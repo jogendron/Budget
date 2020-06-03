@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch user api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build_Budget.Users",
+            "program": "${workspaceFolder}/Budget.Users.Api/bin/Debug/netcoreapp3.1/Budget.Users.Api",
+            "args": [""],
+            "cwd": "${workspaceFolder}/Budget.Users.Api",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}

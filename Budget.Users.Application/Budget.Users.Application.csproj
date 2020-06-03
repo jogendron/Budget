@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Budget.Users.Domain\Budget.Users.Domain.csproj" />
+    <ProjectReference Include="..\Budget.Cqrs\Budget.Cqrs.csproj" />
+    <ProjectReference Include="..\Budget.EventSourcing\Budget.EventSourcing.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.0.1" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>

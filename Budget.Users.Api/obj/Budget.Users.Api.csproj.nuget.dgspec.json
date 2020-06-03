@@ -1,0 +1,440 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/jonathan/Programmes/Budget/Budget.Users.Api/Budget.Users.Api.csproj": {}
+  },
+  "projects": {
+    "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj",
+        "projectName": "Budget.Cqrs",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj",
+        "projectName": "Budget.EventSourcing",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.Users.Api/Budget.Users.Api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Users.Api/Budget.Users.Api.csproj",
+        "projectName": "Budget.Users.Api",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Api/Budget.Users.Api.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Users.Api/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.Application/Budget.Users.Application.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Application/Budget.Users.Application.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/Budget.Users.Cryptography.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/Budget.Users.Cryptography.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/Budget.Users.InMemoryAdapters.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/Budget.Users.InMemoryAdapters.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "mediatr": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "mediatr.extensions.microsoft.dependencyinjection": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.Users.Application/Budget.Users.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Users.Application/Budget.Users.Application.csproj",
+        "projectName": "Budget.Users.Application",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Application/Budget.Users.Application.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Users.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/Budget.Users.Cryptography.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/Budget.Users.Cryptography.csproj",
+        "projectName": "Budget.Users.Cryptography",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/Budget.Users.Cryptography.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Users.Cryptography/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj",
+        "projectName": "Budget.Users.Domain",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/Budget.Users.InMemoryAdapters.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/Budget.Users.InMemoryAdapters.csproj",
+        "projectName": "Budget.Users.InMemoryAdapters",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/Budget.Users.InMemoryAdapters.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Users.InMemoryAdapters/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {
+              "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.EventSourcing/Budget.EventSourcing.csproj"
+              },
+              "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj": {
+                "projectPath": "/home/jonathan/Programmes/Budget/Budget.Users.Domain/Budget.Users.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "mediatr": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "microsoft.extensions.hosting": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

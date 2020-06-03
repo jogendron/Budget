@@ -1,0 +1,64 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {}
+  },
+  "projects": {
+    "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj",
+        "projectName": "Budget.Cqrs",
+        "projectPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/Budget.Cqrs.csproj",
+        "packagesPath": "/home/jonathan/.nuget/packages/",
+        "outputPath": "/home/jonathan/Programmes/Budget/Budget.Cqrs/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/jonathan/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.1": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.1": {
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/opt/dotnet_core/sdk/3.1.102/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
