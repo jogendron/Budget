@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using MediatR;
 
@@ -18,12 +17,10 @@ namespace Budget.Users.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator mediator;
-        private readonly ILogger<UserController> logger;
 
-        public UserController(IMediator mediator, ILogger<UserController> logger)
+        public UserController(IMediator mediator)
         {
             this.mediator = mediator;
-            this.logger = logger;
         }
 
         [HttpPost]
@@ -31,9 +28,9 @@ namespace Budget.Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<SubscribeResponse>> Subscribe([FromBody] SubscribeCommand subscription)
+        public async Task<ActionResult> Subscribe([FromBody] SubscribeCommand subscription)
         {
-            ActionResult<SubscribeResponse> response = new StatusCodeResult(StatusCodes.Status422UnprocessableEntity);
+            ActionResult response = new StatusCodeResult(StatusCodes.Status422UnprocessableEntity);
             
             try
             {
@@ -60,9 +57,9 @@ namespace Budget.Users.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<User>> GetUser(GetUserRequest query)
+        public async Task<ActionResult> GetUser(GetUserRequest query)
         {
-            ActionResult<User> response;
+            ActionResult response;
 
             try
             {

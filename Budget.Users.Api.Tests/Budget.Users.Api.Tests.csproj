@@ -7,10 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="autofixture" Version="4.11.0" />
+    <PackageReference Include="fluentassertions" Version="5.10.3" />
+    <PackageReference Include="mediatr" Version="8.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="nsubstitute" Version="4.2.1" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Budget.Users.Application\Budget.Users.Application.csproj" />
+    <ProjectReference Include="..\Budget.Users.Api\Budget.Users.Api.csproj" />
+    <ProjectReference Include="..\Budget.Users.Domain\Budget.Users.Domain.csproj" />
   </ItemGroup>
 
 </Project>
