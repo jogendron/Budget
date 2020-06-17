@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "167e46bc-4b1b-4179-8b14-699e7c875cef",
+		"name": "Budget.Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Send randomized subscription",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "43be39d9-a2eb-4f73-89b9-9828e8922944",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "adad83d5-224a-4d7d-86e6-ae8054b94f3c",
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"{{$randomUserName}}\",\n    \"FirstName\": \"{{$randomFirstName}}\",\n    \"LastName\": \"{{$randomLastName}}\",\n    \"Email\": \"{{$randomEmail}}\",\n    \"Password\": \"{{$randomPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/User/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"User",
+						""
+					]
+				},
+				"description": "Send a valid subscription request with randomized attributes"
+			},
+			"response": []
+		},
+		{
+			"name": "Send invalid subscription (wrong email)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"{{$randomUserName}}\",\n    \"FirstName\": \"{{$randomFirstName}}\",\n    \"LastName\": \"{{$randomLastName}}\",\n    \"Email\": \"wololooo\",\n    \"Password\": \"{{$randomPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/User/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"User",
+						""
+					]
+				},
+				"description": "Subscription has an invalid email"
+			},
+			"response": []
+		},
+		{
+			"name": "Send fixed subscription",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"JohnSmith\",\n    \"FirstName\": \"John\",\n    \"LastName\": \"Smith\",\n    \"Email\": \"John@Smith.com\",\n    \"Password\": \"Baloney123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/User/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"User",
+						""
+					]
+				},
+				"description": "Sends a fixed subscription. Should work only once username is unique"
+			},
+			"response": []
+		},
+		{
+			"name": "Get fixed user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"JohnSmith\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/User/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"User",
+						""
+					]
+				},
+				"description": "Gets the user created by the fixed subscription"
+			},
+			"response": []
+		},
+		{
+			"name": "Get non existent user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"UserName\": \"{{$randomUserName}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/User/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"User",
+						""
+					]
+				},
+				"description": "Get a user with a request containing a username that does not exist"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
