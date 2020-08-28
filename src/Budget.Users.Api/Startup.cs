@@ -84,6 +84,9 @@ namespace Budget.Users.Api
             services.AddMediatR(applicationLayerAssembly);
 
             services.AddHostedService<Budget.Users.InMemoryAdapters.HostedServices.InMemoryEventConsumer>();
+
+            //var test = new Budget.Users.KafkaAdapters.Domain.Events.KafkaConfiguration();
+            //Configuration.GetSection("Kafka").Bind(test);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
