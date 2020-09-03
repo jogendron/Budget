@@ -7,7 +7,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
     public class KafkaServerTests
     {
         [Fact]
-        public void Constructor_SetsAdressToEmpty_PortToMinus1()
+        public void ParameterlessConstructor_SetsAdressToEmpty_AndPortToMinus1()
         {
             //Arrange
             KafkaServer server = new KafkaServer();
@@ -17,6 +17,21 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             //Assert
             server.Address.Should().BeEmpty();
             server.Port.Should().Be(-1);
+        }
+
+        [Fact]
+        public void ConstructorWithParameters_SetsAdressAndPort()
+        {
+            //Arrange
+            string address = "::1";
+            int port = 92;
+
+            //Act
+            KafkaServer server = new KafkaServer(address, port);
+
+            //Assert
+            server.Address.Should().Be(address);
+            server.Port.Should().Be(port);
         }
 
         [Fact]
@@ -44,6 +59,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             server.Port = port;
 
             //Assert
+            
             server.Port.Should().Be(port);
         }
 

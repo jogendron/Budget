@@ -8,6 +8,12 @@ namespace Budget.Users.KafkaAdapters.Domain.Events
             Port = -1;
         }
 
+        public KafkaServer(string address, int port)
+        {
+            Address = address;
+            Port = port;
+        }
+
         //Has public setter to be set by microsoft's configuration extension
         public string Address { get; set;}
 

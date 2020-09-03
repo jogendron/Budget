@@ -13,7 +13,14 @@ namespace Budget.Users.KafkaAdapters.Domain.Events
 
         public IProducer<string, string> Create()
         {
-            throw new System.NotImplementedException();
+            ProducerConfig config = new ProducerConfig() 
+            {
+                BootstrapServers = Configuration.GetBootstrapServerString()
+            };
+
+            ProducerBuilder<string, string> builder = new ProducerBuilder<string, string>(config);
+            
+            return builder.Build();
         }
     }
 }
