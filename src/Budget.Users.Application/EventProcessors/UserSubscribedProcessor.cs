@@ -26,7 +26,7 @@ namespace Budget.Users.Application.EventProcessors
                 UserSubscribed subscription = request.Event;
 
                 User user = new User(
-                    subscription.Id,
+                    subscription.AggregateId,
                     subscription.UserName,
                     subscription.FirstName,
                     subscription.LastName,

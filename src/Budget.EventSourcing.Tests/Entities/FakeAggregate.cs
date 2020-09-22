@@ -28,12 +28,12 @@ namespace Budget.EventSourcing.Tests.Entities
 
         public void TriggerFakeEvent(string message)
         {
-            AddChange(new FakeEvent(message));
+            AddChange(new FakeEvent(Id, message));
         }
 
         public void TriggerUnhandledFakeEvent()
         {
-            AddChange(new UnhandledFakeEvent());
+            AddChange(new UnhandledFakeEvent(Id));
         }
 
         public void TriggerNullEvent()

@@ -6,7 +6,7 @@ namespace Budget.Users.Domain.Events
 {
     public class PasswordChanged : Event
     {
-        public PasswordChanged(string encryptedPassword) : base(Guid.NewGuid(), DateTime.Now)
+        public PasswordChanged(Guid aggregateId, string encryptedPassword) : base(aggregateId, Guid.NewGuid(), DateTime.Now)
         {
             EncryptedPassword = encryptedPassword;
         }

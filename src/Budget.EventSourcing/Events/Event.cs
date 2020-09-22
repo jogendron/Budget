@@ -11,13 +11,16 @@ namespace Budget.EventSourcing.Events
 
         }
 
-        protected Event(Guid id, DateTime date)
+        protected Event(Guid aggregateId, Guid eventId, DateTime date)
         {
-            Id = id;
+            AggregateId = aggregateId;
+            EventId = eventId;
             Date = date;
         }
 
-        public Guid Id { get; set;} //Public setter because serialization requires it
+        public Guid AggregateId { get; set; } //Public setter because serialization requires it
+
+        public Guid EventId { get; set;} //Public setter because serialization requires it
 
         public DateTime Date { get; set;} //Public setter because serialization requires it
 

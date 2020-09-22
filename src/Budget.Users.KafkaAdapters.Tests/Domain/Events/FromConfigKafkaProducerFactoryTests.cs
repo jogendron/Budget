@@ -21,7 +21,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
         }
 
         [Fact]
-        public void Create_InitializesProducer_AndSetsBootstrapServers()
+        public void Create_InitializesProducer()
         {
             //Arrange
             FromConfigKafkaProducerFactory factory = new FromConfigKafkaProducerFactory(configuration);

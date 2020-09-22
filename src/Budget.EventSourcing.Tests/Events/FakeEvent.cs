@@ -10,11 +10,11 @@ namespace Budget.EventSourcing.Tests.Events
         {
         }
 
-        public FakeEvent(string message) : this(Guid.NewGuid(), DateTime.Now, message)
+        public FakeEvent(Guid aggregateId, string message) : this(aggregateId, Guid.NewGuid(), DateTime.Now, message)
         {
         }
 
-        public FakeEvent(Guid id, DateTime date, string message) : base(id, date)
+        public FakeEvent(Guid aggregateId, Guid eventId, DateTime date, string message) : base(aggregateId, eventId, date)
         {
             Message = message;
         }

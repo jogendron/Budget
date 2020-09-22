@@ -103,6 +103,6 @@ fi
 # -------------
 
 create_topic User.EventSourcing 1 1
-create_topic User.Subscriptions 1 1
+create_topic User.PublicEvents 1 1
 
 exit 0

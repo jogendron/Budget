@@ -10,12 +10,14 @@ namespace Budget.EventSourcing.Tests.Events
         public void Constructor_Assigns_Properties()
         {
             //Arrange
+            Guid aggregateId = Guid.NewGuid();
 
             //Act
-            var @event = new FakeEvent("Dummy");
+            var @event = new FakeEvent(aggregateId, "Dummy");
 
             //Assert
-            @event.Id.Should().NotBe(Guid.Empty);
+            @event.AggregateId.Should().Be(aggregateId);
+            @event.EventId.Should().NotBe(Guid.Empty);
             @event.Date.Should().BeAfter(DateTime.MinValue);
         }
     }

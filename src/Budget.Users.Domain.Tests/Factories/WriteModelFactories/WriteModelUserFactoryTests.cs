@@ -61,17 +61,18 @@ namespace Budget.Users.Domain.Tests.Factories.WriteModelFactories
         [Fact]
         public void Load_AssignsId_AppliesAllChanges()
         {
-            //Arrange            
+            //Arrange          
+            Guid id = Guid.NewGuid();
+
             UserSubscribed subscriptionEvent = new UserSubscribed(
+                id,
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 "abc@def.com"
             );
 
-            Guid id = subscriptionEvent.UserId;
-
-            PasswordChanged passwordChangeEvent = new PasswordChanged(fixture.Create<string>());
+            PasswordChanged passwordChangeEvent = new PasswordChanged(id, fixture.Create<string>());
 
             IEnumerable<Event> changes = new List<Event>() { subscriptionEvent, passwordChangeEvent };
 

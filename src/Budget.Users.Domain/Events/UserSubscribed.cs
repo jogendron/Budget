@@ -7,20 +7,18 @@ namespace Budget.Users.Domain.Events
     public class UserSubscribed : Event
     {
         public UserSubscribed(
+            Guid aggregateId,
             string userName,
             string firstName,
             string lastName,
             string email
-        ) : base(Guid.NewGuid(), DateTime.Now)
+        ) : base(aggregateId, Guid.NewGuid(), DateTime.Now)
         {
-            UserId = Guid.NewGuid();
             UserName = userName;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
         }
-
-        public Guid UserId { get; }
 
         public string UserName { get; }
 

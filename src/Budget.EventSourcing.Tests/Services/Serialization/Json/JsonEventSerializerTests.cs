@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 using FluentAssertions;
 
@@ -15,7 +16,7 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
 
         public JsonEventSerializerTests()
         {
-            @event = new FakeEvent("A knight says Ni.");
+            @event = new FakeEvent(Guid.NewGuid(), "A knight says Ni.");
 
             serializer = new JsonEventSerializer();
         }
@@ -32,7 +33,8 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
             json.Should().Contain("TypeName");
             json.Should().Contain("TypeValue");
             json.Should().Contain(@event.GetType().ToString());
-            json.Should().Contain(@event.Id.ToString());
+            json.Should().Contain(@event.AggregateId.ToString());
+            json.Should().Contain(@event.EventId.ToString());
             json.Should().Contain(@event.Date.ToString("d"));
             json.Should().Contain(@event.Message);
         }
@@ -48,7 +50,8 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
             FakeEvent deserializedFakeEvent = (FakeEvent) deserializedEvent;
 
             //Assert
-            deserializedFakeEvent.Id.Should().Be(@event.Id);
+            deserializedFakeEvent.AggregateId.Should().Be(@event.AggregateId);
+            deserializedFakeEvent.EventId.Should().Be(@event.EventId);
             deserializedFakeEvent.Date.Should().Be(@event.Date);
             deserializedFakeEvent.Message.Should().Be(@event.Message);
         }

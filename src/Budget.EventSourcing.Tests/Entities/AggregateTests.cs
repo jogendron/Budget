@@ -65,8 +65,9 @@ namespace Budget.EventSourcing.Tests.Entities
         public void ApplyChangeHistory_Applies_Changes()
         {
             //Arrange
-            var event1 = new FakeEvent("First");
-            var event2 = new FakeEvent("Second");
+            Guid aggregateId = Guid.NewGuid();
+            var event1 = new FakeEvent(aggregateId, "First");
+            var event2 = new FakeEvent(aggregateId, "Second");
             var events = new List<Event>() {event1, event2};
             var aggregate = new FakeAggregate(Guid.NewGuid(), events);
 
@@ -87,7 +88,8 @@ namespace Budget.EventSourcing.Tests.Entities
         public void ApplyChangeHistory_ThrowsEventNotHandledException_WhenOneEventIsNotHandled()
         {
             //Arrange
-            var event1 = new UnhandledFakeEvent();
+            Guid aggregateId = Guid.NewGuid();
+            var event1 = new UnhandledFakeEvent(aggregateId);
             var events = new List<Event>() { event1 };
             var aggregate = new FakeAggregate(Guid.NewGuid(), events);
 
@@ -102,10 +104,11 @@ namespace Budget.EventSourcing.Tests.Entities
         public void ApplyChangeHistory_AppliesEventBeforeUpToParameter_IfSupplied()
         {
             //Arrange
-            var event1 = new FakeEvent(Guid.NewGuid(), DateTime.MinValue, "first");
-            var event2 = new FakeEvent(Guid.NewGuid(), DateTime.Now.AddDays(-10), "second");
-            var event3 = new FakeEvent(Guid.NewGuid(), DateTime.Now.AddDays(-5), "third");
-            var event4 = new FakeEvent(Guid.NewGuid(), DateTime.MaxValue, "fourth");
+            Guid aggregateId = Guid.NewGuid();
+            var event1 = new FakeEvent(aggregateId, Guid.NewGuid(), DateTime.MinValue, "first");
+            var event2 = new FakeEvent(aggregateId, Guid.NewGuid(), DateTime.Now.AddDays(-10), "second");
+            var event3 = new FakeEvent(aggregateId, Guid.NewGuid(), DateTime.Now.AddDays(-5), "third");
+            var event4 = new FakeEvent(aggregateId, Guid.NewGuid(), DateTime.MaxValue, "fourth");
             var events = new List<Event>() {event1, event2, event3, event4};
             var aggregate = new FakeAggregate(Guid.NewGuid(), events);
 
