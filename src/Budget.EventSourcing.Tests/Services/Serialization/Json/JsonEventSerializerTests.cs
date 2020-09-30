@@ -46,7 +46,7 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
             string json = serializer.Serialize(@event);
 
             //Act
-            Event deserializedEvent = serializer.Deserialize<Event>(json);
+            Event deserializedEvent = serializer.Deserialize(json);
             FakeEvent deserializedFakeEvent = (FakeEvent) deserializedEvent;
 
             //Assert

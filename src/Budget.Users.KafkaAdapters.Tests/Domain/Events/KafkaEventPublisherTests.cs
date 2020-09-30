@@ -6,6 +6,8 @@ using Budget.EventSourcing.Events;
 using Budget.EventSourcing.Services.Serialization;
 using Budget.Users.Domain.Events;
 using Budget.Users.KafkaAdapters.Domain.Events;
+using Budget.Users.KafkaAdapters.Entities;
+using Budget.Users.KafkaAdapters.Factories;
 using Confluent.Kafka;
 
 namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
@@ -14,7 +16,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
     {
         private Fixture fixture;
 
-        private IKafkaProducerFactory producerFactory;
+        private IKafkaGatewayFactory kafkaGatewayFactory;
 
         private IProducer<string, string> producer;
 
@@ -28,13 +30,13 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
 
             producer = Substitute.For<IProducer<string, string>>();
             
-            producerFactory = Substitute.For<IKafkaProducerFactory>();
-            producerFactory.Create().Returns(producer);
+            kafkaGatewayFactory = Substitute.For<IKafkaGatewayFactory>();
+            kafkaGatewayFactory.CreateProducer().Returns(producer);
 
             eventSerializer = Substitute.For<IEventSerializer>();
             eventSerializer.Serialize<Event>(Arg.Any<Event>()).Returns("We are the knight who say Ni");
 
-            eventPublisher = new KafkaEventPublisher(producerFactory, eventSerializer);
+            eventPublisher = new KafkaEventPublisher(kafkaGatewayFactory, eventSerializer);
         }
 
         [Fact]
@@ -51,7 +53,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             eventSerializer.Received(1).Serialize(Arg.Any<UserSubscribed>());
 
             producer.Received(1).ProduceAsync(
-                Arg.Is(KafkaEventPublisher.eventSourcingTopic),
+                Arg.Is(KafkaTopics.UserEventSourcing),
                 Arg.Is<Message<string, string>>(
                     m => m.Key == subscription.AggregateId.ToString()
                         && ! string.IsNullOrEmpty(m.Value)
@@ -59,7 +61,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             );
 
             producer.Received(1).ProduceAsync(
-                Arg.Is(KafkaEventPublisher.publicEventsTopic),
+                Arg.Is(KafkaTopics.UserPublicEvents),
                 Arg.Is<Message<string, string>>(
                     m => m.Key == subscription.AggregateId.ToString()
                         && ! string.IsNullOrEmpty(m.Value)
@@ -67,7 +69,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             );
 
             producer.Received(1).ProduceAsync(
-                Arg.Is(KafkaEventPublisher.eventSourcingTopic),
+                Arg.Is(KafkaTopics.UserEventSourcing),
                 Arg.Is<Message<string, string>>(
                     m => m.Key == passwordChange.AggregateId.ToString()
                         && ! string.IsNullOrEmpty(m.Value)
@@ -87,7 +89,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             eventSerializer.Received(1).Serialize(Arg.Any<PasswordChanged>());
 
             producer.Received(1).ProduceAsync(
-                Arg.Is(KafkaEventPublisher.eventSourcingTopic),
+                Arg.Is(KafkaTopics.UserEventSourcing),
                 Arg.Is<Message<string, string>>(
                     m => m.Key == @event.AggregateId.ToString()
                         && ! string.IsNullOrEmpty(m.Value)
@@ -95,7 +97,7 @@ namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
             );
 
             producer.Received(0).ProduceAsync(
-                Arg.Is(KafkaEventPublisher.publicEventsTopic),
+                Arg.Is(KafkaTopics.UserPublicEvents),
                 Arg.Any<Message<string, string>>()
             );
         }

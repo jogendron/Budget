@@ -1,6 +1,6 @@
 using Xunit;
 using FluentAssertions;
-using Budget.Users.KafkaAdapters.Domain.Events;
+using Budget.Users.KafkaAdapters.Entities;
 
 namespace Budget.Users.KafkaAdapters.Tests.Domain.Events
 {

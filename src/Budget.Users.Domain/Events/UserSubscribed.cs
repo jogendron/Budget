@@ -6,6 +6,12 @@ namespace Budget.Users.Domain.Events
 {
     public class UserSubscribed : Event
     {
+        //Constructor for serialization
+        public UserSubscribed()
+        {
+            
+        }
+
         public UserSubscribed(
             Guid aggregateId,
             string userName,
@@ -20,12 +26,12 @@ namespace Budget.Users.Domain.Events
             Email = email;
         }
 
-        public string UserName { get; }
+        public string UserName { get; set; } //Setter for serialization
 
-        public string FirstName { get; }
+        public string FirstName { get; set; } //Setter for serialization
 
-        public string LastName { get; }
+        public string LastName { get; set; } //Setter for serialization
 
-        public string Email { get; }
+        public string Email { get; set; } //Setter for serialization
     }
 }

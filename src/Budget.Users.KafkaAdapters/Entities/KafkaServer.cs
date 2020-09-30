@@ -1,4 +1,4 @@
-namespace Budget.Users.KafkaAdapters.Domain.Events
+namespace Budget.Users.KafkaAdapters.Entities
 {
     public class KafkaServer
     {

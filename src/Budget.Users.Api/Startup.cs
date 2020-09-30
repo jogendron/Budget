@@ -35,15 +35,7 @@ namespace Budget.Users.Api
                 typeof(Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory)
             );
 
-            services.AddTransient(
-                typeof(Budget.EventSourcing.Events.IEventPublisher),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventPublisher)
-            );
-
-            services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream)
-            );
+            ConfigureEventPublisher(services);
 
             services.AddTransient(
                 typeof(Budget.Users.Domain.Repositories.ReadModelRepositories.IReadModelUnitOfWork),
@@ -83,10 +75,48 @@ namespace Budget.Users.Api
             Assembly applicationLayerAssembly = typeof(Budget.Users.Application.Commands.Subscribe.SubscribeHandler).GetTypeInfo().Assembly;
             services.AddMediatR(applicationLayerAssembly);
 
-            services.AddHostedService<Budget.Users.InMemoryAdapters.HostedServices.InMemoryEventConsumer>();
+            ConfigureEventConsumer(services);
+        }
 
-            //var test = new Budget.Users.KafkaAdapters.Domain.Events.KafkaConfiguration();
-            //Configuration.GetSection("Kafka").Bind(test);
+        private void ConfigureEventPublisher(IServiceCollection services)
+        {
+            /*
+            services.AddTransient(
+                typeof(Budget.EventSourcing.Events.IEventPublisher),
+                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventPublisher)
+            );
+
+            services.AddSingleton(
+                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream),
+                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream)
+            );
+            */
+
+            var kafkaConfiguration = new Budget.Users.KafkaAdapters.Entities.KafkaConfiguration();
+            Configuration.GetSection("Kafka").Bind(kafkaConfiguration);
+            services.AddSingleton(kafkaConfiguration);
+
+            services.AddTransient(
+                typeof(Budget.Users.KafkaAdapters.Factories.IKafkaGatewayFactory),
+                typeof(Budget.Users.KafkaAdapters.Factories.FromConfigKafkaGatewayFactory)
+            );
+
+            services.AddTransient(
+                typeof(Budget.EventSourcing.Services.Serialization.IEventSerializer),
+                typeof(Budget.EventSourcing.Services.Serialization.Json.JsonEventSerializer)
+            );
+
+            services.AddTransient(
+                typeof(Budget.EventSourcing.Events.IEventPublisher),
+                typeof(Budget.Users.KafkaAdapters.Domain.Events.KafkaEventPublisher)
+            );
+        }
+
+        private void ConfigureEventConsumer(IServiceCollection services)
+        {
+            //services.AddHostedService<Budget.Users.InMemoryAdapters.HostedServices.InMemoryEventConsumerService>();
+
+            services.AddHostedService<Budget.Users.KafkaAdapters.HostedServices.KafkaEventConsumerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

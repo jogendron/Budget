@@ -14,9 +14,9 @@ namespace Budget.EventSourcing.Services.Serialization.Json
 
         private JsonSerializerOptions Options { get; }
 
-        public T Deserialize<T>(string content) where T : Event
+        public Event Deserialize(string content)
         {
-            return JsonSerializer.Deserialize<T>(content, Options);
+            return JsonSerializer.Deserialize<Event>(content, Options);
         }
 
         public string Serialize<T>(T @event) where T : Event

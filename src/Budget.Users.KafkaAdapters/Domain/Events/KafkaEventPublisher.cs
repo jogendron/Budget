@@ -3,21 +3,20 @@ using System.Threading.Tasks;
 using Budget.EventSourcing.Events;
 using Budget.EventSourcing.Services.Serialization;
 using Budget.Users.Domain.Events;
+using Budget.Users.KafkaAdapters.Entities;
+using Budget.Users.KafkaAdapters.Factories;
 using Confluent.Kafka;
 
 namespace Budget.Users.KafkaAdapters.Domain.Events
 {
     public class KafkaEventPublisher : EventPublisherBase
     {
-        internal const string eventSourcingTopic = "User.EventSourcing";
-        internal const string publicEventsTopic = "User.PublicEvents";
-
         public KafkaEventPublisher(
-            IKafkaProducerFactory producerFactory,
+            IKafkaGatewayFactory kafkaGatewayFactory,
             IEventSerializer serializaer
         )
         {
-            Producer = producerFactory.Create();
+            Producer = kafkaGatewayFactory.CreateProducer();
             Serializer = serializaer;
         }
 
@@ -27,14 +26,12 @@ namespace Budget.Users.KafkaAdapters.Domain.Events
 
         public override async Task Publish(Event @event)
         {
-            
-
             string serializedEvent = Serializer.Serialize(@event);
             
-            await SendMessage(eventSourcingTopic, @event.AggregateId.ToString(), serializedEvent);
+            await SendMessage(KafkaTopics.UserEventSourcing, @event.AggregateId.ToString(), serializedEvent);
 
             if (@event is UserSubscribed)
-                await SendMessage(publicEventsTopic, @event.AggregateId.ToString(), serializedEvent);
+                await SendMessage(KafkaTopics.UserPublicEvents, @event.AggregateId.ToString(), serializedEvent);
         }
 
         public override async Task Publish(IEnumerable<Event> events)

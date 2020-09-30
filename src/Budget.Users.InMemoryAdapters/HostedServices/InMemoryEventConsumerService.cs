@@ -10,9 +10,9 @@ using MediatR;
 
 namespace Budget.Users.InMemoryAdapters.HostedServices
 {
-    public class InMemoryEventConsumer : BackgroundService
+    public class InMemoryEventConsumerService : BackgroundService
     {
-        public InMemoryEventConsumer(
+        public InMemoryEventConsumerService(
             IServiceScopeFactory serviceScopeFactory
         )
         {

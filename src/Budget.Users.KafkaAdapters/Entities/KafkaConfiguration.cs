@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Budget.Users.KafkaAdapters.Domain.Events
+namespace Budget.Users.KafkaAdapters.Entities
 {
     public class KafkaConfiguration
     {
@@ -12,7 +12,7 @@ namespace Budget.Users.KafkaAdapters.Domain.Events
 
         //Has public setter to be set by microsoft's configuration extension
         public List<KafkaServer> BootstrapServers { get; set; }
-
+        
         public string GetBootstrapServerString()
         {
             string bootstrapServerString = string.Empty;

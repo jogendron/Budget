@@ -6,6 +6,6 @@ namespace Budget.EventSourcing.Services.Serialization
     {
         string Serialize<T>(T @event) where T: Event;
 
-        T Deserialize<T>(string content) where T: Event;
+        Event Deserialize(string content);
     }
 }
