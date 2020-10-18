@@ -39,6 +39,7 @@ namespace Budget.Users.Application.Tests.EventProcessors
         {
             //Arrange
             UserSubscribed @event = new UserSubscribed(
+                Guid.NewGuid(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
@@ -72,6 +73,7 @@ namespace Budget.Users.Application.Tests.EventProcessors
         {
             //Arrange
             UserSubscribed @event = new UserSubscribed(
+                Guid.NewGuid(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),

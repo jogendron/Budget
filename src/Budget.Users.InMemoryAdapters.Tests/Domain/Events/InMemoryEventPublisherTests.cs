@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,6 +31,7 @@ namespace Budget.Users.InMemoryAdapters.Tests.Domain.Events
         {
             //Arrange
             UserSubscribed subscription = new UserSubscribed(
+                Guid.NewGuid(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
@@ -50,6 +52,7 @@ namespace Budget.Users.InMemoryAdapters.Tests.Domain.Events
         {
             //Arrange
             UserSubscribed subscription1 = new UserSubscribed(
+                Guid.NewGuid(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
@@ -57,6 +60,7 @@ namespace Budget.Users.InMemoryAdapters.Tests.Domain.Events
             );
 
             UserSubscribed subscription2 = new UserSubscribed(
+                Guid.NewGuid(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),
                 fixture.Create<string>(),

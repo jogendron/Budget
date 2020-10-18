@@ -26,8 +26,9 @@ namespace Budget.Users.Domain.Model.WriteModel
             string encryptedPassword
         ) : base()
         {
-            var subscription = new UserSubscribed(userName, firstName, lastName, email);
-            var passwordChange = new PasswordChanged(encryptedPassword);
+            Id = Guid.NewGuid();
+            var subscription = new UserSubscribed(Id, userName, firstName, lastName, email);
+            var passwordChange = new PasswordChanged(Id, encryptedPassword);
 
             AddChange(subscription);
             AddChange(passwordChange);
@@ -85,7 +86,7 @@ namespace Budget.Users.Domain.Model.WriteModel
 
         void IEventHandler<UserSubscribed>.Handle(UserSubscribed @event)
         {
-            Id = @event.UserId;
+            Id = @event.AggregateId;
             UserName = @event.UserName;
             FirstName = @event.FirstName;
             LastName = @event.LastName;

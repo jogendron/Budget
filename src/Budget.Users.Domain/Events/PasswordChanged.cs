@@ -6,11 +6,17 @@ namespace Budget.Users.Domain.Events
 {
     public class PasswordChanged : Event
     {
-        public PasswordChanged(string encryptedPassword) : base(Guid.NewGuid(), DateTime.Now)
+        //Constructor for serialization
+        public PasswordChanged()
+        {
+            
+        }
+
+        public PasswordChanged(Guid aggregateId, string encryptedPassword) : base(aggregateId, Guid.NewGuid(), DateTime.Now)
         {
             EncryptedPassword = encryptedPassword;
         }
 
-        public string EncryptedPassword { get; }
+        public string EncryptedPassword { get; set; } //Setter for serialization
     }
 }
