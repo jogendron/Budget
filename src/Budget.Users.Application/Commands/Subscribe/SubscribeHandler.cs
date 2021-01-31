@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,7 +50,7 @@ namespace Budget.Users.Application.Commands.Subscribe
                 
                 WriteModel.Commit();
             }
-            catch (Exception ex)
+            catch
             {
                 WriteModel.Rollback();
                 throw;
