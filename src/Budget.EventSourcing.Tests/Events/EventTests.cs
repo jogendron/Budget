@@ -17,7 +17,7 @@ namespace Budget.EventSourcing.Tests.Events
 
             //Assert
             @event.AggregateId.Should().Be(aggregateId);
-            @event.EventId.Should().NotBe(Guid.Empty);
+            @event.Id.Should().NotBe(Guid.Empty);
             @event.Date.Should().BeAfter(DateTime.MinValue);
         }
     }

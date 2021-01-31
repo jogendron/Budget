@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Budget.Users.Cryptography\Budget.Users.Cryptography.csproj" />
     <ProjectReference Include="..\Budget.Users.InMemoryAdapters\Budget.Users.InMemoryAdapters.csproj" />
     <ProjectReference Include="..\Budget.Users.KafkaAdapters\Budget.Users.KafkaAdapters.csproj" />
+    <ProjectReference Include="..\Budget.Users.MongoDbAdapters\Budget.Users.MongoDbAdapters.csproj" />
   </ItemGroup>
 
 

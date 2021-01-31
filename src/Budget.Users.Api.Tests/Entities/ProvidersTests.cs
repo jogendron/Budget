@@ -9,7 +9,7 @@ namespace Budget.Users.Api.Tests.Entities
     public class ProvidersTests
     {
         [Fact]
-        public void Event_CanBeSet_ToExpectedInMemory()
+        public void Event_CanBeSet()
         {
             //Arrange
             string inMemory = "InMemory";
@@ -21,32 +21,19 @@ namespace Budget.Users.Api.Tests.Entities
             //Assert
             providers.Events.Should().Be(inMemory);
         }
-
+        
         [Fact]
-        public void Event_CanBeSet_ToKafka()
+        public void WriteModelPersistence_CanBeSet()
         {
             //Arrange
-            string kafka = "Kafka";
+            string inMemory = "InMemory";
             Providers providers = new Providers();
 
             //Act
-            providers.Events = kafka;
+            providers.WriteModelPersistence = inMemory;
 
             //Assert
-            providers.Events.Should().Be(kafka);
-        }
-
-        [Fact]
-        public void Event_ThrowsArgumentException_WhenSetToUnexpectedString()
-        {
-            //Arrange
-            string unexpected = "Unexpected";
-            Providers providers = new Providers();
-
-            //Act
-            Assert.Throws<ArgumentException>(() => providers.Events = unexpected);
-
-            //Assert
+            providers.WriteModelPersistence.Should().Be(inMemory);
         }
     }
 }

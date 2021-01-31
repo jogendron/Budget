@@ -34,7 +34,7 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
             json.Should().Contain("TypeValue");
             json.Should().Contain(@event.GetType().ToString());
             json.Should().Contain(@event.AggregateId.ToString());
-            json.Should().Contain(@event.EventId.ToString());
+            json.Should().Contain(@event.Id.ToString());
             json.Should().Contain(@event.Date.ToString("d"));
             json.Should().Contain(@event.Message);
         }
@@ -51,7 +51,7 @@ namespace Budget.EventSourcing.Tests.Services.Serialization.Json
 
             //Assert
             deserializedFakeEvent.AggregateId.Should().Be(@event.AggregateId);
-            deserializedFakeEvent.EventId.Should().Be(@event.EventId);
+            deserializedFakeEvent.Id.Should().Be(@event.Id);
             deserializedFakeEvent.Date.Should().Be(@event.Date);
             deserializedFakeEvent.Message.Should().Be(@event.Message);
         }

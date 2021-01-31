@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using Budget.Users.Api.Entities;
+using Budget.Users.Api.ServiceCollection.Events;
+using Budget.Users.Api.ServiceCollection.WriteModelPersistence;
 using MediatR;
 
 namespace Budget.Users.Api
@@ -35,17 +37,14 @@ namespace Budget.Users.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+   
+            var eventCollectionSelector = new EventServiceCollectionSelector(Configuration, Providers);
+            var eventServiceCollection = eventCollectionSelector.GetServiceCollection();
+            eventServiceCollection.Configure(services);
 
-            switch (Providers.Events)
-            {
-                case "InMemory":
-                    ConfigureInMemoryEvents(services);
-                    break;
-
-                case "Kafka":
-                    ConfigureKafkaEvents(services);
-                    break;
-            }
+            var writeModelPersistenceSelector = new WriteModelServiceCollectionSelector(Configuration, Providers);
+            var writeModelServiceCollection = writeModelPersistenceSelector.GetServiceCollection();
+            writeModelServiceCollection.Configure(services);
 
             services.AddTransient(
                 typeof(Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory),
@@ -68,67 +67,12 @@ namespace Budget.Users.Api
             );
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.WriteModelRepositories.IWriteModelUnitOfWork),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryWriteModelUnitOfWork)
-            );
-
-            services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.WriteModelRepositories.IWriteModelUserRepository),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryWriteModelUserRepository)
-            );
-
-            services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryUserWriteData),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryUserWriteData)
-            );
-
-            services.AddTransient(
                 typeof(Budget.Users.Domain.Services.ICryptService),
                 typeof(Budget.Users.Cryptography.Services.Sha512CryptService)
             );
 
             Assembly applicationLayerAssembly = typeof(Budget.Users.Application.Commands.Subscribe.SubscribeHandler).GetTypeInfo().Assembly;
             services.AddMediatR(applicationLayerAssembly);
-        }
-
-        private void ConfigureKafkaEvents(IServiceCollection services)
-        {
-            var kafkaConfiguration = new Budget.Users.KafkaAdapters.Entities.KafkaConfiguration();
-            Configuration.GetSection("Kafka").Bind(kafkaConfiguration);
-            services.AddSingleton(kafkaConfiguration);
-
-            services.AddTransient(
-                typeof(Budget.Users.KafkaAdapters.Factories.IKafkaGatewayFactory),
-                typeof(Budget.Users.KafkaAdapters.Factories.FromConfigKafkaGatewayFactory)
-            );
-
-            services.AddTransient(
-                typeof(Budget.EventSourcing.Services.Serialization.IEventSerializer),
-                typeof(Budget.EventSourcing.Services.Serialization.Json.JsonEventSerializer)
-            );
-
-            services.AddTransient(
-                typeof(Budget.EventSourcing.Events.IEventPublisher),
-                typeof(Budget.Users.KafkaAdapters.Domain.Events.KafkaEventPublisher)
-            );
-
-            services.AddHostedService<Budget.Users.KafkaAdapters.HostedServices.KafkaEventConsumerService>();
-        }
-
-        private void ConfigureInMemoryEvents(IServiceCollection services)
-        {
-
-            services.AddTransient(
-                typeof(Budget.EventSourcing.Events.IEventPublisher),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventPublisher)
-            );
-
-            services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream)
-            );            
-
-            services.AddHostedService<Budget.Users.InMemoryAdapters.HostedServices.InMemoryEventConsumerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

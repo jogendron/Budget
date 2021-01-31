@@ -12,7 +12,7 @@ namespace Budget.Users.Domain.Events
             
         }
 
-        public PasswordChanged(Guid aggregateId, string encryptedPassword) : base(aggregateId, Guid.NewGuid(), DateTime.Now)
+        public PasswordChanged(Guid aggregateId, string encryptedPassword) : base(Guid.NewGuid(), aggregateId, DateTime.Now)
         {
             EncryptedPassword = encryptedPassword;
         }

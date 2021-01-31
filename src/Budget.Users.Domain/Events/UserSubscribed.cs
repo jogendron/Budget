@@ -18,7 +18,7 @@ namespace Budget.Users.Domain.Events
             string firstName,
             string lastName,
             string email
-        ) : base(aggregateId, Guid.NewGuid(), DateTime.Now)
+        ) : base(Guid.NewGuid(), aggregateId, DateTime.Now)
         {
             UserName = userName;
             FirstName = firstName;

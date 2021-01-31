@@ -14,7 +14,7 @@ namespace Budget.EventSourcing.Tests.Events
         {
         }
 
-        public FakeEvent(Guid aggregateId, Guid eventId, DateTime date, string message) : base(aggregateId, eventId, date)
+        public FakeEvent(Guid aggregateId, Guid eventId, DateTime date, string message) : base(eventId, aggregateId, date)
         {
             Message = message;
         }
