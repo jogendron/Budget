@@ -4,12 +4,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
 {
-    public class WriteModelServiceCollectionSelector : CustomServiceCollectionSelector
+    public class WriteModelPersistenceSelector : CustomServiceCollectionSelector
     {
         private const string InMemory = "InMemory";
         private const string MongoDb = "MongoDb";
 
-        public WriteModelServiceCollectionSelector(IConfiguration configuration, Providers providers) : base(configuration, providers)
+        public WriteModelPersistenceSelector(IConfiguration configuration, Providers providers) : base(configuration, providers)
         {
         }
 
@@ -20,15 +20,15 @@ namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
             switch (Providers.WriteModelPersistence)
             {
                 case InMemory:
-                    serviceCollection = new InMemoryWriteModelPersistenceServiceCollection();
+                    serviceCollection = new InMemoryWriteModelPersistenceServices();
                     break;
 
                 case MongoDb:
-                    serviceCollection = new MongoDbWriteModelPersistenceServiceCollection(Configuration);
+                    serviceCollection = new MongoDbWriteModelPersistenceServices(Configuration);
                     break;
 
                 default:
-                    throw new ArgumentException($"Value {Providers.WriteModelPersistence} is not supported for write model persistence.");
+                    throw new ArgumentException($"Value {Providers.WriteModelPersistence} is not a supported write model persistence provider.");
             }
 
             return serviceCollection;

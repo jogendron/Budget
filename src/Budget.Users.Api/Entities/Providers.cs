@@ -6,7 +6,7 @@ namespace Budget.Users.Api.Entities
         {
         }
 
-        public string Events { get; set;}
+        public string EventPublisher { get; set;}
 
         public string WriteModelPersistence { get; set; }
     }

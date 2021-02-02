@@ -16,10 +16,10 @@ namespace Budget.Users.Api.Tests.Entities
             Providers providers = new Providers();
 
             //Act
-            providers.Events = inMemory;
+            providers.EventPublisher = inMemory;
 
             //Assert
-            providers.Events.Should().Be(inMemory);
+            providers.EventPublisher.Should().Be(inMemory);
         }
         
         [Fact]

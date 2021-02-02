@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Budget.Users.Api.ServiceCollection.Events
+namespace Budget.Users.Api.ServiceCollection.EventPublisher
 {
-    public class KafkaEventServiceCollection : IEventServiceCollection
+    public class KafkaEventServices : IEventServices
     {
-        public KafkaEventServiceCollection(IConfiguration configuration)
+        public KafkaEventServices(IConfiguration configuration)
         {
             Configuration = configuration;
         }

@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
 {
-    public class MongoDbWriteModelPersistenceServiceCollection : ICustomServiceCollection
+    public class MongoDbWriteModelPersistenceServices : IWriteModelPersistenceServices
     {
         
-        public MongoDbWriteModelPersistenceServiceCollection(IConfiguration configuration)
+        public MongoDbWriteModelPersistenceServices(IConfiguration configuration)
         {
             Configuration = configuration;
         }

@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
 {
-    public class InMemoryWriteModelPersistenceServiceCollection : ICustomServiceCollection
+    public class InMemoryWriteModelPersistenceServices : IWriteModelPersistenceServices
     {
         public void Configure(IServiceCollection services)
         {

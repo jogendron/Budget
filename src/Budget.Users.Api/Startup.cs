@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 using Budget.Users.Api.Entities;
-using Budget.Users.Api.ServiceCollection.Events;
+using Budget.Users.Api.ServiceCollection.EventPublisher;
 using Budget.Users.Api.ServiceCollection.WriteModelPersistence;
 using MediatR;
 
@@ -38,13 +38,13 @@ namespace Budget.Users.Api
         {
             services.AddControllers();
    
-            var eventCollectionSelector = new EventServiceCollectionSelector(Configuration, Providers);
-            var eventServiceCollection = eventCollectionSelector.GetServiceCollection();
-            eventServiceCollection.Configure(services);
+            var eventPublisherSelector = new EventPublisherSelector(Configuration, Providers);
+            var eventServices = eventPublisherSelector.GetServiceCollection();
+            eventServices.Configure(services);
 
-            var writeModelPersistenceSelector = new WriteModelServiceCollectionSelector(Configuration, Providers);
-            var writeModelServiceCollection = writeModelPersistenceSelector.GetServiceCollection();
-            writeModelServiceCollection.Configure(services);
+            var writeModelPersistenceSelector = new WriteModelPersistenceSelector(Configuration, Providers);
+            var writeModelServices = writeModelPersistenceSelector.GetServiceCollection();
+            writeModelServices.Configure(services);
 
             services.AddTransient(
                 typeof(Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory),

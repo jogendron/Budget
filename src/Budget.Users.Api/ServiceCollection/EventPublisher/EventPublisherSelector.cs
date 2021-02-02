@@ -2,14 +2,14 @@ using System;
 using Microsoft.Extensions.Configuration;
 using Budget.Users.Api.Entities;
 
-namespace Budget.Users.Api.ServiceCollection.Events
+namespace Budget.Users.Api.ServiceCollection.EventPublisher
 {
-    public class EventServiceCollectionSelector : CustomServiceCollectionSelector
+    public class EventPublisherSelector : CustomServiceCollectionSelector
     {
         private const string InMemory = "InMemory";
         private const string Kafka = "Kafka";
 
-        public EventServiceCollectionSelector(IConfiguration configuration, Providers providers) : base(configuration, providers)
+        public EventPublisherSelector(IConfiguration configuration, Providers providers) : base(configuration, providers)
         {
         }
 
@@ -17,18 +17,18 @@ namespace Budget.Users.Api.ServiceCollection.Events
         {
             ICustomServiceCollection serviceCollection = null;
 
-            switch (Providers.Events)
+            switch (Providers.EventPublisher)
             {
                 case "InMemory":
-                    serviceCollection = new InMemoryEventServiceCollection();
+                    serviceCollection = new InMemoryEventServices();
                     break;
 
                 case "Kafka":
-                    serviceCollection = new KafkaEventServiceCollection(Configuration);
+                    serviceCollection = new KafkaEventServices(Configuration);
                     break;
 
                 default:
-                    throw new ArgumentException($"Value {Providers.Events} is not supported for events provider.");
+                    throw new ArgumentException($"Value {Providers.EventPublisher} is not a supported event publisher.");
             }
 
             return serviceCollection;

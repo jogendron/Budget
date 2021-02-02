@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Budget.Users.Api.ServiceCollection.Events
+namespace Budget.Users.Api.ServiceCollection.EventPublisher
 {
-    public class InMemoryEventServiceCollection : IEventServiceCollection
+    public class InMemoryEventServices : IEventServices
     {
         public void Configure(IServiceCollection services)
         {
