@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 
 namespace Budget.Users.MongoDbAdapters.Entities
@@ -26,6 +27,12 @@ namespace Budget.Users.MongoDbAdapters.Entities
 
         public string GetConnectionString()
         {
+            if (! UserNameAndPasswordAreValid())
+                throw new ArgumentException("Username and password must be either both specified or both empty.");
+
+            if (! AddressIsValid())
+                throw new ArgumentException("Address is mandatory.");
+
             var builder = new StringBuilder();
             builder.Append("mongodb://");
 
@@ -40,6 +47,19 @@ namespace Budget.Users.MongoDbAdapters.Entities
                 builder.Append($":{Port}");
 
             return builder.ToString();
+        }
+
+        private bool UserNameAndPasswordAreValid()
+        {
+            return (
+                (string.IsNullOrEmpty(UserName) && string.IsNullOrEmpty(Password)) 
+                || (! string.IsNullOrEmpty(UserName) && ! string.IsNullOrEmpty(Password))
+            );
+        }
+
+        private bool AddressIsValid()
+        {
+            return ! string.IsNullOrEmpty(Address);
         }
     }
 }

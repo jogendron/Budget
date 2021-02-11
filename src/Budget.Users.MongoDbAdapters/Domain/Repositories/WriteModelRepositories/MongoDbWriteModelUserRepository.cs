@@ -12,7 +12,7 @@ namespace Budget.Users.MongoDbAdapters.Domain.Repositories.WriteModelRepositorie
 {
     public class MongoDbWriteModelUserRepository : IWriteModelUserRepository
     {
-        private const string collectionName = "Users";
+        internal const string collectionName = "Users";
 
         internal MongoDbWriteModelUserRepository(
             IMongoDatabase database,
@@ -25,7 +25,7 @@ namespace Budget.Users.MongoDbAdapters.Domain.Repositories.WriteModelRepositorie
 
         private IMongoCollection<User> Users { get; }
 
-        Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory UserFactory { get; }
+        private Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory UserFactory { get; }
 
         public async Task<Budget.Users.Domain.Model.WriteModel.User> Get(Guid id)
         {

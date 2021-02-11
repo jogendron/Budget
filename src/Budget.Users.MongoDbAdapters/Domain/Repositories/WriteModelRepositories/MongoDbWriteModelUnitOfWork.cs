@@ -11,7 +11,7 @@ namespace Budget.Users.MongoDbAdapters.Domain.Repositories.WriteModelRepositorie
 
     public class MongoDbWriteModelUnitOfWork : IWriteModelUnitOfWork
     {
-        private const string databaseName = "Budget_User";
+        internal const string databaseName = "Budget_User";
 
         public MongoDbWriteModelUnitOfWork(
             MongoDbConfiguration configuration,
