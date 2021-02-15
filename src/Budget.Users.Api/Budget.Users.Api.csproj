@@ -14,7 +14,6 @@
     <ProjectReference Include="..\Budget.EventSourcing\Budget.EventSourcing.csproj" />
     <ProjectReference Include="..\Budget.Users.Application\Budget.Users.Application.csproj" />
     <ProjectReference Include="..\Budget.Users.Domain\Budget.Users.Domain.csproj" />
-    <ProjectReference Include="..\Budget.Users.Cryptography\Budget.Users.Cryptography.csproj" />
     <ProjectReference Include="..\Budget.Users.InMemoryAdapters\Budget.Users.InMemoryAdapters.csproj" />
     <ProjectReference Include="..\Budget.Users.KafkaAdapters\Budget.Users.KafkaAdapters.csproj" />
     <ProjectReference Include="..\Budget.Users.MongoDbAdapters\Budget.Users.MongoDbAdapters.csproj" />

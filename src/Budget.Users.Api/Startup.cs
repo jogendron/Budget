@@ -68,7 +68,7 @@ namespace Budget.Users.Api
 
             services.AddTransient(
                 typeof(Budget.Users.Domain.Services.ICryptService),
-                typeof(Budget.Users.Cryptography.Services.Sha512CryptService)
+                typeof(Budget.Users.Domain.Services.Sha512CryptService)
             );
 
             Assembly applicationLayerAssembly = typeof(Budget.Users.Application.Commands.Subscribe.SubscribeHandler).GetTypeInfo().Assembly;
