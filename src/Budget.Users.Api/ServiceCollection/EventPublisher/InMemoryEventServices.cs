@@ -8,12 +8,12 @@ namespace Budget.Users.Api.ServiceCollection.EventPublisher
         {
             services.AddTransient(
                 typeof(Budget.EventSourcing.Events.IEventPublisher),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventPublisher)
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Events.InMemoryEventPublisher)
             );
 
             services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Events.InMemoryEventStream)
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Events.InMemoryEventStream),
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Events.InMemoryEventStream)
             );            
 
             services.AddHostedService<Budget.Users.InMemoryAdapters.HostedServices.InMemoryEventConsumerService>();

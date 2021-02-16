@@ -30,7 +30,7 @@ namespace Budget.Users.Api.ServiceCollection.EventPublisher
 
             services.AddTransient(
                 typeof(Budget.EventSourcing.Events.IEventPublisher),
-                typeof(Budget.Users.KafkaAdapters.Domain.Events.KafkaEventPublisher)
+                typeof(Budget.Users.KafkaAdapters.Domain.WriteModel.Events.KafkaEventPublisher)
             );
 
             services.AddHostedService<Budget.Users.KafkaAdapters.HostedServices.KafkaEventConsumerService>();

@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Budget.Cqrs.Commands;
 using Budget.EventSourcing.Events;
 using Budget.Users.Application.Exceptions;
-using Budget.Users.Domain.Model.WriteModel;
-using Budget.Users.Domain.Factories.WriteModelFactories;
-using Budget.Users.Domain.Repositories.ReadModelRepositories;
-using Budget.Users.Domain.Repositories.WriteModelRepositories;
+using Budget.Users.Domain.WriteModel;
+using Budget.Users.Domain.WriteModel.Factories;
+using Budget.Users.Domain.WriteModel.Repositories;
+using Budget.Users.Domain.ReadModel.Repositories;
 
 namespace Budget.Users.Application.Commands.Subscribe
 {

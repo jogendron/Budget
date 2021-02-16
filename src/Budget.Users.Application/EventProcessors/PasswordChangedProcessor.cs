@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Budget.Cqrs.Commands.EventProcessors;
-using Budget.Users.Domain.Events;
+using Budget.Users.Domain.WriteModel.Events;
 
 namespace Budget.Users.Application.EventProcessors
 {

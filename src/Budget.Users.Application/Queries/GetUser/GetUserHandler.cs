@@ -2,8 +2,8 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Budget.Cqrs.Queries;
-using Budget.Users.Domain.Model.ReadModel;
-using Budget.Users.Domain.Repositories.ReadModelRepositories;
+using Budget.Users.Domain.ReadModel;
+using Budget.Users.Domain.ReadModel.Repositories;
 
 namespace Budget.Users.Application.Queries.GetUser
 {

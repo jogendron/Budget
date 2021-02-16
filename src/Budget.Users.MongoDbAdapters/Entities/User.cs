@@ -12,7 +12,7 @@ namespace Budget.Users.MongoDbAdapters.Entities
         {
         }
 
-        public User(Budget.Users.Domain.Model.WriteModel.User user)
+        public User(Budget.Users.Domain.WriteModel.User user)
         {
             Id = user.Id;
             Changes = user.Changes;   

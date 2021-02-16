@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Budget.Cqrs.Commands.EventProcessors;
-using Budget.Users.Domain.Events;
-using Budget.Users.Domain.Model.ReadModel;
-using Budget.Users.Domain.Repositories.ReadModelRepositories;
+using Budget.Users.Domain.WriteModel.Events;
+using Budget.Users.Domain.ReadModel;
+using Budget.Users.Domain.ReadModel.Repositories;
 
 namespace Budget.Users.Application.EventProcessors
 {

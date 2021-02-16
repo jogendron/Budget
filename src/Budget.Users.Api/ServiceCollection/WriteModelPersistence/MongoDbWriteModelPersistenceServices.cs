@@ -20,8 +20,8 @@ namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
             services.AddSingleton(mongoDbConfiguration);
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.WriteModelRepositories.IWriteModelUnitOfWork),
-                typeof(Budget.Users.MongoDbAdapters.Domain.Repositories.WriteModelRepositories.MongoDbWriteModelUnitOfWork)
+                typeof(Budget.Users.Domain.WriteModel.Repositories.IWriteModelUnitOfWork),
+                typeof(Budget.Users.MongoDbAdapters.Domain.WriteModel.Repositories.MongoDbWriteModelUnitOfWork)
             );
 
             services.AddSingleton(

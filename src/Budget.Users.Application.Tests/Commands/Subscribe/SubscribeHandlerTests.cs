@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 using Budget.Users.Application.Commands.Subscribe;
 using Budget.Users.Application.Exceptions;
 using Budget.EventSourcing.Events;
-using Budget.Users.Domain.Model.WriteModel;
-using Budget.Users.Domain.Factories.WriteModelFactories;
-using Budget.Users.Domain.Repositories.ReadModelRepositories;
-using Budget.Users.Domain.Repositories.WriteModelRepositories;
-using Budget.Users.Domain.Services;
+using Budget.Users.Domain.WriteModel;
+using Budget.Users.Domain.WriteModel.Factories;
+using Budget.Users.Domain.WriteModel.Repositories;
+using Budget.Users.Domain.WriteModel.Services;
+using Budget.Users.Domain.ReadModel.Repositories;
 
 using MediatR;
 

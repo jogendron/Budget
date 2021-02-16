@@ -47,28 +47,28 @@ namespace Budget.Users.Api
             writeModelServices.Configure(services);
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory),
-                typeof(Budget.Users.Domain.Factories.WriteModelFactories.WriteModelUserFactory)
+                typeof(Budget.Users.Domain.WriteModel.Factories.WriteModelUserFactory),
+                typeof(Budget.Users.Domain.WriteModel.Factories.WriteModelUserFactory)
             );
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.ReadModelRepositories.IReadModelUnitOfWork),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.ReadModelRepositories.InMemoryReadModelUnitOfWork)
+                typeof(Budget.Users.Domain.ReadModel.Repositories.IReadModelUnitOfWork),
+                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryReadModelUnitOfWork)
             );
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.ReadModelRepositories.IReadModelUserRepository), 
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.ReadModelRepositories.InMemoryReadModelUserRepository)
+                typeof(Budget.Users.Domain.ReadModel.Repositories.IReadModelUserRepository), 
+                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryReadModelUserRepository)
             );
 
             services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.ReadModelRepositories.InMemoryUserReadData),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.ReadModelRepositories.InMemoryUserReadData)
+                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryUserReadData),
+                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryUserReadData)
             );
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Services.ICryptService),
-                typeof(Budget.Users.Domain.Services.Sha512CryptService)
+                typeof(Budget.Users.Domain.WriteModel.Services.ICryptService),
+                typeof(Budget.Users.Domain.WriteModel.Services.Sha512CryptService)
             );
 
             Assembly applicationLayerAssembly = typeof(Budget.Users.Application.Commands.Subscribe.SubscribeHandler).GetTypeInfo().Assembly;

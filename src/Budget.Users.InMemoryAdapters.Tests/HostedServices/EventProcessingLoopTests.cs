@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 
-using Budget.Users.InMemoryAdapters.Domain.Events;
+using Budget.Users.InMemoryAdapters.Domain.WriteModel.Events;
 using Budget.Users.InMemoryAdapters.HostedServices;
-using Budget.Users.Domain.Events;
+using Budget.Users.Domain.WriteModel.Events;
 using Budget.Cqrs.Commands.EventProcessors;
 
 namespace Budget.Users.InMemoryAdapters.Tests.HostedServices

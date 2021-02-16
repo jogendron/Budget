@@ -1,6 +1,6 @@
 using Budget.Cqrs.Queries;
 
-using Budget.Users.Domain.Model.ReadModel;
+using Budget.Users.Domain.ReadModel;
 
 namespace Budget.Users.Application.Queries.GetUser
 {

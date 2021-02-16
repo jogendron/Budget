@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using Budget.Cqrs.Commands.EventProcessors;
 using Budget.EventSourcing.Events;
-using Budget.Users.InMemoryAdapters.Domain.Events;
+using Budget.Users.InMemoryAdapters.Domain.WriteModel.Events;
 
 using MediatR;
 

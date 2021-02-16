@@ -6,10 +6,10 @@ using NSubstitute;
 using AutoFixture;
 
 using Budget.Users.MongoDbAdapters.Entities;
-using Budget.Users.Domain.Services;
-using Budget.Users.Domain.Factories.WriteModelFactories;
+using Budget.Users.Domain.WriteModel.Services;
+using Budget.Users.Domain.WriteModel.Factories;
 using Budget.EventSourcing.Events;
-using Budget.Users.Domain.Events;
+using Budget.Users.Domain.WriteModel.Events;
 
 namespace Budget.Users.MongoDbAdapters.Tests.Entities
 {

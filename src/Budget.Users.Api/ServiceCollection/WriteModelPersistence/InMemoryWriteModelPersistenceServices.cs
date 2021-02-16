@@ -7,18 +7,18 @@ namespace Budget.Users.Api.ServiceCollection.WriteModelPersistence
         public void Configure(IServiceCollection services)
         {
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.WriteModelRepositories.IWriteModelUnitOfWork),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryWriteModelUnitOfWork)
+                typeof(Budget.Users.Domain.WriteModel.Repositories.IWriteModelUnitOfWork),
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Repositories.InMemoryWriteModelUnitOfWork)
             );
 
             services.AddTransient(
-                typeof(Budget.Users.Domain.Repositories.WriteModelRepositories.IWriteModelUserRepository),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryWriteModelUserRepository)
+                typeof(Budget.Users.Domain.WriteModel.Repositories.IWriteModelUserRepository),
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Repositories.InMemoryWriteModelUserRepository)
             );
 
             services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryUserWriteData),
-                typeof(Budget.Users.InMemoryAdapters.Domain.Repositories.WriteModelRepositories.InMemoryUserWriteData)
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Repositories.InMemoryUserWriteData),
+                typeof(Budget.Users.InMemoryAdapters.Domain.WriteModel.Repositories.InMemoryUserWriteData)
             );
         }
     }

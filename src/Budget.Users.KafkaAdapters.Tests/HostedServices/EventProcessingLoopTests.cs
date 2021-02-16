@@ -14,7 +14,7 @@ using Budget.EventSourcing.Services.Serialization;
 using Budget.EventSourcing.Services.Serialization.Json;
 using Budget.Users.KafkaAdapters.HostedServices;
 using Budget.Users.KafkaAdapters.Entities;
-using Budget.Users.Domain.Events;
+using Budget.Users.Domain.WriteModel.Events;
 
 using Confluent.Kafka;
 using MediatR;

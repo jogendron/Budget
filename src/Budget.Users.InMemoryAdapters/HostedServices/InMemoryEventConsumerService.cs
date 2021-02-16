@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-using Budget.Users.InMemoryAdapters.Domain.Events;
+using Budget.Users.InMemoryAdapters.Domain.WriteModel.Events;
 
 using MediatR;
 

@@ -8,7 +8,7 @@ using MediatR;
 using Budget.Users.Application.Commands.Subscribe;
 using Budget.Users.Application.Queries.GetUser;
 using Budget.Users.Application.Exceptions;
-using Budget.Users.Domain.Model.ReadModel;
+using Budget.Users.Domain.ReadModel;
 
 namespace Budget.Users.Api.Controllers
 {
