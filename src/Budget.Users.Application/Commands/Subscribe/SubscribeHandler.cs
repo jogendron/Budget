@@ -45,9 +45,13 @@ namespace Budget.Users.Application.Commands.Subscribe
 
                 var user = CreateUser(command);
 
-                await WriteModel.UserRepository.Save(user);
-                await EventPublisher.PublishNewEvents(user);
-                
+                await Task.WhenAll(
+                    new Task[] {
+                        WriteModel.UserRepository.Save(user),
+                        EventPublisher.PublishNewEvents(user)
+                    }
+                );
+
                 WriteModel.Commit();
             }
             catch
