@@ -9,5 +9,7 @@ namespace Budget.Users.Api.Entities
         public string EventPublisher { get; set;}
 
         public string WriteModelPersistence { get; set; }
+
+        public string ReadModelPersistence { get; set; }
     }
 }

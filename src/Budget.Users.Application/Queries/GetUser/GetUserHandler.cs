@@ -9,16 +9,16 @@ namespace Budget.Users.Application.Queries.GetUser
 {
     public class GetUserHandler : IQueryHandler<GetUserRequest, User>
     {
-        public GetUserHandler(IReadModelUserRepository userRepository)
+        public GetUserHandler(IReadModelUnitOfWork readModel)
         {
-            UserRepository = userRepository;
+            ReadModel = readModel;
         }
 
-        private IReadModelUserRepository UserRepository { get; }
+        private IReadModelUnitOfWork ReadModel { get; }
 
         public Task<User> Handle(GetUserRequest request, CancellationToken cancellationToken)
         {
-            return UserRepository.GetUser(request.UserName);
+            return ReadModel.UserRepository.GetUser(request.UserName);
         }
     }
 }

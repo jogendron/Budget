@@ -10,3 +10,7 @@ docker exec broker kafka-topics --create --bootstrap-server localhost:9092 --rep
 
 echo Creating User.PublicEvents kafka topic...
 docker exec broker kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic User.PublicEvents
+
+echo Configuring postgres...
+docker cp ./postgres-budget-setup.sql postgres:/tmp
+docker exec -u postgres postgres psql -f /tmp/postgres-budget-setup.sql

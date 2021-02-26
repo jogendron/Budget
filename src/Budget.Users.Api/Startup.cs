@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Budget.Users.Api.Entities;
 using Budget.Users.Api.ServiceCollection.EventPublisher;
 using Budget.Users.Api.ServiceCollection.WriteModelPersistence;
+using Budget.Users.Api.ServiceCollection.ReadModelPersistence;
 using MediatR;
 
 namespace Budget.Users.Api
@@ -46,24 +47,13 @@ namespace Budget.Users.Api
             var writeModelServices = writeModelPersistenceSelector.GetServiceCollection();
             writeModelServices.Configure(services);
 
+            var readModelPersistenceSelector = new ReadModelPersistenceSelector(Configuration, Providers);
+            var readModelServices = readModelPersistenceSelector.GetServiceCollection();
+            readModelServices.Configure(services);
+
             services.AddTransient(
                 typeof(Budget.Users.Domain.WriteModel.Factories.WriteModelUserFactory),
                 typeof(Budget.Users.Domain.WriteModel.Factories.WriteModelUserFactory)
-            );
-
-            services.AddTransient(
-                typeof(Budget.Users.Domain.ReadModel.Repositories.IReadModelUnitOfWork),
-                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryReadModelUnitOfWork)
-            );
-
-            services.AddTransient(
-                typeof(Budget.Users.Domain.ReadModel.Repositories.IReadModelUserRepository), 
-                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryReadModelUserRepository)
-            );
-
-            services.AddSingleton(
-                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryUserReadData),
-                typeof(Budget.Users.InMemoryAdapters.Domain.ReadModel.Repositories.InMemoryUserReadData)
             );
 
             services.AddTransient(

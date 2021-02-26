@@ -17,6 +17,8 @@ namespace Budget.Users.Application.Tests.Queries.GetUser
     {
         Fixture fixture;
 
+        private IReadModelUnitOfWork unitOfWork;
+
         private IReadModelUserRepository userRepository;
 
         private GetUserHandler handler;
@@ -25,9 +27,12 @@ namespace Budget.Users.Application.Tests.Queries.GetUser
         {
             fixture = new Fixture();
 
+            unitOfWork = Substitute.For<IReadModelUnitOfWork>();
             userRepository = Substitute.For<IReadModelUserRepository>();
 
-            handler = new GetUserHandler(userRepository);
+            unitOfWork.UserRepository.Returns(userRepository);
+
+            handler = new GetUserHandler(unitOfWork);
         }
 
         [Fact]

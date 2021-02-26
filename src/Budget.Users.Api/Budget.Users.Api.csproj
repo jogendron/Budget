@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Budget.Users.InMemoryAdapters\Budget.Users.InMemoryAdapters.csproj" />
     <ProjectReference Include="..\Budget.Users.KafkaAdapters\Budget.Users.KafkaAdapters.csproj" />
     <ProjectReference Include="..\Budget.Users.MongoDbAdapters\Budget.Users.MongoDbAdapters.csproj" />
+    <ProjectReference Include="..\Budget.Users.PostgresAdapters\Budget.Users.PostgresAdapters.csproj" />
   </ItemGroup>
 
 

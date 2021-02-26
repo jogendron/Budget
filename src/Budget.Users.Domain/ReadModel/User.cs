@@ -2,7 +2,7 @@ using System;
 
 namespace Budget.Users.Domain.ReadModel
 {
-    public class User
+    public class User : IEquatable<User>
     {
         public User(Guid id, string userName, string firstName, string lastName, string email)
         {
@@ -22,5 +22,15 @@ namespace Budget.Users.Domain.ReadModel
         public string LastName { get; }
 
         public string Email { get; }
+
+        public bool Equals(User other)
+        {
+            return
+                this.Id == other.Id
+                && this.UserName == other.UserName
+                && this.FirstName == other.FirstName
+                && this.LastName == other.LastName
+                && this.Email == other.LastName;
+        }
     }
 }

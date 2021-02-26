@@ -70,7 +70,7 @@ namespace Budget.Users.Api.Controllers
                 else 
                     response = NotFound();
             }
-            catch
+            catch             
             {
                 response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
