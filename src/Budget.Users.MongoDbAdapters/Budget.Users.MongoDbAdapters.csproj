@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="mongodb.bson" Version="2.11.5" />
-    <PackageReference Include="mongodb.driver" Version="2.11.3" />
+    <PackageReference Include="mongodb.bson" Version="2.12.1" />
+    <PackageReference Include="mongodb.driver" Version="2.12.1" />
   </ItemGroup>
 
   <ItemGroup>
