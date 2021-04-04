@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build_Budget.Users",
-            "program": "${workspaceFolder}/src/Budget.Users.Api/bin/Debug/netcoreapp3.1/Budget.Users.Api",
+            "program": "${workspaceFolder}/src/Budget.Users.Api/bin/Debug/netcoreapp5.0/Budget.Users.Api",
             "args": [""],
             "cwd": "${workspaceFolder}/src/Budget.Users.Api",
             "console": "internalConsole",
