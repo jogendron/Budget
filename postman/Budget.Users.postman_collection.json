@@ -11,7 +11,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "43be39d9-a2eb-4f73-89b9-9828e8922944",
 						"exec": [
 							""
 						],
@@ -21,7 +20,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "adad83d5-224a-4d7d-86e6-ae8054b94f3c",
 						"exec": [
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -44,14 +42,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/User/",
+					"raw": "http://localhost:7000/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "7000",
 					"path": [
-						"User",
+						"user",
 						""
 					]
 				},
@@ -74,14 +72,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/User/",
+					"raw": "http://localhost:5000/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"User",
+						"user",
 						""
 					]
 				},
@@ -104,14 +102,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/User/",
+					"raw": "http://localhost:7000/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "5000",
+					"port": "7000",
 					"path": [
-						"User",
+						"user",
 						""
 					]
 				},
@@ -137,14 +135,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/User/",
+					"raw": "http://localhost:5000/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"User",
+						"user",
 						""
 					]
 				},
@@ -170,14 +168,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/User/",
+					"raw": "http://localhost:5000/user/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "5000",
 					"path": [
-						"User",
+						"user",
 						""
 					]
 				},
@@ -185,6 +183,5 @@
 			},
 			"response": []
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
