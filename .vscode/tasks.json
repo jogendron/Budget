@@ -2,7 +2,53 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build_Budget.Users",
+            "label": "Api Gateway - Build",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/Budget.Gateway.sln",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile",
+            "promptOnClose": false,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Api Gateway - Build Docker image",
+            "command": "docker",
+            "type": "shell",
+            "args": [
+                "build",
+                ".",
+                "--pull",
+                "-t",
+                "budget/gateway:1.0",
+                "-f",
+                "${workspaceFolder}/src/Budget.Gateway.Dockerfile"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/src/"
+            }
+        },
+        {
+            "label": "Users API - Build",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -23,7 +69,7 @@
             }
         },
         {
-            "label": "Test_Budget.Users",
+            "label": "Users API - Test",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -41,6 +87,31 @@
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true
+            }
+        },
+        {
+            "label": "Users API - Build Docker image",
+            "command": "docker",
+            "type": "shell",
+            "args": [
+                "build",
+                ".",
+                "--pull",
+                "-t",
+                "budget/users:1.0",
+                "-f",
+                "${workspaceFolder}/src/Budget.Users.Dockerfile"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/src/"
             }
         }
     ]

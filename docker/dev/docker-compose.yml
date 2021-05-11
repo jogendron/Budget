@@ -1,5 +1,5 @@
 ---
-version: '2'
+version: '3.8'
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -10,6 +10,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - budget_backend
 
   broker:
     image: confluentinc/cp-server:latest
@@ -24,7 +26,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://broker:9092
       KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
@@ -38,13 +40,17 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    networks:
+      - budget_backend
 
   mongo:
-      image: mongo:latest
-      hostname: mongo
-      container_name: mongo
-      ports:
-        - "27017:27017"
+    image: mongo:latest
+    hostname: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - budget_backend
 
   postgresql:
     image: postgres
@@ -54,3 +60,41 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: postgres
+    networks:
+      - budget_backend
+
+  budget_users:
+    image: budget/users:1.0
+    hostname: budget_users
+    container_name: budget_users
+    depends_on:
+      - broker
+      - mongo
+      - postgresql
+    ports:
+      - "5000:5000"
+    networks:
+      - budget_backend
+
+  budget_gateway:
+    image: budget/gateway:1.0
+    hostname: budget_gateway
+    container_name: budget_gateway
+    depends_on:
+      - budget_users
+    ports:
+      - "7000:7000"
+    networks:
+      - budget_frontend
+      - budget_backend
+
+networks:
+
+  budget_backend:
+    driver: bridge
+    internal: true
+    name: budget_backend
+
+  budget_frontend:
+    driver: bridge
+    name: budget_frontend

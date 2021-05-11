@@ -8,10 +8,21 @@
             "name": "Launch user api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "Build_Budget.Users",
-            "program": "${workspaceFolder}/src/Budget.Users.Api/bin/Debug/netcoreapp5.0/Budget.Users.Api",
+            "preLaunchTask": "Users API - Build",
+            "program": "${workspaceFolder}/src/Budget.Users.Api/bin/Debug/net5.0/Budget.Users.Api",
             "args": [""],
             "cwd": "${workspaceFolder}/src/Budget.Users.Api",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Launch api gateway",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Api Gateway - Build",
+            "program": "${workspaceFolder}/src/Budget.Gateway.Api/bin/Debug/net5.0/Budget.Gateway.Api",
+            "args": [""],
+            "cwd": "${workspaceFolder}/src/Budget.Gateway.Api",
             "console": "internalConsole",
             "stopAtEntry": false
         }
