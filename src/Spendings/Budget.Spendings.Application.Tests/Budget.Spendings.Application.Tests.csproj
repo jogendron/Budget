@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
@@ -12,7 +13,9 @@
   <ItemGroup>
     <PackageReference Include="autofixture" Version="4.18.0" />
     <PackageReference Include="fluentassertions" Version="6.11.0" />
+    <PackageReference Include="microsoft.extensions.logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="nsubstitute" Version="5.0.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Budget.Spendings.Application\Budget.Spendings.Application.csproj" />
     <ProjectReference Include="..\Budget.Spendings.Domain\Budget.Spendings.Domain.csproj" />
-    <ProjectReference Include="..\Budget.EventSourcing\Budget.EventSourcing.csproj" />
   </ItemGroup>
 
 </Project>

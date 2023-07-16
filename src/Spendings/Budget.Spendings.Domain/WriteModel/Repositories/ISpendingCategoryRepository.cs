@@ -1,6 +1,6 @@
 using Budget.Spendings.Domain.WriteModel.Entities;
 
-namespace Budget.Spendings.Domain.Repositories;
+namespace Budget.Spendings.Domain.WriteModel.Repositories;
 
 public interface ISpendingCategoryRepository
 {

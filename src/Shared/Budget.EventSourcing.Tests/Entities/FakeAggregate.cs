@@ -41,7 +41,7 @@ namespace Budget.EventSourcing.Tests.Entities
 
         public void TriggerNullEvent()
         {
-            AddChange(null);
+            AddChange(null!);
         }
         
         public void Handle(FakeEvent @event)

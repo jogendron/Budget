@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.EventSourcing", "Budget.EventSourcing\Budget.EventSourcing.csproj", "{2F81C1AD-EE7F-4708-9DEC-9B3E8CCD8D90}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared\Budget.EventSourcing", "Budget.EventSourcing\Budget.EventSourcing.csproj", "{2F81C1AD-EE7F-4708-9DEC-9B3E8CCD8D90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.EventSourcing.Tests", "Budget.EventSourcing.Tests\Budget.EventSourcing.Tests.csproj", "{39BEF1F0-1EE3-46DD-B0DF-61F34C31DFF1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared\Budget.EventSourcing.Tests", "Budget.EventSourcing.Tests\Budget.EventSourcing.Tests.csproj", "{39BEF1F0-1EE3-46DD-B0DF-61F34C31DFF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Domain", "Budget.Spendings.Domain\Budget.Spendings.Domain.csproj", "{986E1C60-A927-4835-8883-52119B3CC613}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Domain", "Spendings\Budget.Spendings.Domain\Budget.Spendings.Domain.csproj", "{986E1C60-A927-4835-8883-52119B3CC613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Domain.Tests", "Budget.Spendings.Domain.Tests\Budget.Spendings.Domain.Tests.csproj", "{AD535951-0BB8-4D12-B615-BF5981FF5065}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Domain.Tests", "Spendings\Budget.Spendings.Domain.Tests\Budget.Spendings.Domain.Tests.csproj", "{AD535951-0BB8-4D12-B615-BF5981FF5065}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Spendings", "Spendings", "{4C805453-BFF5-4F05-97F4-7A520D92E728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Application", "Spendings\Budget.Spendings.Application\Budget.Spendings.Application.csproj", "{B603F6DD-44AD-4DC5-938D-4896E298D7E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Application.Tests", "Spendings\Budget.Spendings.Application.Tests\Budget.Spendings.Application.Tests.csproj", "{6F8CC546-ECFD-461B-8F38-74691A8E20FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +42,17 @@ Global
 		{AD535951-0BB8-4D12-B615-BF5981FF5065}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD535951-0BB8-4D12-B615-BF5981FF5065}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD535951-0BB8-4D12-B615-BF5981FF5065}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B603F6DD-44AD-4DC5-938D-4896E298D7E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B603F6DD-44AD-4DC5-938D-4896E298D7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B603F6DD-44AD-4DC5-938D-4896E298D7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B603F6DD-44AD-4DC5-938D-4896E298D7E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B603F6DD-44AD-4DC5-938D-4896E298D7E1} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
+		{6F8CC546-ECFD-461B-8F38-74691A8E20FF} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
 	EndGlobalSection
 EndGlobal

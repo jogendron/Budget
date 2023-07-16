@@ -9,6 +9,7 @@ namespace Budget.EventSourcing.Tests.Events
         //Constructor for serialization
         public FakeEvent() : base()
         {
+            Message = string.Empty;
         }
 
         public FakeEvent(Guid aggregateId, string message) : this(aggregateId, Guid.NewGuid(), DateTime.Now, message)
