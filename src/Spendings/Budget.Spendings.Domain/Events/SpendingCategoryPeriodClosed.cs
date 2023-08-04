@@ -1,6 +1,6 @@
 using Budget.EventSourcing.Events;
 
-namespace Budget.Spendings.Domain.WriteModel.Events;
+namespace Budget.Spendings.Domain.Events;
 
 public class SpendingCategoryPeriodClosed : Event
 {

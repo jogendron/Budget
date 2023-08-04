@@ -1,5 +1,5 @@
+using Budget.Spendings.Domain.Events;
 using Budget.Spendings.Domain.WriteModel.Entities;
-using Budget.Spendings.Domain.WriteModel.Events;
 using Budget.Spendings.Domain.WriteModel.Factories;
 using Budget.EventSourcing.Events;
 
@@ -32,10 +32,10 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     id,
                     fixture.Create<string>(),
                     fixture.Create<string>(),
-                    new Period(
+                    new Events.Period(
                         DateTime.MinValue
                     ),
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     15,
                     fixture.Create<string>()
                 )
@@ -50,7 +50,8 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             //Arrange
             string userId = fixture.Create<string>();
             string name = fixture.Create<string>();
-            Frequency frequency = Frequency.Daily;
+            Budget.Spendings.Domain.WriteModel.Entities.Frequency frequency = 
+                Budget.Spendings.Domain.WriteModel.Entities.Frequency.Daily;
             double amount = 10;
             string description = fixture.Create<string>();
 
@@ -79,7 +80,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                 evt.UserId.Should().Be(userId);
                 evt.Name.Should().Be(name);
                 evt.Period.Should().NotBeNull();
-                evt.Frequency.Should().Be(Frequency.Daily);
+                evt.Frequency.Should().Be(Events.Frequency.Daily);
                 evt.Amount.Should().Be(amount);
                 evt.Description.Should().Be(description);
             }
@@ -93,7 +94,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             string name = fixture.Create<string>();
             DateTime beginDate = DateTime.MinValue;
             DateTime endDate = beginDate.AddDays(1);
-            Frequency frequency = Frequency.Daily;
+            Events.Frequency frequency = Events.Frequency.Daily;
             double amount = 10;
             string description = fixture.Create<string>();
 
@@ -104,11 +105,11 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     id,
                     userId,
                     name,
-                    new Period(
+                    new Events.Period(
                         beginDate,
                         endDate
                     ),
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     amount,
                     description
                 )
@@ -124,7 +125,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             category.Period.Should().NotBeNull();
             category.Period.BeginDate.Should().Be(beginDate);
             category.Period.EndDate.Should().Be(endDate);
-            category.Frequency.Should().Be(frequency);
+            category.Frequency.Should().Be(frequency.ToWriteModelFrequency());
             category.Amount.Should().Be(amount);
             category.Description.Should().Be(description);
         }
@@ -137,7 +138,8 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             string name = string.Empty;
             DateTime beginDate = DateTime.MinValue;
             DateTime endDate = beginDate.AddDays(1);
-            Frequency frequency = Frequency.Daily;
+            Budget.Spendings.Domain.WriteModel.Entities.Frequency frequency = 
+                Budget.Spendings.Domain.WriteModel.Entities.Frequency.Daily;
             double amount = 10;
             string description = fixture.Create<string>();
 
@@ -165,7 +167,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     fixture.Create<string>(),
                     fixture.Create<string>(),
                     null,
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     10,
                     fixture.Create<string>()
                 )
@@ -186,7 +188,8 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             string name = fixture.Create<string>();
             DateTime beginDate = DateTime.MinValue;
             DateTime endDate = beginDate.AddDays(1);
-            Frequency frequency = Frequency.Daily;
+            Budget.Spendings.Domain.WriteModel.Entities.Frequency frequency = 
+                Budget.Spendings.Domain.WriteModel.Entities.Frequency.Daily;
             double amount = -10;
             string description = fixture.Create<string>();
 
@@ -211,7 +214,8 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
             string name = fixture.Create<string>();
             DateTime beginDate = DateTime.MinValue;
             DateTime endDate = beginDate.AddDays(1);
-            Frequency frequency = Frequency.Daily;
+            Budget.Spendings.Domain.WriteModel.Entities.Frequency frequency = 
+                Budget.Spendings.Domain.WriteModel.Entities.Frequency.Daily;
             double amount = 10;
             string description = string.Empty;
 
@@ -295,10 +299,10 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     id,
                     fixture.Create<string>(),
                     fixture.Create<string>(),
-                    new Period(
+                    new Events.Period(
                         DateTime.Now
                     ),
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     15,
                     fixture.Create<string>()
                 ),
@@ -325,10 +329,10 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     id,
                     fixture.Create<string>(),
                     fixture.Create<string>(),
-                    new Period(
+                    new Events.Period(
                         DateTime.Now
                     ),
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     15,
                     fixture.Create<string>()
                 ),
@@ -354,10 +358,10 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
                     id,
                     fixture.Create<string>(),
                     fixture.Create<string>(),
-                    new Period(
+                    new Events.Period(
                         DateTime.Now
                     ),
-                    Frequency.Daily,
+                    Events.Frequency.Daily,
                     15,
                     fixture.Create<string>()
                 ),
@@ -383,7 +387,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
         public void Update_ThrowsArgumentException_WhenNameIsNullOrEmpty()
         {
             //Arrange
-            var frequency = fixture.Create<Frequency>();
+            var frequency = fixture.Create<Budget.Spendings.Domain.WriteModel.Entities.Frequency>();
             var amount = fixture.Create<double>();
             var description = fixture.Create<string>();
 
@@ -401,7 +405,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
         {
             //Arrange
             var name = fixture.Create<string>();
-            var frequency = fixture.Create<Frequency>();
+            var frequency = fixture.Create<Budget.Spendings.Domain.WriteModel.Entities.Frequency>();
             var amount = fixture.Create<double>();
 
             SpendingCategory category = GetExistingSpendingCategory();
@@ -418,7 +422,7 @@ namespace Budget.Spendings.Domain.Tests.WriteModel
         {
             //Arrange
             var name = fixture.Create<string>();
-            var frequency = fixture.Create<Frequency>();
+            var frequency = fixture.Create<Budget.Spendings.Domain.WriteModel.Entities.Frequency>();
             var amount = fixture.Create<double>();
             var description = fixture.Create<string>();
 

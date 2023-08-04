@@ -36,7 +36,7 @@ public class CreateSpendingCategoryHandlerTests
     }
 
     [Fact]
-    public void Handle_CreatesAndSaves_SpendingCategory()
+    public async Task Handle_CreatesAndSaves_SpendingCategory()
     {
         //Arrange
         var command = _fixture.Build<CreateSpendingCategoryCommand>()
@@ -47,15 +47,13 @@ public class CreateSpendingCategoryHandlerTests
         var token = tokenSource.Token;
 
         //Act
-        var task = _handler.Handle(command, token);
-        task.Wait();
-        var result = task.Result;
+        var result = await _handler.Handle(command, token);
 
         //Assert
         result.Id.Should().NotBeEmpty();
 
         _unitOfWork.Received(1).BeginTransaction();
-        _repository.Received(1).SaveAsync(
+        await _repository.Received(1).SaveAsync(
             Arg.Is<SpendingCategory>(
                 s => s.UserId == command.UserId
                 && s.Name == command.Name

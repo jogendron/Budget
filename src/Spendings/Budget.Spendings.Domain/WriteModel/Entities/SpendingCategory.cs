@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using Budget.EventSourcing.Entities;
 using Budget.EventSourcing.Events;
-using Budget.Spendings.Domain.WriteModel.Events;
+using Budget.Spendings.Domain.Events;
 
 namespace Budget.Spendings.Domain.WriteModel.Entities;
 
@@ -35,8 +35,8 @@ public class SpendingCategory :
                 Id,
                 userId,
                 name,
-                period,
-                frequency,
+                period.ToEventPeriod(),
+                frequency.ToEventFrequency(),
                 amount,
                 description
             )
@@ -131,7 +131,7 @@ public class SpendingCategory :
             new SpendingCategoryUpdated(
                 Id,
                 name,
-                frequency,
+                frequency.ToEventFrequency(),
                 amount,
                 description
             )
@@ -172,12 +172,14 @@ public class SpendingCategory :
 
     void IEventHandler<SpendingCategoryCreated>.Handle(SpendingCategoryCreated @event)
     {
-        Id = @event.AggregateId;
+        if (@event.Period == null)
+            throw new ArgumentNullException(nameof(@event.Period));
 
+        Id = @event.AggregateId;
         UserId = @event.UserId;
         Name = @event.Name;
-        Period = @event.Period;
-        Frequency = @event.Frequency;
+        Period = @event.Period.ToWriteModelPeriod();
+        Frequency = @event.Frequency.ToWriteModelFrequency();
         Amount = @event.Amount;
         Description = @event.Description;
     }
@@ -185,7 +187,7 @@ public class SpendingCategory :
     void IEventHandler<SpendingCategoryUpdated>.Handle(SpendingCategoryUpdated @event)
     {
         Name = @event.Name;
-        Frequency = @event.Frequency;
+        Frequency = @event.Frequency.ToWriteModelFrequency();
         Amount = @event.Amount;
         Description = @event.Description;
     }

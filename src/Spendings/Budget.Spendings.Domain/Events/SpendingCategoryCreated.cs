@@ -1,7 +1,6 @@
 using Budget.EventSourcing.Events;
-using Budget.Spendings.Domain.WriteModel.Entities;
 
-namespace Budget.Spendings.Domain.WriteModel.Events
+namespace Budget.Spendings.Domain.Events
 {
     public class SpendingCategoryCreated : Event
     {

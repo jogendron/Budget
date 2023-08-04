@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Application.Tests", "Spendings\Budget.Spendings.Application.Tests\Budget.Spendings.Application.Tests.csproj", "{6F8CC546-ECFD-461B-8F38-74691A8E20FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Infrastructure.EF", "Spendings\Budget.Spendings.Infrastructure.EF\Budget.Spendings.Infrastructure.EF.csproj", "{1DC63976-77B9-46D4-811D-0151D4FD3B9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Infrastructure.EF.Tests", "Spendings\Budget.Spendings.Infrastructure.EF.Tests\Budget.Spendings.Infrastructure.EF.Tests.csproj", "{CA010477-5E8B-4AB0-896B-4366C5C49F0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,9 +54,19 @@ Global
 		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F8CC546-ECFD-461B-8F38-74691A8E20FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DC63976-77B9-46D4-811D-0151D4FD3B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC63976-77B9-46D4-811D-0151D4FD3B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DC63976-77B9-46D4-811D-0151D4FD3B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DC63976-77B9-46D4-811D-0151D4FD3B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA010477-5E8B-4AB0-896B-4366C5C49F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA010477-5E8B-4AB0-896B-4366C5C49F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA010477-5E8B-4AB0-896B-4366C5C49F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA010477-5E8B-4AB0-896B-4366C5C49F0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B603F6DD-44AD-4DC5-938D-4896E298D7E1} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
 		{6F8CC546-ECFD-461B-8F38-74691A8E20FF} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
+		{1DC63976-77B9-46D4-811D-0151D4FD3B9D} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
+		{CA010477-5E8B-4AB0-896B-4366C5C49F0B} = {4C805453-BFF5-4F05-97F4-7A520D92E728}
 	EndGlobalSection
 EndGlobal
