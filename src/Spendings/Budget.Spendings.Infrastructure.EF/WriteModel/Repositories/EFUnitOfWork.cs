@@ -9,7 +9,7 @@ public class EFUnitOfWork : IUnitOfWork
     public EFUnitOfWork(SpendingsContext dbContext)
     {
         _dbContext = dbContext;
-        SpendingCategories = new EFSpendingCategoryRepository(_dbContext);
+        SpendingCategories = new EFWriteModelSpendingCategoryRepository(_dbContext);
     }
 
     public ISpendingCategoryRepository SpendingCategories { get; }

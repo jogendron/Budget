@@ -8,6 +8,6 @@ public interface ISpendingCategoryRepository
 
     Task<IEnumerable<SpendingCategory>> Get(string userId);
 
-    Task<IEnumerable<SpendingCategory>> Get(string userId, string name);
+    Task<SpendingCategory?> Get(string userId, string name);
     
 }

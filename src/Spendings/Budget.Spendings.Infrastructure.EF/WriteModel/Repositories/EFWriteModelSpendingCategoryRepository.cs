@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Budget.Spendings.Infrastructure.EF.WriteModel.Repositories;
 
-public class EFSpendingCategoryRepository : ISpendingCategoryRepository
+public class EFWriteModelSpendingCategoryRepository : ISpendingCategoryRepository
 {
     private readonly SpendingsContext _context;
     private readonly SpendingCategoryFactory _factory;
 
-    public EFSpendingCategoryRepository(SpendingsContext context)
+    public EFWriteModelSpendingCategoryRepository(SpendingsContext context)
     {
         _context = context;
         _factory = new SpendingCategoryFactory();

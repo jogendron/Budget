@@ -50,4 +50,19 @@ public class SpendingCategory
 
     public List<Event> Events { get; set; }
 
+    internal Domain.ReadModel.Entities.SpendingCategory ToReadModel()
+    {
+        return new Domain.ReadModel.Entities.SpendingCategory(
+            Id,
+            UserId,
+            Name,
+            BeginDate,
+            ModifiedOn,
+            EndDate,
+            Frequency.ToReadModel(),
+            Amount,
+            Description
+        );
+    }
+
 }

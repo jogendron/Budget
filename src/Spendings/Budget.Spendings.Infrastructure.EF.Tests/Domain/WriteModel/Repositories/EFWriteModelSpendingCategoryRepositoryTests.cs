@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Budget.Spendings.Infrastructure.EF.Tests.Domain.WriteModel.Repositories;
 
-public class EFSpendingCategoryRepositoryTests
+public class EFWriteModelSpendingCategoryRepositoryTests
 {
     private readonly Fixture _fixture;
     private readonly SpendingsContext _dbContext;
-    private readonly EFSpendingCategoryRepository _repository;
+    private readonly EFWriteModelSpendingCategoryRepository _repository;
     private SpendingCategoryFactory _categoryFactory;
 
-    public EFSpendingCategoryRepositoryTests()
+    public EFWriteModelSpendingCategoryRepositoryTests()
     {
         _fixture = new Fixture();
 
@@ -23,7 +23,7 @@ public class EFSpendingCategoryRepositoryTests
         _dbContext = new SpendingsContext(builder.Options);
         _dbContext.Database.EnsureCreated();
 
-        _repository = new EFSpendingCategoryRepository(_dbContext);
+        _repository = new EFWriteModelSpendingCategoryRepository(_dbContext);
 
         _categoryFactory = new SpendingCategoryFactory();
     }
