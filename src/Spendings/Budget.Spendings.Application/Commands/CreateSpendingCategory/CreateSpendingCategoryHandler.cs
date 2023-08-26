@@ -1,5 +1,6 @@
-using Budget.Spendings.Domain.WriteModel.Factories;
-using Budget.Spendings.Domain.WriteModel.Repositories;
+using Budget.Spendings.Application.Exceptions;
+using Budget.Spendings.Domain.Factories;
+using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,11 +12,11 @@ public class CreateSpendingCategoryHandler
 {
     private readonly SpendingCategoryFactory _factory;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger _logger;
+    private readonly ILogger<CreateSpendingCategoryHandler> _logger;
 
     public CreateSpendingCategoryHandler(
         IUnitOfWork unitOfWork,
-        ILogger logger
+        ILogger<CreateSpendingCategoryHandler> logger
     )
     {
         _factory = new SpendingCategoryFactory();
@@ -33,6 +34,14 @@ public class CreateSpendingCategoryHandler
         try
         {
             _unitOfWork.BeginTransaction();
+
+            var existingCategory = await _unitOfWork.SpendingCategories.GetAsync(
+                request.UserId,
+                request.Name
+            );
+
+            if (existingCategory != null)
+                throw new SpendingCategoryAlreadyExistsException();
 
             var category = _factory.Create(
                 request.UserId,

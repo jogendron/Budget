@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Infrastruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Infrastructure.EF.Tests", "Spendings\Budget.Spendings.Infrastructure.EF.Tests\Budget.Spendings.Infrastructure.EF.Tests.csproj", "{41622C32-74CC-42C8-9B4B-DE8C27275B6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Api", "Spendings\Budget.Spendings.Api\Budget.Spendings.Api.csproj", "{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Spendings.Api.Tests", "Spendings\Budget.Spendings.Api.Tests\Budget.Spendings.Api.Tests.csproj", "{0AE9CA43-383F-48B9-98D8-DEA58D9EE650}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,11 +66,21 @@ Global
 		{41622C32-74CC-42C8-9B4B-DE8C27275B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41622C32-74CC-42C8-9B4B-DE8C27275B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41622C32-74CC-42C8-9B4B-DE8C27275B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AE9CA43-383F-48B9-98D8-DEA58D9EE650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AE9CA43-383F-48B9-98D8-DEA58D9EE650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AE9CA43-383F-48B9-98D8-DEA58D9EE650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AE9CA43-383F-48B9-98D8-DEA58D9EE650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E7574472-9B49-495C-8EBC-9321B05F81EC} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
 		{A6ACDBEB-8384-410E-8036-D2D0DED95BA6} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
 		{31F70F69-F326-4376-8C79-A666EC8E5492} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
 		{41622C32-74CC-42C8-9B4B-DE8C27275B6D} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
+		{4CA8C073-EBD8-46CA-A9E5-EC2932D6A282} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
+		{0AE9CA43-383F-48B9-98D8-DEA58D9EE650} = {2846ABE3-8BD1-4EB8-82DA-D20C6919D1B2}
 	EndGlobalSection
 EndGlobal

@@ -1,3 +1,5 @@
+using Budget.Spendings.Domain.Factories;
+
 namespace Budget.Spendings.Infrastructure.EF;
 
 public class SpendingCategory
@@ -16,7 +18,7 @@ public class SpendingCategory
         Events = new List<Event>();
     }
 
-    public SpendingCategory(Budget.Spendings.Domain.WriteModel.Entities.SpendingCategory category)
+    public SpendingCategory(Domain.Entities.SpendingCategory category)
     {
         Id = category.Id;
         UserId = category.UserId;
@@ -50,19 +52,11 @@ public class SpendingCategory
 
     public List<Event> Events { get; set; }
 
-    internal Domain.ReadModel.Entities.SpendingCategory ToReadModel()
+    internal Domain.Entities.SpendingCategory ToDomain()
     {
-        return new Domain.ReadModel.Entities.SpendingCategory(
-            Id,
-            UserId,
-            Name,
-            BeginDate,
-            ModifiedOn,
-            EndDate,
-            Frequency.ToReadModel(),
-            Amount,
-            Description
-        );
+        var factory = new SpendingCategoryFactory();
+        
+        return factory.Load(Id, Events.Select(e => e.ToDomainEvent()));
     }
 
 }

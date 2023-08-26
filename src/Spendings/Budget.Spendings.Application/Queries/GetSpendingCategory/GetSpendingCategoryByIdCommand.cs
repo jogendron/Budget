@@ -1,5 +1,6 @@
-using Budget.Spendings.Domain.ReadModel.Entities;
+using Budget.Spendings.Domain.Entities;
 
+using System.ComponentModel.DataAnnotations;
 using MediatR;
 
 namespace Budget.Spendings.Application.Queries.GetSpendingCategory;
@@ -15,6 +16,7 @@ public class GetSpendingCategoryByIdCommand : IRequest<SpendingCategory?>
     {
         Id = id;
     }
-    
+
+    [Required]    
     public Guid Id { get; set; }
 }

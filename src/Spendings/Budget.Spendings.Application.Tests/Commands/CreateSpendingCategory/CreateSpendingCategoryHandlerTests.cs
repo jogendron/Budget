@@ -1,11 +1,14 @@
 using Budget.Spendings.Application.Commands.CreateSpendingCategory;
-using Budget.Spendings.Domain.WriteModel.Entities;
-using Budget.Spendings.Domain.WriteModel.Repositories;
+using Budget.Spendings.Domain.Entities;
+using Budget.Spendings.Domain.Factories;
+using Budget.Spendings.Domain.Repositories;
 
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
+
+using Budget.Spendings.Application.Exceptions;
 
 namespace Budget.Spendings.Application.Tests.Commands.CreateSpendingCategory;
 
@@ -15,7 +18,7 @@ public class CreateSpendingCategoryHandlerTests
 
     private ISpendingCategoryRepository _repository;
     private IUnitOfWork _unitOfWork;
-    private ILogger _logger;
+    private ILogger<CreateSpendingCategoryHandler> _logger;
 
     private CreateSpendingCategoryHandler _handler;
 
@@ -27,7 +30,7 @@ public class CreateSpendingCategoryHandlerTests
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _unitOfWork.SpendingCategories.Returns(_repository);
 
-        _logger = Substitute.For<ILogger>();       
+        _logger = Substitute.For<ILogger<CreateSpendingCategoryHandler>>();       
 
         _handler = new CreateSpendingCategoryHandler(
             _unitOfWork,
@@ -35,13 +38,22 @@ public class CreateSpendingCategoryHandlerTests
         );
     }
 
+    private CreateSpendingCategoryCommand CreateCommand()
+    {
+        return new CreateSpendingCategoryCommand(
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<Frequency>(),
+            _fixture.Create<double>(),
+            _fixture.Create<string>()
+        );
+    }
+
     [Fact]
     public async Task Handle_CreatesAndSaves_SpendingCategory()
     {
         //Arrange
-        var command = _fixture.Build<CreateSpendingCategoryCommand>()
-            .With(c => c.Amount, (new Random()).NextDouble() * 1000000)
-            .Create();
+        var command = CreateCommand();
 
         var tokenSource = new CancellationTokenSource();
         var token = tokenSource.Token;
@@ -66,12 +78,40 @@ public class CreateSpendingCategoryHandlerTests
     }
 
     [Fact]
+    public async Task Handle_ThrowsSpendingCategoryAlreadyExistsException_WhenCategoryExists()
+    {
+        //Arrange
+        var factory = new SpendingCategoryFactory();
+        var existingCategory = factory.Create(
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<Frequency>(),
+            (new Random()).NextDouble() * 1000000,
+            _fixture.Create<string>()
+        );
+
+        var command = CreateCommand();
+
+        _repository.GetAsync(
+            Arg.Is(command.UserId), 
+            Arg.Is(command.Name)
+        ).Returns(existingCategory);
+
+        var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
+
+        //Act
+        var action = (() => _handler.Handle(command, token));
+
+        //Assert
+        await action.Should().ThrowAsync<SpendingCategoryAlreadyExistsException>();
+    }
+
+    [Fact]
     public void Handle_RollbacksTransaction_WhenErrorOccur()
     {
         //Arrange
-        var command = _fixture.Build<CreateSpendingCategoryCommand>()
-            .With(c => c.Amount, (new Random()).NextDouble() * 1000000)
-            .Create();
+        var command = CreateCommand();
 
         var tokenSource = new CancellationTokenSource();
         var token = tokenSource.Token;

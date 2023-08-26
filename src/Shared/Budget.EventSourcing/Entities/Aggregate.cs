@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 using Budget.EventSourcing.Events;
 using Budget.EventSourcing.Exceptions;
@@ -34,15 +36,13 @@ public abstract class Aggregate
 
     public Guid Id { get; protected set; }
 
-    public IEnumerable<Event­­> Changes 
-    { 
-        get { return this._changes; } 
-    }
+    [IgnoreDataMember]
+    [JsonIgnore]
+    public IEnumerable<Event­­> Changes => this._changes;
 
-    public IEnumerable<Event> NewChanges
-    {
-        get { return this._newChanges; }
-    }
+    [IgnoreDataMember]
+    [JsonIgnore]
+    public IEnumerable<Event> NewChanges => this._newChanges;
 
     public void ApplyChangeHistory(DateTime? upTo = null)
     {

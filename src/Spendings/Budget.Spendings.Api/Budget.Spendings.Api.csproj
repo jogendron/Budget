@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>c6518202-94d1-4d7f-91fe-c56db1d8cc30</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mediatr" Version="12.1.1" />
+    <PackageReference Include="microsoft.entityframeworkcore" Version="7.0.10" />
+    <PackageReference Include="microsoft.entityframeworkcore.design" Version="7.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="microsoft.entityframeworkcore.inmemory" Version="7.0.10" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="7.0.10" />
+    <PackageReference Include="microsoft.identity.web" Version="2.13.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="system.text.json" Version="7.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Budget.Spendings.Domain\Budget.Spendings.Domain.csproj" />
+    <ProjectReference Include="..\Budget.Spendings.Application\Budget.Spendings.Application.csproj" />
+    <ProjectReference Include="..\Budget.Spendings.Infrastructure.EF\Budget.Spendings.Infrastructure.EF.csproj" />
+  </ItemGroup>
+
+</Project>

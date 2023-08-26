@@ -26,15 +26,15 @@ public class Period
 
 public static class PeriodExtensions
 {
-    public static Period ToEventPeriod(this WriteModel.Entities.Period period)
+    public static Period ToEventPeriod(this Entities.Period period)
     {
         return new Period(period.BeginDate, period.EndDate);
     }
 
-    public static WriteModel.Entities.Period ToWriteModelPeriod(this Period period)
+    public static Entities.Period ToWriteModelPeriod(this Period period)
     {
         return period.EndDate == null ?
-            new WriteModel.Entities.Period(period.BeginDate)
-            : new WriteModel.Entities.Period(period.BeginDate, period.EndDate.Value);
+            new Entities.Period(period.BeginDate)
+            : new Entities.Period(period.BeginDate, period.EndDate.Value);
     }
 }

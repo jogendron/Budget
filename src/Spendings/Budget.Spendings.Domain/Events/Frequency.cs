@@ -16,28 +16,28 @@ public enum Frequency
 
 public static class FrequencyExtensions
 {
-    public static Frequency ToEventFrequency(this WriteModel.Entities.Frequency frequency)
+    public static Frequency ToEventFrequency(this Entities.Frequency frequency)
     {
         return frequency switch 
         {
-            WriteModel.Entities.Frequency.Daily => Frequency.Daily,
-            WriteModel.Entities.Frequency.Weekly => Frequency.Weekly,
-            WriteModel.Entities.Frequency.SemiWeekly => Frequency.SemiWeekly,
-            WriteModel.Entities.Frequency.Monthly => Frequency.Monthly,
-            WriteModel.Entities.Frequency.Yearly => Frequency.Yearly,
+            Entities.Frequency.Daily => Frequency.Daily,
+            Entities.Frequency.Weekly => Frequency.Weekly,
+            Entities.Frequency.SemiWeekly => Frequency.SemiWeekly,
+            Entities.Frequency.Monthly => Frequency.Monthly,
+            Entities.Frequency.Yearly => Frequency.Yearly,
             _ => throw new ArgumentException($"Cannot convert unknown frequency {frequency}")
         };
     }
 
-    public static WriteModel.Entities.Frequency ToWriteModelFrequency(this Frequency frequency)
+    public static Entities.Frequency ToDomainFrequency(this Frequency frequency)
     {
         return frequency switch
         {
-            Frequency.Daily => WriteModel.Entities.Frequency.Daily,
-            Frequency.Weekly => WriteModel.Entities.Frequency.Weekly,
-            Frequency.SemiWeekly => WriteModel.Entities.Frequency.SemiWeekly,
-            Frequency.Monthly => WriteModel.Entities.Frequency.Monthly,
-            Frequency.Yearly => WriteModel.Entities.Frequency.Yearly,
+            Frequency.Daily => Entities.Frequency.Daily,
+            Frequency.Weekly => Entities.Frequency.Weekly,
+            Frequency.SemiWeekly => Entities.Frequency.SemiWeekly,
+            Frequency.Monthly => Entities.Frequency.Monthly,
+            Frequency.Yearly => Entities.Frequency.Yearly,
             _ => throw new ArgumentException($"Cannot convert unknown frequency {frequency}")
         };
     }

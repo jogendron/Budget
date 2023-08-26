@@ -1,5 +1,5 @@
-using Budget.Spendings.Domain.ReadModel.Entities;
-using Budget.Spendings.Domain.ReadModel.Repositories;
+using Budget.Spendings.Domain.Entities;
+using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
 
@@ -7,14 +7,14 @@ namespace Budget.Spendings.Application.Queries.GetSpendingCategory;
 
 public class GetSpendingCategoryCommandHandler :
     IRequestHandler<GetSpendingCategoryByIdCommand, SpendingCategory?>,
-    IRequestHandler<GetSpendingCategoryByUserAndNameCommand, SpendingCategory?>,
-    IRequestHandler<GetSpendingCategoriesByUserCommand, IEnumerable<SpendingCategory>>
+    IRequestHandler<GetSpendingCategoryByUserAndNameCommand, SpendingCategory?>
+    //IRequestHandler<GetSpendingCategoriesByUserCommand, IEnumerable<SpendingCategory>>
 {
-    private readonly ISpendingCategoryRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetSpendingCategoryCommandHandler(ISpendingCategoryRepository repository)
+    public GetSpendingCategoryCommandHandler(IUnitOfWork unitOfWork)
     {
-        _repository = repository;        
+        _unitOfWork = unitOfWork;        
     }
 
     public async Task<SpendingCategory?> Handle(
@@ -22,7 +22,7 @@ public class GetSpendingCategoryCommandHandler :
         CancellationToken cancellationToken
     )
     {
-        return await _repository.Get(request.Id);
+        return await _unitOfWork.SpendingCategories.GetAsync(request.Id);
     }
 
     public async Task<SpendingCategory?> Handle(
@@ -30,11 +30,12 @@ public class GetSpendingCategoryCommandHandler :
         CancellationToken cancellationToken
     )
     {
-        return await _repository.Get(request.UserId, request.Name);
+        return await _unitOfWork.SpendingCategories.GetAsync(request.UserId, request.Name);
     }
-
+/*
     public async Task<IEnumerable<SpendingCategory>> Handle(GetSpendingCategoriesByUserCommand request, CancellationToken cancellationToken)
     {
         return await _repository.Get(request.UserId);
     }
+*/
 }

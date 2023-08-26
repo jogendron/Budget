@@ -5,7 +5,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.entityframeworkcore" Version="7.0.9" />
+    <PackageReference Include="microsoft.entityframeworkcore" Version="7.0.10" />
+    <PackageReference Include="microsoft.entityframeworkcore.design" Version="7.0.10">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="microsoft.entityframeworkcore.relational" Version="7.0.10" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="7.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <PropertyGroup>

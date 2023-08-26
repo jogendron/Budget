@@ -6,4 +6,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="system.text.json" Version="7.0.3" />
+  </ItemGroup>
+
 </Project>

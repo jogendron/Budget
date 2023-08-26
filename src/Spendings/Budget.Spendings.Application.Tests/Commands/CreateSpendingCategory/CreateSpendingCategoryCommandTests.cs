@@ -1,5 +1,5 @@
 using Budget.Spendings.Application.Commands.CreateSpendingCategory;
-using Budget.Spendings.Domain.WriteModel.Entities;
+using Budget.Spendings.Domain.Entities;
 
 using FluentAssertions;
 using AutoFixture;

@@ -10,4 +10,11 @@ public class SpendingsContext: DbContext
     }
 
     public DbSet<SpendingCategory> SpendingCategories { get; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.HasDefaultSchema("Spendings");
+    }
 }

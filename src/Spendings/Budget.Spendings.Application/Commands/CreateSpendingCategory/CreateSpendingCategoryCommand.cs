@@ -1,4 +1,4 @@
-using Budget.Spendings.Domain.WriteModel.Entities;
+using Budget.Spendings.Domain.Entities;
 
 using MediatR;
 
@@ -23,13 +23,13 @@ public class CreateSpendingCategoryCommand
         Description = description;
     }
 
-    public string UserId { get; set; }
+    public string UserId { get; }
 
-    public string Name { get; set; }
+    public string Name { get; }
 
-    public Frequency Frequency { get; set; }
+    public Frequency Frequency { get; }
 
-    public double Amount { get; set; }
+    public double Amount { get; }
 
-    public string Description { get; set; }
+    public string Description { get; }
 }
