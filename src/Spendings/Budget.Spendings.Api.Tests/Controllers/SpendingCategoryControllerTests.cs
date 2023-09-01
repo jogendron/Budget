@@ -243,6 +243,7 @@ public class SpendingCategoryControllerTests
             value.Should().NotBeNull();
             if (value != null)
             {
+                value.Id.Should().Be(domainCategory.Id);
                 value.Name.Should().Be(domainCategory.Name);
                 value.Frequency.Should().Be(domainCategory.Frequency);
                 value.Amount.Should().Be(domainCategory.Amount);
@@ -388,6 +389,7 @@ public class SpendingCategoryControllerTests
                 var firstCategory = receivedCategories.First();
 
                 firstCategory.Should().NotBeNull();
+                firstCategory.Id.Should().Be(domainCategory.Id);
                 firstCategory.Name.Should().Be(domainCategory.Name);
                 firstCategory.Frequency.Should().Be(domainCategory.Frequency);
                 firstCategory.Amount.Should().Be(domainCategory.Amount);
@@ -459,14 +461,40 @@ public class SpendingCategoryControllerTests
                     var source = domainCategories.ElementAt(i);
                     var destination = receivedCategories.ElementAt(i);
 
-                    source.Should().NotBeNull();
-                    source.Name.Should().Be(destination.Name);
-                    source.Frequency.Should().Be(destination.Frequency);
-                    source.Amount.Should().Be(destination.Amount);
-                    source.Description.Should().Be(destination.Description);
+                    destination.Should().NotBeNull();
+                    destination.Id.Should().Be(source.Id);
+                    destination.Name.Should().Be(source.Name);
+                    destination.Frequency.Should().Be(source.Frequency);
+                    destination.Amount.Should().Be(source.Amount);
+                    destination.Description.Should().Be(source.Description);
                 }
             }
         }
+    }
+
+    [Fact]
+    public async Task GetSpendingCategories_ReturnsNotFound_WhenNameSpecifiedAndNoResults()
+    {
+        //Arrange
+
+        //Act
+        var result = await _controller.GetSpendingCategories(_fixture.Create<string>());
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task GetSpendingCategories_ReturnsOkObjectResult_WhenNoNameAndNoResults()
+    {
+        //Arrange
+        _mediator.Send(Arg.Any<GetSpendingCategoriesByUserCommand>()).Returns(new List<Domain.Entities.SpendingCategory>());
+
+        //Act
+        var result = await _controller.GetSpendingCategories();
+
+        //Assert
+        result.Should().BeOfType<OkObjectResult>();
     }
 
     [Fact]

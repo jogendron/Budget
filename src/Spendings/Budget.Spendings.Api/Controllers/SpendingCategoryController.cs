@@ -200,7 +200,9 @@ public class SpendingCategoryController : ControllerBase
                 );
             }
 
-            response = new OkObjectResult(categories.AsEnumerable());
+            response = categories.Any() || string.IsNullOrEmpty(name)
+                ? new OkObjectResult(categories.AsEnumerable())
+                : new NotFoundResult();
         }
         catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
         {
