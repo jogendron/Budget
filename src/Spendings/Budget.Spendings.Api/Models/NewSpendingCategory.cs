@@ -1,4 +1,3 @@
-using Budget.Spendings.Application.Commands.CreateSpendingCategory;
 using Budget.Spendings.Domain.Entities;
 
 using System.ComponentModel.DataAnnotations;
@@ -26,15 +25,4 @@ public class NewSpendingCategory
 
     [Required]
     public string Description { get; set; }
-
-    internal CreateSpendingCategoryCommand ToCreateCommand(string userId)
-    {
-        return new CreateSpendingCategoryCommand(
-            userId,
-            Name,
-            Frequency,
-            Amount,
-            Description
-        );
-    }
 }

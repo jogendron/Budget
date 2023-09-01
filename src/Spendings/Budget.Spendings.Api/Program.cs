@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Budget.Spendings.Api.Services;
 using Budget.Spendings.Infrastructure.EF;
 using Budget.Spendings.Infrastructure.EF.Repositories;
 
@@ -35,6 +36,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+builder.Services.AddScoped<IUserInspector, HttpContextUserInspector>();
 
 //Application
 builder.Services.AddMediatR(

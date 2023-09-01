@@ -8,6 +8,8 @@ using Budget.Spendings.Application.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
+using Budget.Spendings.Api.Services;
 
 namespace Budget.Spendings.Api.Controllers;
 
@@ -16,30 +18,24 @@ namespace Budget.Spendings.Api.Controllers;
 [Route("api/v1/[controller]")]
 public class SpendingCategoryController : ControllerBase
 {
+    private const string readScope = "Spendings.Read";
+    private const string writeScope = "Spendings.Write";
+
     private readonly ILogger<SpendingCategoryController> _logger;
     private readonly IMediator _mediator;
+    private readonly IUserInspector _userInspector;
 
     public SpendingCategoryController(
         ILogger<SpendingCategoryController> logger,
-        IMediator mediator
+        IMediator mediator,
+        IUserInspector userInspector
     )
     {
         _logger = logger;
         _mediator = mediator;
+        _userInspector = userInspector;
     }
 
-    private string Username 
-    {
-        get 
-        {
-            var value = HttpContext.User.Identity?.Name ?? string.Empty;
-
-            if (string.IsNullOrEmpty(value))
-                throw new WrongUserException();
-
-            return value;
-        }
-    }
 
     private SpendingCategory? ConvertSpendingCategory(Domain.Entities.SpendingCategory? domainCategory)
     {
@@ -49,7 +45,7 @@ public class SpendingCategoryController : ControllerBase
         {
             //Do not return a category that does not belong to the user
             //Do not let an impostor know if an id exists or not
-            if (domainCategory?.UserId == Username)
+            if (domainCategory?.UserId == _userInspector.GetAuthenticatedUser())
                 modelCategory = new SpendingCategory(domainCategory);
             else
                 throw new WrongUserException();
@@ -59,6 +55,7 @@ public class SpendingCategoryController : ControllerBase
     }
 
     [HttpPost(Name = "CreateSpendingCategory")]
+    [RequiredScope(writeScope)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
@@ -69,13 +66,20 @@ public class SpendingCategoryController : ControllerBase
 
         try
         {
-            var creation = await _mediator.Send(newSpendingCategory.ToCreateCommand(Username));
+            var command = new CreateSpendingCategoryCommand(
+                _userInspector.GetAuthenticatedUser(),
+                newSpendingCategory.Name,
+                newSpendingCategory.Frequency,
+                newSpendingCategory.Amount,
+                newSpendingCategory.Description
+            );
+            var creation = await _mediator.Send(command);
 
             var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(creation.Id);
 
             response = CreatedAtRoute(
                 "GetSpendingCategoryFromId", 
-                getCategoryByIdCommand, 
+                new { id = creation.Id }, 
                 ConvertSpendingCategory(await _mediator.Send(getCategoryByIdCommand))
             );
         }
@@ -107,8 +111,8 @@ public class SpendingCategoryController : ControllerBase
         return response;
     }
 
-
     [HttpGet("{id:guid}", Name = "GetSpendingCategoryFromId")]
+    [RequiredScope(readScope)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
@@ -126,7 +130,7 @@ public class SpendingCategoryController : ControllerBase
             else
                 response = NotFound();
         }
-        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is InvalidOperationException)
+        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
         {
             response = BadRequest();
 
@@ -141,7 +145,7 @@ public class SpendingCategoryController : ControllerBase
 
             _logger.LogWarning(
                 "User {user} attempted to get someone else's spending category ({id})",
-                Username,
+                _userInspector.GetAuthenticatedUser(),
                 id
             );
         }
@@ -159,28 +163,46 @@ public class SpendingCategoryController : ControllerBase
     }
 
 
-    [HttpGet(Name = "GetSpendingCategoryFromName")]
-    [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
+    [HttpGet(Name = "GetSpendingCategories")]
+    [RequiredScope(readScope)]
+    [ProducesResponseType(typeof(IEnumerable<SpendingCategory>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> GetSpendingCategoryFromName([FromQuery] string name)
+    public async Task<ActionResult> GetSpendingCategories([FromQuery] string name = "")
     {
+        List<SpendingCategory> categories = new List<SpendingCategory>();
         ActionResult response;
 
         try
         {
-            var command = new GetSpendingCategoryByUserAndNameCommand(
-                Username,
-                name
-            );
-            var category = ConvertSpendingCategory(await _mediator.Send(command));
+            if (! string.IsNullOrEmpty(name))
+            {
+                var command = new GetSpendingCategoryByUserAndNameCommand(
+                    _userInspector.GetAuthenticatedUser(),
+                    name
+                );
 
-            if (category != null)
-                response = new OkObjectResult(category);
+                var category = ConvertSpendingCategory(await _mediator.Send(command));
+                
+                if (category != null)
+                    categories.Add(category);
+            }
             else
-                response = NotFound();
+            {
+                var command = new GetSpendingCategoriesByUserCommand(
+                    _userInspector.GetAuthenticatedUser()
+                );
+
+                categories.AddRange(
+                    (await _mediator.Send(command)).Select(
+                        c => ConvertSpendingCategory(c)
+                    ).Where(c => c != null)!
+                );
+            }
+
+            response = new OkObjectResult(categories.AsEnumerable());
         }
-        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is InvalidOperationException)
+        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
         {
             response = BadRequest();
 

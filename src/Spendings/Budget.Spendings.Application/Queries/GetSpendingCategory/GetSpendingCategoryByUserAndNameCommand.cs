@@ -1,6 +1,5 @@
 using Budget.Spendings.Domain.Entities;
 
-using System.ComponentModel.DataAnnotations;
 using MediatR;
 
 namespace Budget.Spendings.Application.Queries.GetSpendingCategory;
@@ -19,9 +18,7 @@ public class GetSpendingCategoryByUserAndNameCommand : IRequest<SpendingCategory
         Name = name;
     }
 
-    [Required]    
     public string UserId { get; set; }
 
-    [Required]
     public string Name { get; set; }
 }

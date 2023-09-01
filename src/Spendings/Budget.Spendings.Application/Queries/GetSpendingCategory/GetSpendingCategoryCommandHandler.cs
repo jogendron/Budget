@@ -7,8 +7,8 @@ namespace Budget.Spendings.Application.Queries.GetSpendingCategory;
 
 public class GetSpendingCategoryCommandHandler :
     IRequestHandler<GetSpendingCategoryByIdCommand, SpendingCategory?>,
-    IRequestHandler<GetSpendingCategoryByUserAndNameCommand, SpendingCategory?>
-    //IRequestHandler<GetSpendingCategoriesByUserCommand, IEnumerable<SpendingCategory>>
+    IRequestHandler<GetSpendingCategoryByUserAndNameCommand, SpendingCategory?>,
+    IRequestHandler<GetSpendingCategoriesByUserCommand, IEnumerable<SpendingCategory>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -32,10 +32,13 @@ public class GetSpendingCategoryCommandHandler :
     {
         return await _unitOfWork.SpendingCategories.GetAsync(request.UserId, request.Name);
     }
-/*
-    public async Task<IEnumerable<SpendingCategory>> Handle(GetSpendingCategoriesByUserCommand request, CancellationToken cancellationToken)
+
+    public async Task<IEnumerable<SpendingCategory>> Handle(
+        GetSpendingCategoriesByUserCommand request, 
+        CancellationToken cancellationToken
+    )
     {
-        return await _repository.Get(request.UserId);
+        return await _unitOfWork.SpendingCategories.GetAsync(request.UserId);
     }
-*/
+    
 }

@@ -80,7 +80,6 @@ public class GetSpendingCategoryCommandHandlerTests
         category.Should().BeEquivalentTo(expectedCategory);
     }
 
-/*
     [Fact]
     public async Task Handle_GetByUser_ReturnsCategoriesFromRepository()
     {
@@ -105,5 +104,4 @@ public class GetSpendingCategoryCommandHandlerTests
         categories.Should().NotBeNull();
         categories.Should().BeEquivalentTo(expectedCategories);
     }
-*/
 }
