@@ -1,4 +1,5 @@
 using Budget.Spendings.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Budget.Spendings.Infrastructure.EF.Repositories;
 
@@ -16,16 +17,19 @@ public class EFUnitOfWork : IUnitOfWork
 
     public void BeginTransaction()
     {
-        _dbContext.Database.BeginTransaction();
+        if (_dbContext.Database.IsRelational())
+            _dbContext.Database.BeginTransaction();
     }
 
     public void Commit()
     {
-        _dbContext.Database.CommitTransaction();
+        if (_dbContext.Database.IsRelational())
+            _dbContext.Database.CommitTransaction();
     }
 
     public void Rollback()
     {
-        _dbContext.Database.RollbackTransaction();
+        if (_dbContext.Database.IsRelational())
+            _dbContext.Database.RollbackTransaction();
     }
 }
