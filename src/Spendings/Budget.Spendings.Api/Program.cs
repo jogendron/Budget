@@ -1,21 +1,48 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+
+using Budget.Spendings.Api.Configuration;
 using Budget.Spendings.Api.Services;
 using Budget.Spendings.Infrastructure.EF;
 using Budget.Spendings.Infrastructure.EF.Repositories;
 
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
+string GetSecretValue(SecretClient client, string name)
+{
+    var query = client.GetSecret(name);
+
+    return query.Value.Value;
+}
+
 /*
-*   *****************
-*   Load user secrets
-*   *****************
+*   ******************************
+*   Load configuration and secrets
+*   ******************************
 */
+
 builder.Configuration.AddUserSecrets(Assembly.GetCallingAssembly());
+
+DatabaseConfiguration databaseConfig = new DatabaseConfiguration();
+builder.Configuration.GetSection("Database").Bind(databaseConfig);
+
+string? keyvaultUri = builder.Configuration.GetValue<string>("Keyvault:Uri");
+if (keyvaultUri != null)
+{
+    var keyvaultSecretClient = new SecretClient(
+        new Uri(keyvaultUri), 
+        new DefaultAzureCredential()
+    );
+
+    databaseConfig.UseInMemory = Convert.ToBoolean(GetSecretValue(keyvaultSecretClient, "Database--UseInMemory"));
+    databaseConfig.ConnectionString = GetSecretValue(keyvaultSecretClient, "Database--ConnectionString");
+}
 
 /*
 *   *****************
@@ -58,15 +85,13 @@ builder.Services.AddScoped<
 >();
 
 // Entity Framework
-if (builder.Configuration.GetValue<bool>("Budget:Spendings:Database:UseInMemory"))
+if (databaseConfig.UseInMemory)
     builder.Services.AddDbContext<SpendingsContext>(
         o => o.UseInMemoryDatabase("Spendings")
     );
 else
     builder.Services.AddDbContext<SpendingsContext>(
-        o => o.UseSqlServer(
-            builder.Configuration.GetValue<string>("Budget:Spendings:Database:ConnectionString")
-        )
+        o => o.UseSqlServer(databaseConfig.ConnectionString)
     );
 
 /*
