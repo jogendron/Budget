@@ -1,25 +1,19 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 using Budget.Spendings.Api.Configuration;
 using Budget.Spendings.Api.Services;
 using Budget.Spendings.Infrastructure.EF;
 using Budget.Spendings.Infrastructure.EF.Repositories;
 
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-
-string GetSecretValue(SecretClient client, string name)
-{
-    var query = client.GetSecret(name);
-
-    return query.Value.Value;
-}
 
 /*
 *   ******************************
@@ -30,18 +24,25 @@ string GetSecretValue(SecretClient client, string name)
 builder.Configuration.AddUserSecrets(Assembly.GetCallingAssembly());
 
 DatabaseConfiguration databaseConfig = new DatabaseConfiguration();
-builder.Configuration.GetSection("Database").Bind(databaseConfig);
+X509Certificate2? certificate = null;
 
 string? keyvaultUri = builder.Configuration.GetValue<string>("Keyvault:Uri");
 if (keyvaultUri != null)
 {
-    var keyvaultSecretClient = new SecretClient(
-        new Uri(keyvaultUri), 
-        new DefaultAzureCredential()
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyvaultUri),
+        new DefaultAzureCredential(),
+        new KeyVaultSecretManager()
     );
+}
 
-    databaseConfig.UseInMemory = Convert.ToBoolean(GetSecretValue(keyvaultSecretClient, "Database--UseInMemory"));
-    databaseConfig.ConnectionString = GetSecretValue(keyvaultSecretClient, "Database--ConnectionString");
+builder.Configuration.GetSection("Database").Bind(databaseConfig);
+
+var certificateValue = builder.Configuration.GetValue<string>("Api:Certificate");
+if (! string.IsNullOrEmpty(certificateValue))
+{
+    var certificateBytes = Convert.FromBase64String(certificateValue);
+    certificate = new X509Certificate2(certificateBytes);
 }
 
 /*
@@ -97,6 +98,16 @@ else
 /*
 *   Build application
 */
+
+if (certificate != null)
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        serverOptions.ConfigureHttpsDefaults(configureOptions =>
+        {
+            configureOptions.ServerCertificate = certificate;
+        });
+    });
+
 var app = builder.Build();
 
 /*
