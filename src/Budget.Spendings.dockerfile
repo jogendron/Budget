@@ -5,8 +5,8 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /source
 
 COPY Budget.Spendings.sln .
-COPY Shared ./
-COPY Spendings/ ./
+COPY Shared/. ./Shared
+COPY Spendings/. ./Spendings
 
 RUN dotnet restore Budget.Spendings.sln
 
