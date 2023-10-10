@@ -121,8 +121,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-//app.UseHttpsRedirection();
+if (app.Configuration.GetValue<bool>("Api:UseHttpsRedirection"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
