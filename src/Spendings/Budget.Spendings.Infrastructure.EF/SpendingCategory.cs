@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Budget.Spendings.Domain.Factories;
 
 namespace Budget.Spendings.Infrastructure.EF;
@@ -34,8 +35,10 @@ public class SpendingCategory
 
     public Guid Id { get; set; }
 
+    [MaxLength(100)]
     public string UserId { get; set; }
 
+    [MaxLength(100)]
     public string Name { get; set; }
 
     public DateTime BeginDate { get; set; }
@@ -48,6 +51,7 @@ public class SpendingCategory
 
     public double Amount { get; set; }
 
+    [MaxLength(500)]
     public string Description { get; set; }
 
     public List<Event> Events { get; set; }

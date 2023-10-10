@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace Budget.Spendings.Infrastructure.EF;
@@ -26,6 +27,7 @@ public class Event
 
     public Guid Id { get; set; }
 
+    [MaxLength(500)]
     public string Type { get; set; }
 
     public string Content { get; set; }
