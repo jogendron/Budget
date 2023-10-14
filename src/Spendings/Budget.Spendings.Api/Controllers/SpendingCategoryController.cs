@@ -36,6 +36,10 @@ public class SpendingCategoryController : ControllerBase
         _userInspector = userInspector;
     }
 
+    private bool CategoryBelongsToUser(Domain.Entities.SpendingCategory category)
+    {
+        return category.UserId == _userInspector.GetAuthenticatedUser();
+    }
 
     private SpendingCategory? ConvertSpendingCategory(Domain.Entities.SpendingCategory? domainCategory)
     {
@@ -45,13 +49,34 @@ public class SpendingCategoryController : ControllerBase
         {
             //Do not return a category that does not belong to the user
             //Do not let an impostor know if an id exists or not
-            if (domainCategory?.UserId == _userInspector.GetAuthenticatedUser())
+            if (CategoryBelongsToUser(domainCategory))
                 modelCategory = new SpendingCategory(domainCategory);
             else
                 throw new WrongUserException();
         }
             
         return modelCategory;
+    }
+
+    private IEnumerable<SpendingCategoryEvent> GetHistoryFrom(Domain.Entities.SpendingCategory? domainCategory)
+    {
+        var events = new List<SpendingCategoryEvent>();
+
+        if (domainCategory != null)
+        {
+            //Do not return a category that does not belong to the user
+            //Do not let an impostor know if an id exists or not
+            if (CategoryBelongsToUser(domainCategory))
+                events = domainCategory.Changes.Select(c => new SpendingCategoryEvent() {
+                    EventId = c.EventId,
+                    EventDate = c.EventDate,
+                    EventType = c.GetType().ToString().Split('.').Last()
+                }).ToList();
+            else
+                throw new WrongUserException();
+        }
+
+        return events;
     }
 
     [HttpPost(Name = "CreateSpendingCategory")]
@@ -162,7 +187,6 @@ public class SpendingCategoryController : ControllerBase
         return response;
     }
 
-
     [HttpGet(Name = "GetSpendingCategories")]
     [RequiredScope(readScope)]
     [ProducesResponseType(typeof(IEnumerable<SpendingCategory>), StatusCodes.Status200OK)]
@@ -225,5 +249,56 @@ public class SpendingCategoryController : ControllerBase
 
         return response;
     }
+
+    [HttpGet("{id:guid}/history", Name = "GetSpendingCategoryHistoryFromId")]
+    [RequiredScope(readScope)]
+    [ProducesResponseType(typeof(SpendingCategoryEvent), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> GetSpendingCategoryHistoryFromId([FromRoute] Guid id)
+    {
+        ActionResult response;
+
+        try
+        {
+            var command = new GetSpendingCategoryByIdCommand(id);
+            var history = GetHistoryFrom(await _mediator.Send(command));
+
+            if (history != null && history.Any())
+                response = new OkObjectResult(history);
+            else
+                response = NotFound();
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
+        {
+            response = BadRequest();
+
+            _logger.LogWarning(
+                "Failed to get spending category history from id\n{exception}",
+                ex.ToString()
+            );
+        }
+        catch (WrongUserException)
+        {
+            response = NotFound();
+
+            _logger.LogWarning(
+                "User {user} attempted to get someone else's spending category history ({id})",
+                _userInspector.GetAuthenticatedUser(),
+                id
+            );
+        }
+        catch (Exception ex)
+        {
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+
+            _logger.LogError(
+                "An unexpected exception occured while getting category history from id\n{exception}",
+                ex.ToString()
+            );
+        }
+
+        return response;
+    } 
 
 }

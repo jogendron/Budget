@@ -547,4 +547,148 @@ public class SpendingCategoryControllerTests
         if (statusResult != null)
             statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
     }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsOkObjectResult_WhenCategoryExists()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var domainCategory = new SpendingCategoryFactory().Load(
+            id, 
+            new List<Event>() {
+                _fixture.Build<SpendingCategoryCreated>().With(
+                    c => c.AggregateId, id
+                ).With(
+                    c => c.UserId, _userInspector.GetAuthenticatedUser()
+                ).With(
+                    c => c.Period, new Domain.Events.Period(DateTime.MinValue)
+                ).Create()
+            }
+        );
+
+        _mediator.Send(Arg.Is<GetSpendingCategoryByIdCommand>(c => c.Id == id)).Returns(domainCategory);
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<OkObjectResult>();
+
+        var okResult = result as OkObjectResult;
+        okResult.Should().NotBeNull();
+
+        if (okResult != null)
+        {
+            okResult.Value.Should().NotBeNull();
+
+            if (okResult.Value != null)
+            {
+                var events = okResult.Value as IEnumerable<SpendingCategoryEvent>;
+                if (events != null)
+                {
+                    events.First().EventId.Should().Be(domainCategory.Changes.First().EventId);
+                    events.First().EventDate.Should().Be(domainCategory.Changes.First().EventDate);
+                    events.First().EventType.Should().Be("SpendingCategoryCreated");
+                }
+            }
+        }
+    }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsNotFound_WhenCategoryIsNotFound()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsBadRequest_WhenArgumentExceptionOccurs()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+
+        _mediator.When(m => m.Send(Arg.Any<GetSpendingCategoryByIdCommand>())).Do(
+            c => throw new ArgumentException()
+        );
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsBadRequest_WhenArgumentNullExceptionOccurs()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+
+        _mediator.When(m => m.Send(Arg.Any<GetSpendingCategoryByIdCommand>())).Do(
+            c => throw new ArgumentNullException()
+        );
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsNotFound_WhenCategoryBelongsToAnotherUser()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var domainCategory = new SpendingCategoryFactory().Load(
+            id, 
+            new List<Event>() {
+                _fixture.Build<SpendingCategoryCreated>().With(
+                    c => c.AggregateId, id
+                ).With(
+                    c => c.UserId, _fixture.Create<string>()
+                ).With(
+                    c => c.Period, new Domain.Events.Period(DateTime.MinValue)
+                ).Create()
+            }
+        );
+
+        _mediator.Send(Arg.Is<GetSpendingCategoryByIdCommand>(c => c.Id == id)).Returns(domainCategory);
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task GetSpendingCategoryHistoryFromId_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+
+        _mediator.When(m => m.Send(Arg.Any<GetSpendingCategoryByIdCommand>())).Do(
+            c => throw new DivideByZeroException()
+        );
+
+        //Act
+        var result = await _controller.GetSpendingCategoryHistoryFromId(id);
+
+        //Assert
+        result.Should().BeOfType<StatusCodeResult>();
+        result.Should().NotBeNull();
+
+        var statusResult = result as StatusCodeResult;
+        if (statusResult != null)
+        {
+            statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+    }
 }
