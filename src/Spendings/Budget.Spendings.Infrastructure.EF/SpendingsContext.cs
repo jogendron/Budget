@@ -15,6 +15,15 @@ public class SpendingsContext: DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<SpendingCategory>(builder => {
+            builder.Property(e => e.Id).ValueGeneratedNever();
+        });
+
+        modelBuilder.Entity<Event>(builder =>
+        {
+            builder.Property(e => e.Id).ValueGeneratedNever();
+        });
+
         modelBuilder.HasDefaultSchema("Spendings");
     }
 }

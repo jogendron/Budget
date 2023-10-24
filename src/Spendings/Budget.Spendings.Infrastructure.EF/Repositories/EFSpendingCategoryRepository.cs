@@ -59,12 +59,23 @@ public async Task<IEnumerable<Domain.Entities.SpendingCategory>> GetAsync(string
     public async Task SaveAsync(Domain.Entities.SpendingCategory category)
     {
         var dbCategory = new SpendingCategory(category);
-        var existingCategory = await _context.SpendingCategories.FindAsync(category.Id);
+        var existingCategory = await _context.SpendingCategories.Include(
+            s => s.Events
+        ).FirstOrDefaultAsync(c => c.Id == category.Id);
 
         if (existingCategory != null)
         {
-            var entry = _context.SpendingCategories.Entry(existingCategory);
-            entry.CurrentValues.SetValues(dbCategory);
+            _context.SpendingCategories.Entry(
+                existingCategory
+            ).CurrentValues.SetValues(dbCategory);
+            
+            existingCategory.Events.AddRange(
+                category.NewChanges.Where(
+                    c => ! existingCategory.Events.Any(e => e.Id == c.EventId)
+                ).Select(
+                    c => new Event(c)
+                )
+            );
         }
         else
         {

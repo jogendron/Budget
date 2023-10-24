@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web.Resource;
 using Budget.Spendings.Api.Services;
+using Budget.Spendings.Application.Commands.UpdateSpendingCategory;
 
 namespace Budget.Spendings.Api.Controllers;
 
@@ -98,6 +99,7 @@ public class SpendingCategoryController : ControllerBase
                 newSpendingCategory.Amount,
                 newSpendingCategory.Description
             );
+
             var creation = await _mediator.Send(command);
 
             var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(creation.Id);
@@ -301,4 +303,57 @@ public class SpendingCategoryController : ControllerBase
         return response;
     } 
 
+    [HttpPatch(Name = "UpdateSpendingCategory")]
+    [RequiredScope(writeScope)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> UpdateSpendingCategory(SpendingCategoryUpdate update)
+    {
+        ActionResult response;
+
+        try
+        {
+            var command = new UpdateSpendingCategoryCommand(
+                update.Id,
+                _userInspector.GetAuthenticatedUser(),
+                update.Name,
+                update.Frequency,
+                update.IsPeriodOpened,
+                update.Amount,
+                update.Description
+            );
+
+            await _mediator.Send(command);
+
+            response = Ok();
+        }
+        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is InvalidOperationException)
+        {
+            _logger.LogWarning(
+                "Failed to update spending category \"{name}\" because of invalid parameters",
+                update.Name
+            );
+
+            response = BadRequest();
+        }
+        catch (SpendingCategoryAlreadyExistsException)
+        {
+            _logger.LogWarning(
+                "Failed to rename spending category to \"{name}\" because it already exists",
+                update.Name
+            );
+
+            response = Conflict();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("An unexpected error occure :\n{exception}", ex.ToString());
+
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        return response;
+    }
 }

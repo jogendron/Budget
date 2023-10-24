@@ -271,12 +271,13 @@ public class EFSpendingCategoryRepositoryTests
         var category = _categoryFactory.Create(
             _fixture.Create<string>(),
             _fixture.Create<string>(),
-            _fixture.Create<Budget.Spendings.Domain.Entities.Frequency>(),
+            _fixture.Create<Domain.Entities.Frequency>(),
             _fixture.Create<double>(),
             _fixture.Create<string>()
         );
 
         await _repository.SaveAsync(category);
+        category = _categoryFactory.Load(category.Id, category.Changes);
 
         var newName = _fixture.Create<string>();
         category.Update(
@@ -292,6 +293,7 @@ public class EFSpendingCategoryRepositoryTests
         //Assert
         _dbContext.SpendingCategories.Count().Should().Be(1);
         _dbContext.SpendingCategories.Should().Contain(c => c.Id == category.Id);
+        _dbContext.SpendingCategories.First(c => c.Id == category.Id).Events.Count().Should().Be(2);
         _dbContext.SpendingCategories.First(c => c.Id == category.Id).Name.Should().Be(newName);
     }
     
