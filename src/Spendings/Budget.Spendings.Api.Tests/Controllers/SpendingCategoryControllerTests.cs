@@ -2,6 +2,7 @@ using Budget.Spendings.Api.Controllers;
 using Budget.Spendings.Api.Models;
 using Budget.Spendings.Api.Services;
 using Budget.Spendings.Application.Commands.CreateSpendingCategory;
+using Budget.Spendings.Application.Commands.UpdateSpendingCategory;
 using Budget.Spendings.Application.Queries.GetSpendingCategory;
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Domain.Events;
@@ -684,6 +685,191 @@ public class SpendingCategoryControllerTests
         //Assert
         result.Should().BeOfType<StatusCodeResult>();
         result.Should().NotBeNull();
+
+        var statusResult = result as StatusCodeResult;
+        if (statusResult != null)
+        {
+            statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsOkResult_WhenNoErrorOccurs()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Name = _fixture.Create<string>(),
+            Frequency = _fixture.Create<Domain.Entities.Frequency>(),
+            IsPeriodOpened = _fixture.Create<bool>(),
+            Amount = _fixture.Create<double>(),
+            Description = _fixture.Create<string>()
+        };
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        await _mediator.Received(1).Send(Arg.Is<UpdateSpendingCategoryCommand>(
+            c => c.SpendingCategoryId == command.Id 
+                && c.UserId == _userInspector.GetAuthenticatedUser()
+                && c.Name == command.Name
+                && c.Frequency == command.Frequency
+                && c.IsPeriodOpened == command.IsPeriodOpened
+                && c.Amount == command.Amount
+                && c.Description == command.Description
+        ));
+
+        result.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsBadRequest_WhenArgumentExceptionOccurs()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new ArgumentException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsBadRequest_WhenArgumentNullExceptionOccurs()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new ArgumentNullException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsBadRequest_WhenInvalidOperationExceptionOccurs()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new InvalidOperationException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsNotFound_WhenCategoryDoesNotExist()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new CategoryDoesNotExistException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsNotFound_WhenCategoryBelongsToAnotherUser()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new CategoryBelongsToAnotherUserException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsConflict_WhenCategoryIsRenamedToAnExistingCategory()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new SpendingCategoryAlreadyExistsException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().BeOfType<ConflictResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpendingCategory_ReturnsInternalError_WhenUnhandledExceptionOccurs()
+    {
+        //Arrange
+        var command = new SpendingCategoryUpdate() 
+        {
+            Id = Guid.NewGuid(),
+            Amount = _fixture.Create<double>()
+        };
+
+        _mediator.When(m => m.Send(Arg.Any<UpdateSpendingCategoryCommand>())).Do(
+            c => throw new DivideByZeroException()
+        );
+
+        //Act
+        var result = await _controller.UpdateSpendingCategory(command);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<StatusCodeResult>();
 
         var statusResult = result as StatusCodeResult;
         if (statusResult != null)

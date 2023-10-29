@@ -31,7 +31,7 @@ public class UpdateSpendingCategoryHandler : IRequestHandler<UpdateSpendingCateg
             var category = await _unitOfWork.SpendingCategories.GetAsync(request.SpendingCategoryId);
 
             if (category == null)
-                throw new ArgumentException($"Spending category {request.SpendingCategoryId} does not exists.");
+                throw new CategoryDoesNotExistException($"Spending category {request.SpendingCategoryId} does not exists.");
 
             await ValidateRequest(request, category);
 

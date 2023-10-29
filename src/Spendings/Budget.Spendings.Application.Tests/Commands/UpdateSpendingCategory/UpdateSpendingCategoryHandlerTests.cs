@@ -45,7 +45,7 @@ public class UpdateSpendingCategoryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ThrowArgumentException_WhenCategoryDoesNotExist()
+    public async Task Handle_ThrowCategoryDoesNotExistException_WhenCategoryDoesNotExist()
     {
         //Arrange
         var tokenSource = new CancellationTokenSource();
@@ -64,7 +64,7 @@ public class UpdateSpendingCategoryHandlerTests
         var action = async () => await _handler.Handle(request, tokenSource.Token);
 
         //Assert
-        await action.Should().ThrowAsync<ArgumentException>();
+        await action.Should().ThrowAsync<CategoryDoesNotExistException>();
     }
 
     [Fact]

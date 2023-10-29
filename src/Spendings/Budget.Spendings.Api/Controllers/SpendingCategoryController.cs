@@ -307,6 +307,7 @@ public class SpendingCategoryController : ControllerBase
     [RequiredScope(writeScope)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> UpdateSpendingCategory(SpendingCategoryUpdate update)
@@ -337,6 +338,16 @@ public class SpendingCategoryController : ControllerBase
             );
 
             response = BadRequest();
+        }
+        catch (Exception ex) when (ex is CategoryDoesNotExistException || ex is CategoryBelongsToAnotherUserException)
+        {
+            _logger.LogWarning(
+                "User {user} has no category with id {id}",
+                _userInspector.GetAuthenticatedUser(),
+                update.Id
+            );
+
+            response = NotFound();
         }
         catch (SpendingCategoryAlreadyExistsException)
         {
