@@ -60,7 +60,7 @@ public class SpendingCategory
     {
         var factory = new SpendingCategoryFactory();
         
-        return factory.Load(Id, Events.Select(e => e.ToDomainEvent()));
+        return factory.Load(Id, Events.Select(e => e.ToDomainEvent()).OrderBy(e => e.EventDate));
     }
 
 }
