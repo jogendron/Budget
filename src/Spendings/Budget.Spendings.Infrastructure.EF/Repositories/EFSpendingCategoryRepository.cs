@@ -25,9 +25,8 @@ public class EFSpendingCategoryRepository : ISpendingCategoryRepository
             dbSpendingCategory.ToDomain()
             : null;
     }
-
     
-public async Task<IEnumerable<Domain.Entities.SpendingCategory>> GetAsync(string userId)
+    public async Task<IEnumerable<Domain.Entities.SpendingCategory>> GetAsync(string userId)
     {
         var categories = new List<Domain.Entities.SpendingCategory>();
         var dbCategories = await _context.SpendingCategories.AsNoTracking().Include(

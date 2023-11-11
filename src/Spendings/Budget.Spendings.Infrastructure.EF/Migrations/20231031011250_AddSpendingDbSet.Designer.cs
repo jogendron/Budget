@@ -4,6 +4,7 @@ using Budget.Spendings.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Budget.Spendings.Infrastructure.EF.Migrations
 {
     [DbContext(typeof(SpendingsContext))]
-    partial class SpendingsContextModelSnapshot : ModelSnapshot
+    [Migration("20231031011250_AddSpendingDbSet")]
+    partial class AddSpendingDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,6 +63,9 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -68,12 +74,7 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid>("SpendingCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SpendingCategoryId");
 
                     b.ToTable("Spendings", "Spendings");
                 });
@@ -131,23 +132,12 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
 
             modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Spending", b =>
                 {
-                    b.HasOne("Budget.Spendings.Infrastructure.EF.SpendingCategory", null)
-                        .WithMany("Spendings")
-                        .HasForeignKey("SpendingCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Spending", b =>
-                {
                     b.Navigation("Events");
                 });
 
             modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.SpendingCategory", b =>
                 {
                     b.Navigation("Events");
-
-                    b.Navigation("Spendings");
                 });
 #pragma warning restore 612, 618
         }

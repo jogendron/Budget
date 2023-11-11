@@ -17,6 +17,7 @@ public class SpendingCategory
         Amount = 0;
         Description = string.Empty;
         Events = new List<Event>();
+        Spendings = new List<Spending>();
     }
 
     public SpendingCategory(Domain.Entities.SpendingCategory category)
@@ -31,6 +32,7 @@ public class SpendingCategory
         Amount = category.Amount;
         Description = category.Description;
         Events = category.Changes.Select(c => new Event(c)).ToList();
+        Spendings = new List<Spending>();
     }
 
     public Guid Id { get; set; }
@@ -55,6 +57,8 @@ public class SpendingCategory
     public string Description { get; set; }
 
     public List<Event> Events { get; set; }
+
+    public List<Spending> Spendings { get; set; }
 
     internal Domain.Entities.SpendingCategory ToDomain()
     {
