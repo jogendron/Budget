@@ -17,17 +17,17 @@ namespace Budget.Spendings.Api.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
-public class SpendingCategoryController : ControllerBase
+public class SpendingCategoriesController : ControllerBase
 {
     private const string readScope = "Spendings.Read";
     private const string writeScope = "Spendings.Write";
 
-    private readonly ILogger<SpendingCategoryController> _logger;
+    private readonly ILogger<SpendingCategoriesController> _logger;
     private readonly IMediator _mediator;
     private readonly IUserInspector _userInspector;
 
-    public SpendingCategoryController(
-        ILogger<SpendingCategoryController> logger,
+    public SpendingCategoriesController(
+        ILogger<SpendingCategoriesController> logger,
         IMediator mediator,
         IUserInspector userInspector
     )

@@ -24,22 +24,22 @@ public class SpendingCategoryControllerTests
 {
     private Fixture _fixture;
 
-    private ILogger<SpendingCategoryController> _logger;
+    private ILogger<SpendingCategoriesController> _logger;
     private IMediator _mediator;
     private IUserInspector _userInspector;
-    private SpendingCategoryController _controller;
+    private SpendingCategoriesController _controller;
 
     public SpendingCategoryControllerTests()
     {
         _fixture = new Fixture();
 
-        _logger = Substitute.For<ILogger<SpendingCategoryController>>();
+        _logger = Substitute.For<ILogger<SpendingCategoriesController>>();
         _mediator = Substitute.For<IMediator>();
         _userInspector = Substitute.For<IUserInspector>();
 
         _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
-        _controller = new SpendingCategoryController(_logger, _mediator, _userInspector); 
+        _controller = new SpendingCategoriesController(_logger, _mediator, _userInspector); 
     }
 
     [Fact]
