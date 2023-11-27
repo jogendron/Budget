@@ -81,6 +81,11 @@ builder.Services.AddScoped<
 >();
 
 builder.Services.AddScoped<
+    Budget.Spendings.Domain.Repositories.ISpendingRepository,
+    EFSpendingRepository
+>();
+
+builder.Services.AddScoped<
     Budget.Spendings.Domain.Repositories.IUnitOfWork, 
     EFUnitOfWork
 >();

@@ -11,9 +11,12 @@ public class EFUnitOfWork : IUnitOfWork
     {
         _dbContext = dbContext;
         SpendingCategories = new EFSpendingCategoryRepository(_dbContext);
+        Spendings = new EFSpendingRepository(_dbContext);
     }
 
     public ISpendingCategoryRepository SpendingCategories { get; }
+
+    public ISpendingRepository Spendings { get; }
 
     public void BeginTransaction()
     {

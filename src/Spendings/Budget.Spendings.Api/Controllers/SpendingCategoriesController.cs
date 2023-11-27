@@ -1,7 +1,9 @@
 using Budget.Spendings.Api.Exceptions;
 using Budget.Spendings.Api.Models;
+using Budget.Spendings.Api.Services;
 
 using Budget.Spendings.Application.Commands.CreateSpendingCategory;
+using Budget.Spendings.Application.Commands.UpdateSpendingCategory;
 using Budget.Spendings.Application.Queries.GetSpendingCategory;
 using Budget.Spendings.Application.Exceptions;
 
@@ -9,8 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web.Resource;
-using Budget.Spendings.Api.Services;
-using Budget.Spendings.Application.Commands.UpdateSpendingCategory;
+using Budget.Sendings.Api.Configuration;
 
 namespace Budget.Spendings.Api.Controllers;
 
@@ -19,9 +20,6 @@ namespace Budget.Spendings.Api.Controllers;
 [Route("api/v1/[controller]")]
 public class SpendingCategoriesController : ControllerBase
 {
-    private const string readScope = "Spendings.Read";
-    private const string writeScope = "Spendings.Write";
-
     private readonly ILogger<SpendingCategoriesController> _logger;
     private readonly IMediator _mediator;
     private readonly IUserInspector _userInspector;
@@ -81,7 +79,7 @@ public class SpendingCategoriesController : ControllerBase
     }
 
     [HttpPost(Name = "CreateSpendingCategory")]
-    [RequiredScope(writeScope)]
+    [RequiredScope(ApiScopes.Write)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status409Conflict)]
@@ -130,7 +128,7 @@ public class SpendingCategoriesController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError("An unexpected error occure :\n{exception}", ex.ToString());
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
 
             response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
@@ -139,7 +137,7 @@ public class SpendingCategoriesController : ControllerBase
     }
 
     [HttpGet("{id:guid}", Name = "GetSpendingCategoryFromId")]
-    [RequiredScope(readScope)]
+    [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
@@ -190,7 +188,7 @@ public class SpendingCategoriesController : ControllerBase
     }
 
     [HttpGet(Name = "GetSpendingCategories")]
-    [RequiredScope(readScope)]
+    [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(IEnumerable<SpendingCategory>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
@@ -253,7 +251,7 @@ public class SpendingCategoriesController : ControllerBase
     }
 
     [HttpGet("{id:guid}/history", Name = "GetSpendingCategoryHistoryFromId")]
-    [RequiredScope(readScope)]
+    [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(SpendingCategoryEvent), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
@@ -304,7 +302,7 @@ public class SpendingCategoriesController : ControllerBase
     } 
 
     [HttpPatch(Name = "UpdateSpendingCategory")]
-    [RequiredScope(writeScope)]
+    [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]

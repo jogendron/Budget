@@ -184,7 +184,7 @@ public class EFSpendingRepositoryTests
         );
 
         await _spendingCategoryRepository.SaveAsync(category);
-        Task.WaitAll(new [] {
+        await Task.WhenAll(new [] {
             _spendingRepository.SaveAsync(spending1),
             _spendingRepository.SaveAsync(spending2),
             _spendingRepository.SaveAsync(spending3),

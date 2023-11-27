@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "Build Budget.Spendings.sln",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Spendings/Budget.Spendings.Api/bin/Debug/net7.0/Budget.Spendings.Api.dll",
+            "program": "${workspaceFolder}/src/Spendings/Budget.Spendings.Api/bin/Debug/net8.0/Budget.Spendings.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Spendings/Budget.Spendings.Api",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
