@@ -114,7 +114,52 @@ public class SpendingsController : ControllerBase
                 id
             );
 
-            response = BadRequest();
+            response = NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
+
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        return response;
+    }
+
+    [HttpGet(Name = "GetSpendingFromCategoryId")]
+    [RequiredScope(ApiScopes.Read)]
+    [ProducesResponseType(typeof(IEnumerable<SpendingCategory>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> GetSpendingsByCategory(
+        [FromQuery] Guid categoryId, 
+        [FromQuery] DateTime? beginDate, 
+        [FromQuery] DateTime? endDate
+    )
+    {
+        ActionResult response = new OkResult();
+
+        try
+        {
+            var spendings = await _mediator.Send(
+                new GetSpendingsByCategoryCommand(
+                    _userInspector.GetAuthenticatedUser(),
+                    categoryId,
+                    beginDate,
+                    endDate
+                )
+            );
+
+            response = new OkObjectResult(spendings);
+        }
+        catch (Exception ex) when (ex is CategoryBelongsToAnotherUserException)
+        {
+            _logger.LogWarning(
+                "Failed to get spendings with category id \"{id}\" because it belongs to another user",
+                categoryId
+            );
+
+            response = NotFound();
         }
         catch (Exception ex)
         {

@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Budget.Spendings.Application.Queries.GetSpending;
 
-public class GetSpendingHandler : IRequestHandler<GetSpendingByIdCommand, Spending?>
+public class GetSpendingHandler 
+    :   IRequestHandler<GetSpendingByIdCommand, Spending?>,
+        IRequestHandler<GetSpendingsByCategoryCommand, IEnumerable<Spending>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<GetSpendingHandler> _logger;
@@ -38,6 +40,32 @@ public class GetSpendingHandler : IRequestHandler<GetSpendingByIdCommand, Spendi
 
                 response = spending;
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+        
+        return response;
+    }
+
+    public async Task<IEnumerable<Spending>> Handle(GetSpendingsByCategoryCommand request, CancellationToken cancellationToken)
+    {
+        IEnumerable<Spending> response = new List<Spending>();
+
+        try
+        {
+            var category = await _unitOfWork.SpendingCategories.GetAsync(request.CategoryId);
+
+            if (category?.UserId != request.UserId)
+                throw new CategoryBelongsToAnotherUserException();
+
+            response = await _unitOfWork.Spendings.GetAsync(
+                request.CategoryId, 
+                request.BeginDate, 
+                request.EndDate
+            );
         }
         catch (Exception ex)
         {

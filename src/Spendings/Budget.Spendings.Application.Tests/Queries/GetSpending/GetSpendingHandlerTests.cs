@@ -43,7 +43,7 @@ public class GetSpendingHandlerTests
     }
     
     [Fact]
-    public async Task Handle_GetsAndReturns_Spending()
+    public async Task GetBySpendingId_GetsAndReturns_Spending()
     {
         //Arrange
         var userId = _fixture.Create<string>();
@@ -78,7 +78,7 @@ public class GetSpendingHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ThrowsSpendingBelongsToAnotherUserException_WhenSpendingBelongsToAnotherUser()
+    public async Task GetBySpendingId_ThrowsSpendingBelongsToAnotherUserException_WhenSpendingBelongsToAnotherUser()
     {
         //Arrange
         var userId = _fixture.Create<string>();
@@ -111,4 +111,96 @@ public class GetSpendingHandlerTests
         await action.Should().ThrowAsync<SpendingBelongsToAnotherUserException>();
     }
 
+    [Fact]
+    public async Task GetByCategoryId_GetsAndReturns_AllSpendingsFromCategory()
+    {
+        //Arrange
+        var userId = _fixture.Create<string>();
+
+        var category = _categoryFactory.Create(
+            userId,
+            _fixture.Create<string>(),
+            _fixture.Create<Frequency>(),
+            _fixture.Create<double>(),
+            _fixture.Create<string>()
+        );
+
+        var spending1 = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
+
+        var spending2 = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
+
+        _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
+        _spendingRepository.GetAsync(
+            Arg.Is(category.Id),
+            Arg.Any<DateTime?>(),
+            Arg.Any<DateTime?>()
+        ).Returns(new [] { spending1, spending2 });
+
+        var command = new GetSpendingsByCategoryCommand(userId, category.Id, null, null);
+        var tokenSource = new CancellationTokenSource();
+
+        //Act
+        var result = await _handler.Handle(command, tokenSource.Token);
+
+        //Assert
+        result.Should().NotBeNullOrEmpty();
+        result.Count().Should().Be(2);
+        result.Should().Contain(spending1);
+        result.Should().Contain(spending2);
+    }
+
+    [Fact]
+    public async Task GetByCategoryId_ThrowsCategoryBelongsToAnotherUser_WhenCategoryBelongsToAnotherUser()
+    {
+        //Arrange
+        var userId = _fixture.Create<string>();
+
+        var category = _categoryFactory.Create(
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<Frequency>(),
+            _fixture.Create<double>(),
+            _fixture.Create<string>()
+        );
+
+        var spending1 = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
+
+        var spending2 = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
+
+        _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
+        _spendingRepository.GetAsync(
+            Arg.Is(category.Id),
+            Arg.Any<DateTime?>(),
+            Arg.Any<DateTime?>()
+        ).Returns(new [] { spending1, spending2 });
+
+        var command = new GetSpendingsByCategoryCommand(userId, category.Id, null, null);
+        var tokenSource = new CancellationTokenSource();
+
+        //Act
+        var action = () => _handler.Handle(command, tokenSource.Token);
+
+        //Assert
+        await action.Should().ThrowAsync<CategoryBelongsToAnotherUserException>();
+    }
 }
