@@ -89,12 +89,12 @@ public class SpendingsController : ControllerBase
         return response;
     }
 
-    [HttpGet(Name = "GetSpendingFromId")]
+    [HttpGet("{id:guid}", Name = "GetSpendingFromId")]
     [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> GetSpending(Guid id)
+    public async Task<ActionResult> GetSpending([FromRoute] Guid id)
     {
         ActionResult response = new OkResult();
 
