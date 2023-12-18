@@ -20,7 +20,7 @@ using AutoFixture;
 
 namespace Budget.Spendings.Api.Tests.Controllers;
 
-public class SpendingCategoryControllerTests
+public class SpendingCategoriesControllerTests
 {
     private Fixture _fixture;
 
@@ -29,7 +29,7 @@ public class SpendingCategoryControllerTests
     private IUserInspector _userInspector;
     private SpendingCategoriesController _controller;
 
-    public SpendingCategoryControllerTests()
+    public SpendingCategoriesControllerTests()
     {
         _fixture = new Fixture();
 

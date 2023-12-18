@@ -9,7 +9,8 @@ namespace Budget.Spendings.Application.Queries.GetSpending;
 
 public class GetSpendingHandler 
     :   IRequestHandler<GetSpendingByIdCommand, Spending?>,
-        IRequestHandler<GetSpendingsByCategoryCommand, IEnumerable<Spending>>
+        IRequestHandler<GetSpendingsByCategoryCommand, IEnumerable<Spending>>,
+        IRequestHandler<GetSpendingsByUserCommand, IEnumerable<Spending>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<GetSpendingHandler> _logger;
@@ -73,6 +74,27 @@ public class GetSpendingHandler
             throw;
         }
         
+        return response;
+    }
+
+    public async Task<IEnumerable<Spending>> Handle(GetSpendingsByUserCommand request, CancellationToken cancellationToken)
+    {
+        IEnumerable<Spending> response = new List<Spending>();
+
+        try
+        {
+            response = await _unitOfWork.Spendings.GetAsync(
+                request.UserId,
+                request.BeginDate,
+                request.EndDate
+            );
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            throw;
+        }
+
         return response;
     }
 }

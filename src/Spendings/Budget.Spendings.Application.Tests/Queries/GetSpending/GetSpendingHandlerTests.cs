@@ -203,4 +203,45 @@ public class GetSpendingHandlerTests
         //Assert
         await action.Should().ThrowAsync<CategoryBelongsToAnotherUserException>();
     }
+
+    [Fact]
+    public async Task HandleGetByUser_CallsRepository()
+    {
+        //Arrange
+        var spendings = new [] {
+            _spendingFactory.Create(
+                _fixture.Create<Guid>(),
+                DateTime.Now,
+                new Random().NextDouble() * 10000,
+                _fixture.Create<string>()
+            ),
+            _spendingFactory.Create(
+                _fixture.Create<Guid>(),
+                DateTime.Now,
+                new Random().NextDouble() * 10000,
+                _fixture.Create<string>()
+            )
+        };
+
+        var command = new GetSpendingsByUserCommand(
+            _fixture.Create<string>(),
+            _fixture.Create<DateTime>(),
+            _fixture.Create<DateTime>()
+        );
+
+        _spendingRepository.GetAsync(
+            Arg.Is(command.UserId),
+            Arg.Is(command.BeginDate),
+            Arg.Is(command.EndDate)
+        ).Returns(spendings);
+
+        var tokenSource = new CancellationTokenSource();
+
+        //Act
+        var result = await _handler.Handle(command, tokenSource.Token);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeEquivalentTo(spendings);
+    }
 }

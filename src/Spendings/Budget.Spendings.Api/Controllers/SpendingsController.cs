@@ -42,7 +42,7 @@ public class SpendingsController : ControllerBase
 
     [HttpPost(Name = "CreateSpending")]
     [RequiredScope(ApiScopes.Write)]
-    [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Spending), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> CreateSpending(NewSpending spending)
@@ -91,7 +91,7 @@ public class SpendingsController : ControllerBase
 
     [HttpGet("{id:guid}", Name = "GetSpendingFromId")]
     [RequiredScope(ApiScopes.Read)]
-    [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Spending), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> GetSpending([FromRoute] Guid id)
@@ -105,7 +105,9 @@ public class SpendingsController : ControllerBase
             );
 
             if (spending != null)
-                response = new OkObjectResult(spending);
+                response = new OkObjectResult(ConvertSpending(spending));
+            else
+                response = NotFound();
         }
         catch (Exception ex) when (ex is SpendingBelongsToAnotherUserException)
         {
@@ -126,36 +128,61 @@ public class SpendingsController : ControllerBase
         return response;
     }
 
-    [HttpGet(Name = "GetSpendingFromCategoryId")]
+    [HttpGet(Name = "GetSpendings")]
     [RequiredScope(ApiScopes.Read)]
-    [ProducesResponseType(typeof(IEnumerable<SpendingCategory>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<Spending>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> GetSpendingsByCategory(
-        [FromQuery] Guid categoryId, 
+    public async Task<ActionResult> GetSpendings(
+        [FromQuery] Guid? categoryId, 
         [FromQuery] DateTime? beginDate, 
         [FromQuery] DateTime? endDate
     )
     {
         ActionResult response = new OkResult();
-
+        
         try
         {
-            var spendings = await _mediator.Send(
-                new GetSpendingsByCategoryCommand(
-                    _userInspector.GetAuthenticatedUser(),
-                    categoryId,
-                    beginDate,
-                    endDate
-                )
-            );
+            List<Spending> spendings = new List<Spending>();
+            IEnumerable<Domain.Entities.Spending> queryResult;
 
-            response = new OkObjectResult(spendings);
+            if (categoryId.HasValue)
+            {
+                queryResult = await _mediator.Send(
+                    new GetSpendingsByCategoryCommand(
+                        _userInspector.GetAuthenticatedUser(),
+                        categoryId.Value,
+                        beginDate,
+                        endDate
+                    )
+                );
+            }
+            else
+            {
+                queryResult = await _mediator.Send(
+                    new GetSpendingsByUserCommand(
+                        _userInspector.GetAuthenticatedUser(),
+                        beginDate,
+                        endDate
+                    )
+                );
+            }
+
+            spendings.AddRange(
+                queryResult.Select(
+                    s => ConvertSpending(s)
+                ).Where(s => s != null)!
+            );
+            
+            if (spendings.Any())
+                response = new OkObjectResult(spendings.AsEnumerable());
+            else
+                response = NotFound();
         }
-        catch (Exception ex) when (ex is CategoryBelongsToAnotherUserException)
+        catch (Exception ex) when (ex is CategoryBelongsToAnotherUserException) 
         {
             _logger.LogWarning(
-                "Failed to get spendings with category id \"{id}\" because it belongs to another user",
+                "Failed to get queryResult with category id \"{id}\" because it belongs to another user",
                 categoryId
             );
 
@@ -170,4 +197,5 @@ public class SpendingsController : ControllerBase
 
         return response;
     }
+
 }
