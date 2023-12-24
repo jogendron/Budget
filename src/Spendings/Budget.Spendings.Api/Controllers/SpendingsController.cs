@@ -4,6 +4,7 @@ using Budget.Spendings.Api.Services;
 
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Application.Commands.CreateSpending;
+using Budget.Spendings.Application.Commands.UpdateSpending;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -198,4 +199,59 @@ public class SpendingsController : ControllerBase
         return response;
     }
 
+    [HttpPatch(Name = "UpdateSpendings")]
+    [RequiredScope(ApiScopes.Write)]
+    [ProducesResponseType(typeof(IEnumerable<Spending>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> UpdateSpending(SpendingUpdate update)
+    {
+        ActionResult response = new OkResult();
+
+        try
+        {
+            var command = new UpdateSpendingCommand(
+                update.Id,
+                _userInspector.GetAuthenticatedUser(),
+                update.CategoryId,
+                update.Date,
+                update.Amount,
+                update.Description
+            );
+
+            await _mediator.Send(command);
+        }
+        catch (Exception ex) when (
+            ex is ArgumentNullException 
+            | ex is SpendingBelongsToAnotherUserException
+            | ex is CategoryDoesNotExistException
+            | ex is CategoryBelongsToAnotherUserException
+        )
+        {
+            _logger.LogWarning(
+                "Failed to update spendind \"{id}\" because of invalid parameters",
+                update.Id
+            );
+
+            response = BadRequest();
+        }
+        catch (Exception ex) when (ex is SpendingDoesNotExistException)
+        {
+            _logger.LogWarning(
+                "User has no spending \"{id}\"",
+                update.Id
+            );
+
+            response = NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
+
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        return response;
+    }
 }

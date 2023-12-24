@@ -2,6 +2,7 @@ using Budget.Spendings.Api.Controllers;
 using Budget.Spendings.Api.Models;
 using Budget.Spendings.Api.Services;
 using Budget.Spendings.Application.Commands.CreateSpending;
+using Budget.Spendings.Application.Commands.UpdateSpending;
 using Budget.Spendings.Application.Queries.GetSpending;
 
 using MediatR;
@@ -412,6 +413,139 @@ public class SpendingsControllerTests
 
         //Assert
         result.Should().NotBeNull();
+        result.Should().BeOfType<StatusCodeResult>();
+
+        var statusResult = result as StatusCodeResult;
+        if (statusResult != null)
+        {
+            statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [Fact]
+    public async Task UpdateSpending_SendsCommandToMediator_AndReturnsOk()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        await _mediator.Received(1).Send(
+            Arg.Is<UpdateSpendingCommand>(c =>
+                c.SpendingId == spending.Id
+                && c.UserId == userId
+                && c.Date == spending.Date
+                && c.Amount == spending.Amount
+                && c.Description == spending.Description
+            )
+        );
+        
+        result.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsBadRequest_WhenArgumentNullExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new ArgumentNullException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsBadRequest_WhenSpendingBelongsToAnotherUserExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new SpendingBelongsToAnotherUserException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsBadRequest_WhenCategoryDoesNotExistExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new CategoryDoesNotExistException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsBadRequest_WhenCategoryBelongsToAnotherUserExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new CategoryBelongsToAnotherUserException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsBadRequest_WhenSpendingDoesNotExistExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new SpendingDoesNotExistException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task UpdateSpending_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
+    {
+        //Arrange
+        var spending = _fixture.Create<SpendingUpdate>();
+
+        _mediator.When(m => 
+            m.Send(Arg.Any<UpdateSpendingCommand>())
+        ).Do(c => throw new DivideByZeroException());
+
+        //Act
+        var result = await _controller.UpdateSpending(spending);
+
+        //Assert
         result.Should().BeOfType<StatusCodeResult>();
 
         var statusResult = result as StatusCodeResult;

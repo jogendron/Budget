@@ -23,6 +23,8 @@ public class UpdateSpendingHandler : IRequestHandler<UpdateSpendingCommand>
     {
         try
         {
+            _unitOfWork.BeginTransaction();
+
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
@@ -45,8 +47,6 @@ public class UpdateSpendingHandler : IRequestHandler<UpdateSpendingCommand>
                 else if (newCategory.UserId != request.UserId)
                     throw new CategoryBelongsToAnotherUserException();
             }
-
-            _unitOfWork.BeginTransaction();
 
             var categoryId = request.CategoryId ?? spending.CategoryId;
             var date = request.Date ?? spending.Date;
