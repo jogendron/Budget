@@ -40,7 +40,6 @@ public class EFSpendingCategoryRepository : ISpendingCategoryRepository
 
         return categories;
     }
-    
 
     public async Task<Domain.Entities.SpendingCategory?> GetAsync(string userId, string name)
     {

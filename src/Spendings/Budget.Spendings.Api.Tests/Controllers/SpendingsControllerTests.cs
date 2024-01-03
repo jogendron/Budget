@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Budget.Spendings.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Budget.Spendings.Domain.Factories;
+using Budget.Spendings.Application.Commands.DeleteSpendings;
 
 namespace Budget.Spendings.Api.Tests.Controllers;
 
@@ -465,7 +466,7 @@ public class SpendingsControllerTests
     }
 
     [Fact]
-    public async Task UpdateSpending_ReturnsBadRequest_WhenSpendingBelongsToAnotherUserExceptionOccurs()
+    public async Task UpdateSpending_ReturnsNotFound_WhenSpendingBelongsToAnotherUserExceptionOccurs()
     {
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
@@ -478,7 +479,7 @@ public class SpendingsControllerTests
         var result = await _controller.UpdateSpending(spending);
 
         //Assert
-        result.Should().BeOfType<BadRequestResult>();
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Fact]
@@ -553,5 +554,147 @@ public class SpendingsControllerTests
         {
             statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
+    }
+
+    [Fact]
+    public async Task DeleteSpending_ReturnsBadRequest_WhenArgumentNullExceptionOccurs()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var userId = _fixture.Create<string>();
+
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(m => 
+            m.Send(
+                Arg.Is<DeleteSpendingsCommand>(c => 
+                    c.SpendingIds.Count() == 1 
+                    && c.SpendingIds.Contains(id)
+                    && c.UserId == userId
+                )
+            )
+        ).Do(c => throw new ArgumentNullException());
+
+        //Act
+        var result = await _controller.DeleteSpending(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<BadRequestResult>();
+
+    }
+
+    [Fact]
+    public async Task DeleteSpending_ReturnsNotFound_WhenSpendingDoesNotExist()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var userId = _fixture.Create<string>();
+
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(m => 
+            m.Send(
+                Arg.Is<DeleteSpendingsCommand>(c => 
+                    c.SpendingIds.Count() == 1 
+                    && c.SpendingIds.Contains(id)
+                    && c.UserId == userId
+                )
+            )
+        ).Do(c => throw new SpendingDoesNotExistException());
+
+        //Act
+        var result = await _controller.DeleteSpending(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<NotFoundResult>();
+
+    }
+
+    [Fact]
+    public async Task DeleteSpending_ReturnsNotFound_WhenSpendingBelongsToAnotherUser()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var userId = _fixture.Create<string>();
+
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(m => 
+            m.Send(
+                Arg.Is<DeleteSpendingsCommand>(c => 
+                    c.SpendingIds.Count() == 1 
+                    && c.SpendingIds.Contains(id)
+                    && c.UserId == userId
+                )
+            )
+        ).Do(c => throw new SpendingBelongsToAnotherUserException());
+
+        //Act
+        var result = await _controller.DeleteSpending(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task DeleteSpending_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var userId = _fixture.Create<string>();
+
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(m => 
+            m.Send(
+                Arg.Is<DeleteSpendingsCommand>(c => 
+                    c.SpendingIds.Count() == 1 
+                    && c.SpendingIds.Contains(id)
+                    && c.UserId == userId
+                )
+            )
+        ).Do(c => throw new DivideByZeroException());
+
+        //Act
+        var result = await _controller.DeleteSpending(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<StatusCodeResult>();
+
+        var statusResult = result as StatusCodeResult;
+        statusResult.Should().NotBeNull();
+        if (statusResult != null)
+        {
+            statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [Fact]
+    public async Task DeleteSpending_SendCommandToMediator_AndReturnsOk()
+    {
+        //Arrange
+        var id = Guid.NewGuid();
+        var userId = _fixture.Create<string>();
+
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        //Act
+        var result = await _controller.DeleteSpending(id);
+
+        //Assert
+        await _mediator.Received(1).Send(
+            Arg.Is<DeleteSpendingsCommand>(c => 
+                c.SpendingIds.Count() == 1 
+                && c.SpendingIds.Contains(id)
+                && c.UserId == userId
+            )
+        );
+
+        result.Should().NotBeNull();
+        result.Should().BeOfType<OkResult>();
     }
 }

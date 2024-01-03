@@ -290,4 +290,25 @@ public class EFSpendingRepositoryTests
             dbSpending.Description.Should().Be(spending.Description);
         }
     }
+
+    [Fact]
+    public async Task DeleteAsync_FromId_DoesHardDelete()
+    {
+        //Arrange
+        var spending = _spendingFactory.Create(
+            Guid.NewGuid(),
+            _fixture.Create<DateTime>(),
+            new Random().NextDouble() * 1000,
+            _fixture.Create<string>()
+        );
+ 
+        await _spendingRepository.SaveAsync(spending);
+
+        //Act
+        await _spendingRepository.DeleteAsync(spending.Id);
+
+        //Assert
+        var search = await _spendingRepository.GetAsync(spending.Id);
+        search.Should().BeNull();
+    }
 }

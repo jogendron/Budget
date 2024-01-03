@@ -5,6 +5,7 @@ using Budget.Spendings.Api.Services;
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Application.Commands.CreateSpending;
 using Budget.Spendings.Application.Commands.UpdateSpending;
+using Budget.Spendings.Application.Commands.DeleteSpendings;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -224,23 +225,78 @@ public class SpendingsController : ControllerBase
         }
         catch (Exception ex) when (
             ex is ArgumentNullException 
-            | ex is SpendingBelongsToAnotherUserException
             | ex is CategoryDoesNotExistException
             | ex is CategoryBelongsToAnotherUserException
         )
         {
             _logger.LogWarning(
-                "Failed to update spendind \"{id}\" because of invalid parameters",
+                "Failed to update spending \"{id}\" because of invalid parameters",
                 update.Id
             );
 
             response = BadRequest();
         }
-        catch (Exception ex) when (ex is SpendingDoesNotExistException)
+        catch (Exception ex) when (ex is SpendingBelongsToAnotherUserException || ex is SpendingDoesNotExistException)
         {
             _logger.LogWarning(
                 "User has no spending \"{id}\"",
                 update.Id
+            );
+
+            response = NotFound();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
+
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        return response;
+    }
+
+    [HttpDelete("{id:guid}", Name = "DeleteSpending")]
+    [RequiredScope(ApiScopes.Write)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> DeleteSpending([FromRoute] Guid id)
+    {
+        return await DeleteSpendings(new [] {id});
+    }
+
+    [HttpDelete(Name = "DeleteSpendings")]
+    [RequiredScope(ApiScopes.Write)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> DeleteSpendings([FromBody] IEnumerable<Guid> ids)
+    {
+        ActionResult response = new OkResult();
+
+        try
+        {
+            var command = new DeleteSpendingsCommand(
+                ids, 
+                _userInspector.GetAuthenticatedUser()
+            );
+
+            await _mediator.Send(command);
+        }
+        catch (ArgumentNullException)
+        {
+            _logger.LogWarning(
+                "Failed to delete a spending because of invalid parameters"
+            );
+
+            response = BadRequest();
+        }
+        catch (Exception ex) when (ex is SpendingDoesNotExistException || ex is SpendingBelongsToAnotherUserException)
+        {
+            _logger.LogWarning(
+                "One of the spendings was not found"
             );
 
             response = NotFound();

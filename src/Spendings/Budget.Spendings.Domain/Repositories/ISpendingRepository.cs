@@ -11,4 +11,6 @@ public interface ISpendingRepository
     Task<IEnumerable<Spending>> GetAsync(string userId, DateTime? beginDate, DateTime? endDate);
 
     Task SaveAsync(Spending spending);
+
+    Task DeleteAsync(Guid id);
 }

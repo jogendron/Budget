@@ -92,4 +92,15 @@ public class EFSpendingRepository : ISpendingRepository
 
         _context.SaveChanges();
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var dbSpending = await _context.Spendings.Include(s => s.Events).FirstOrDefaultAsync(s => s.Id == id);
+
+        if (dbSpending != null)
+        {
+            _context.Spendings.Remove(dbSpending);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
