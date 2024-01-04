@@ -42,7 +42,7 @@ public class DeleteSpendingsHandler : IRequestHandler<DeleteSpendingsCommand>
         catch(Exception exception)
         {
             _unitOfWork.Rollback();
-            _logger.LogError(exception, "Spending category creation failed");
+            _logger.LogError(exception, "Spending delete failed");
             throw;
         }
     }

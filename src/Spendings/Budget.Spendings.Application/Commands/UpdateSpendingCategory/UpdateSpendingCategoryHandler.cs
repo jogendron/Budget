@@ -59,7 +59,7 @@ public class UpdateSpendingCategoryHandler : IRequestHandler<UpdateSpendingCateg
         catch(Exception exception)
         {
             _unitOfWork.Rollback();
-            _logger.LogError(exception, "Spending category creation failed");
+            _logger.LogError(exception, "Spending category update failed");
             throw;
         }
     }
