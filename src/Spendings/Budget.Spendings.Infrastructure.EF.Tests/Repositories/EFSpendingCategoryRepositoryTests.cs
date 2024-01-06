@@ -297,4 +297,25 @@ public class EFSpendingCategoryRepositoryTests
         _dbContext.SpendingCategories.First(c => c.Id == category.Id).Name.Should().Be(newName);
     }
     
+    [Fact]
+    public async Task DeleteAsync_RemovesCategory()
+    {
+        //Arrange
+        var category = _categoryFactory.Create(
+            _fixture.Create<string>(),
+            _fixture.Create<string>(),
+            _fixture.Create<Domain.Entities.Frequency>(),
+            _fixture.Create<double>(),
+            _fixture.Create<string>()
+        );
+
+        await _repository.SaveAsync(category);
+
+        //Act
+        await _repository.DeleteAsync(category.Id);
+
+        //Assert
+        var search = await _repository.GetAsync(category.Id);
+        search.Should().BeNull();
+    }
 }

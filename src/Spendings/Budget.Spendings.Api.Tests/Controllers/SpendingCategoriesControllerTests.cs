@@ -17,6 +17,7 @@ using MediatR;
 using FluentAssertions;
 using NSubstitute;
 using AutoFixture;
+using Budget.Spendings.Application.Commands.DeleteSpendingCategory;
 
 namespace Budget.Spendings.Api.Tests.Controllers;
 
@@ -876,5 +877,132 @@ public class SpendingCategoriesControllerTests
         {
             statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
+    }
+
+    [Fact]
+    public async Task DeleteSpendingCategory_ReturnsBadRequest_WhenArgumentNullExceptionOccurs()
+    {
+        //Arrange
+        Guid id = Guid.NewGuid();
+
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(
+            m => m.Send(Arg.Is<DeleteSpendingCategoryCommand>(
+                c => c.Id == id
+                && c.UserId == userId
+            ))
+        ).Do(c => throw new ArgumentNullException());
+
+        //Act
+        var result = await _controller.DeleteSpendingCategory(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<BadRequestResult>();
+    }
+
+    [Fact]
+    public async Task DeleteSpendingCategory_ReturnsNotFound_WhenCategoryDoesNotExist()
+    {
+        //Arrange
+        Guid id = Guid.NewGuid();
+
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(
+            m => m.Send(Arg.Is<DeleteSpendingCategoryCommand>(
+                c => c.Id == id
+                && c.UserId == userId
+            ))
+        ).Do(c => throw new CategoryDoesNotExistException());
+
+        //Act
+        var result = await _controller.DeleteSpendingCategory(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task DeleteSpendingCategory_ReturnsNotFound_WhenCategoryBelongsToAnotherUser()
+    {
+        //Arrange
+        Guid id = Guid.NewGuid();
+
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(
+            m => m.Send(Arg.Is<DeleteSpendingCategoryCommand>(
+                c => c.Id == id
+                && c.UserId == userId
+            ))
+        ).Do(c => throw new CategoryBelongsToAnotherUserException());
+
+        //Act
+        var result = await _controller.DeleteSpendingCategory(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public async Task DeleteSpendingCategory_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
+    {
+        //Arrange
+        Guid id = Guid.NewGuid();
+
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        _mediator.When(
+            m => m.Send(Arg.Is<DeleteSpendingCategoryCommand>(
+                c => c.Id == id
+                && c.UserId == userId
+            ))
+        ).Do(c => throw new DivideByZeroException());
+
+        //Act
+        var result = await _controller.DeleteSpendingCategory(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<StatusCodeResult>();
+
+        var statusResult = result as StatusCodeResult;
+        statusResult.Should().NotBeNull();
+        if (statusResult != null)
+        {
+            statusResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+        }
+    }
+
+    [Fact]
+    public async Task DeleteSpendingCategory_Returns200Ok()
+    {
+        //Arrange
+        Guid id = Guid.NewGuid();
+
+        var userId = _fixture.Create<string>();
+        _userInspector.GetAuthenticatedUser().Returns(userId);
+
+        //Act
+        var result = await _controller.DeleteSpendingCategory(id);
+
+        //Assert
+        result.Should().NotBeNull();
+        result.Should().BeOfType<OkResult>();
+
+        await _mediator.Received(1).Send(
+            Arg.Is<DeleteSpendingCategoryCommand>(
+                c => c.Id == id 
+                && c.UserId == userId
+            )
+        );
     }
 }

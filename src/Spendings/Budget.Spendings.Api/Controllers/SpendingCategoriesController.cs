@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web.Resource;
 using Budget.Sendings.Api.Configuration;
+using Budget.Spendings.Application.Commands.DeleteSpendingCategory;
 
 namespace Budget.Spendings.Api.Controllers;
 
@@ -358,7 +359,55 @@ public class SpendingCategoriesController : ControllerBase
         }
         catch(Exception ex)
         {
-            _logger.LogError("An unexpected error occure :\n{exception}", ex.ToString());
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
+
+            response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        return response;
+    }
+
+    [HttpDelete("{id:guid}", Name = "DeleteSpendingCategory")]
+    [RequiredScope(ApiScopes.Write)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> DeleteSpendingCategory([FromRoute] Guid id)
+    {
+        ActionResult response = Ok();
+
+        try
+        {
+            var command = new DeleteSpendingCategoryCommand(
+                id, 
+                _userInspector.GetAuthenticatedUser()
+            );
+
+            await _mediator.Send(command);
+        }
+        catch (ArgumentNullException)
+        {
+            _logger.LogWarning(
+                "Failed to delete spending category \"{id}\" because of invalid parameters",
+                id
+            );
+
+            response = BadRequest();
+        }
+        catch (Exception ex) when (ex is CategoryDoesNotExistException || ex is CategoryBelongsToAnotherUserException)
+        {
+            _logger.LogWarning(
+                "User {user} has no category with id {id}",
+                _userInspector.GetAuthenticatedUser(),
+                id
+            );
+
+            response = NotFound();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError("An unexpected error occured :\n{exception}", ex.ToString());
 
             response = new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }

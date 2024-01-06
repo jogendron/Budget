@@ -11,4 +11,6 @@ public interface ISpendingCategoryRepository
     Task<IEnumerable<SpendingCategory>> GetAsync(string userId);
 
     Task SaveAsync(SpendingCategory category);
+
+    Task DeleteAsync(Guid id);
 }

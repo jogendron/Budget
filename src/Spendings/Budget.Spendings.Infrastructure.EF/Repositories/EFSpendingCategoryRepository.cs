@@ -82,4 +82,21 @@ public class EFSpendingCategoryRepository : ISpendingCategoryRepository
 
         _context.SaveChanges();
     }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var category = await _context.SpendingCategories.Include(
+            c => c.Spendings
+        ).ThenInclude(
+            s => s.Events
+        ).Include(
+            c => c.Events
+        ).FirstOrDefaultAsync(s => s.Id == id);
+
+        if (category != null)
+        {
+            _context.SpendingCategories.Remove(category);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
