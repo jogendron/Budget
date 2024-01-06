@@ -5,7 +5,7 @@ using Budget.Spendings.Api.Services;
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Application.Commands.CreateSpending;
 using Budget.Spendings.Application.Commands.UpdateSpending;
-using Budget.Spendings.Application.Commands.DeleteSpendings;
+using Budget.Spendings.Application.Commands.DeleteSpending;
 
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -263,23 +263,12 @@ public class SpendingsController : ControllerBase
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> DeleteSpending([FromRoute] Guid id)
     {
-        return await DeleteSpendings(new [] {id});
-    }
-
-    [HttpDelete(Name = "DeleteSpendings")]
-    [RequiredScope(ApiScopes.Write)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult> DeleteSpendings([FromBody] IEnumerable<Guid> ids)
-    {
         ActionResult response = new OkResult();
 
         try
         {
-            var command = new DeleteSpendingsCommand(
-                ids, 
+            var command = new DeleteSpendingCommand(
+                id, 
                 _userInspector.GetAuthenticatedUser()
             );
 

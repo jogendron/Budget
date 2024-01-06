@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Budget.Spendings.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Budget.Spendings.Domain.Factories;
-using Budget.Spendings.Application.Commands.DeleteSpendings;
+using Budget.Spendings.Application.Commands.DeleteSpending;
 
 namespace Budget.Spendings.Api.Tests.Controllers;
 
@@ -567,9 +567,8 @@ public class SpendingsControllerTests
 
         _mediator.When(m => 
             m.Send(
-                Arg.Is<DeleteSpendingsCommand>(c => 
-                    c.SpendingIds.Count() == 1 
-                    && c.SpendingIds.Contains(id)
+                Arg.Is<DeleteSpendingCommand>(c => 
+                    c.Id == id
                     && c.UserId == userId
                 )
             )
@@ -595,9 +594,8 @@ public class SpendingsControllerTests
 
         _mediator.When(m => 
             m.Send(
-                Arg.Is<DeleteSpendingsCommand>(c => 
-                    c.SpendingIds.Count() == 1 
-                    && c.SpendingIds.Contains(id)
+                Arg.Is<DeleteSpendingCommand>(c => 
+                    c.Id == id
                     && c.UserId == userId
                 )
             )
@@ -623,9 +621,8 @@ public class SpendingsControllerTests
 
         _mediator.When(m => 
             m.Send(
-                Arg.Is<DeleteSpendingsCommand>(c => 
-                    c.SpendingIds.Count() == 1 
-                    && c.SpendingIds.Contains(id)
+                Arg.Is<DeleteSpendingCommand>(c => 
+                    c.Id == id
                     && c.UserId == userId
                 )
             )
@@ -650,9 +647,8 @@ public class SpendingsControllerTests
 
         _mediator.When(m => 
             m.Send(
-                Arg.Is<DeleteSpendingsCommand>(c => 
-                    c.SpendingIds.Count() == 1 
-                    && c.SpendingIds.Contains(id)
+                Arg.Is<DeleteSpendingCommand>(c => 
+                    c.Id == id
                     && c.UserId == userId
                 )
             )
@@ -687,9 +683,8 @@ public class SpendingsControllerTests
 
         //Assert
         await _mediator.Received(1).Send(
-            Arg.Is<DeleteSpendingsCommand>(c => 
-                c.SpendingIds.Count() == 1 
-                && c.SpendingIds.Contains(id)
+            Arg.Is<DeleteSpendingCommand>(c => 
+                c.Id == id
                 && c.UserId == userId
             )
         );

@@ -1,4 +1,4 @@
-using Budget.Spendings.Application.Commands.DeleteSpendings;
+using Budget.Spendings.Application.Commands.DeleteSpending;
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Domain.Entities;
 using Budget.Spendings.Domain.Factories;
@@ -18,8 +18,8 @@ public class DeleteSpendingsHandlerTests
     private readonly ISpendingCategoryRepository _categoryRepository;
     private readonly ISpendingRepository _spendingRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ILogger<DeleteSpendingsHandler> _logger;
-    private readonly DeleteSpendingsHandler _handler;
+    private readonly ILogger<DeleteSpendingHandler> _logger;
+    private readonly DeleteSpendingHandler _handler;
     private readonly SpendingCategoryFactory _categoryFactory;
     private readonly SpendingFactory _spendingFactory;
 
@@ -33,9 +33,9 @@ public class DeleteSpendingsHandlerTests
         _unitOfWork.SpendingCategories.Returns(_categoryRepository);
         _unitOfWork.Spendings.Returns(_spendingRepository);
 
-        _logger = Substitute.For<ILogger<DeleteSpendingsHandler>>();
+        _logger = Substitute.For<ILogger<DeleteSpendingHandler>>();
 
-        _handler = new DeleteSpendingsHandler(_unitOfWork, _logger);
+        _handler = new DeleteSpendingHandler(_unitOfWork, _logger);
 
         _categoryFactory = new SpendingCategoryFactory();
         _spendingFactory = new SpendingFactory();
@@ -57,37 +57,13 @@ public class DeleteSpendingsHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ThrowsSpendingDoesNotExistException_WhenAtLeastOneSpendingIsNotFound()
+    public async Task Handle_ThrowsSpendingDoesNotExistException_WhenSpendingIsNotFound()
     {
         //Arrange
-        var spendings = new List<Spending>();
         var userId = _fixture.Create<string>();
-        
-        var category = _categoryFactory.Create(
-            userId,
-            _fixture.Create<string>(),
-            _fixture.Create<Frequency>(),
-            new Random().NextDouble() * 10000,
-            _fixture.Create<string>()
-        );
 
-        _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
-
-        for (int i = 0; i < 3; i++)
-        {
-            var spending = _spendingFactory.Create(
-                category.Id,
-                DateTime.Now,
-                new Random().NextDouble() * 10000,
-                _fixture.Create<string>()
-            );
-
-            _spendingRepository.GetAsync(spending.Id).Returns(spending);
-            spendings.Add(spending);
-        }
-
-        var command = new DeleteSpendingsCommand(
-            spendings.Select(s => s.Id).Union(new [] { Guid.NewGuid() }), 
+        var command = new DeleteSpendingCommand(
+            Guid.NewGuid(), 
             userId
         );
         var tokenSource = new CancellationTokenSource();
@@ -102,7 +78,7 @@ public class DeleteSpendingsHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ThrowsSpendingBelongsToAnotherUserException_WhenAtLeastOneSpendingBelongsToAnotherUser()
+    public async Task Handle_ThrowsSpendingBelongsToAnotherUserException_SpendingBelongsToAnotherUser()
     {
         //Arrange
         var spendings = new List<Spending>();
@@ -118,20 +94,17 @@ public class DeleteSpendingsHandlerTests
 
         _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
 
-        for (int i = 0; i < 3; i++)
-        {
-            var spending = _spendingFactory.Create(
-                category.Id,
-                DateTime.Now,
-                new Random().NextDouble() * 10000,
-                _fixture.Create<string>()
-            );
+        var spending = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
 
-            _spendingRepository.GetAsync(spending.Id).Returns(spending);
-            spendings.Add(spending);
-        }
-
-        var command = new DeleteSpendingsCommand(spendings.Select(s => s.Id), userId);
+        _spendingRepository.GetAsync(spending.Id).Returns(spending);
+        spendings.Add(spending);
+        
+        var command = new DeleteSpendingCommand(spending.Id, userId);
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -144,7 +117,7 @@ public class DeleteSpendingsHandlerTests
     }
 
     [Fact]
-    public async Task Handle_CallsRepository_ForEachIdToDelete()
+    public async Task Handle_CallsRepository()
     {
         //Arrange
         var spendings = new List<Spending>();
@@ -160,20 +133,18 @@ public class DeleteSpendingsHandlerTests
 
         _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
 
-        for (int i = 0; i < 3; i++)
-        {
-            var spending = _spendingFactory.Create(
-                category.Id,
-                DateTime.Now,
-                new Random().NextDouble() * 10000,
-                _fixture.Create<string>()
-            );
+        var spending = _spendingFactory.Create(
+            category.Id,
+            DateTime.Now,
+            new Random().NextDouble() * 10000,
+            _fixture.Create<string>()
+        );
 
-            _spendingRepository.GetAsync(spending.Id).Returns(spending);
-            spendings.Add(spending);
-        }
+        _spendingRepository.GetAsync(spending.Id).Returns(spending);
+        spendings.Add(spending);
+    
 
-        var command = new DeleteSpendingsCommand(spendings.Select(s => s.Id), userId);
+        var command = new DeleteSpendingCommand(spending.Id, userId);
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -182,8 +153,7 @@ public class DeleteSpendingsHandlerTests
         //Assert
         _unitOfWork.Received(1).BeginTransaction();
 
-        foreach (var s in spendings)
-            await _spendingRepository.Received(1).DeleteAsync(Arg.Is(s.Id));
+        await _spendingRepository.Received(1).DeleteAsync(Arg.Is(spending.Id));
 
         _unitOfWork.Received(1).Commit();
     }

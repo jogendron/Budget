@@ -1,9 +1,9 @@
-using Budget.Spendings.Application.Commands.DeleteSpendings;
+using Budget.Spendings.Application.Commands.DeleteSpending;
 
 using AutoFixture;
 using FluentAssertions;
 
-namespace Budget.Spendings.Application.Tests.Commands.DeleteSpendings;
+namespace Budget.Spendings.Application.Tests.Commands.DeleteSpending;
 
 public class DeleteSpendingsCommandTests
 {
@@ -18,14 +18,14 @@ public class DeleteSpendingsCommandTests
     public void Constructor_AssignsProperties()
     {
         //Arrange
-        var ids = _fixture.Create<List<Guid>>();
+        var id = _fixture.Create<Guid>();
         var userId = _fixture.Create<string>();
 
         //Act
-        var command = new DeleteSpendingsCommand(ids, userId);
+        var command = new DeleteSpendingCommand(id, userId);
 
         //Assert
-        command.SpendingIds.Should().BeEquivalentTo(ids);
+        command.Id.Should().Be(id);
         command.UserId.Should().Be(userId);
     }
 }
