@@ -1,4 +1,3 @@
-using Budget.Spendings.Api.Exceptions;
 using Budget.Spendings.Api.Models;
 using Budget.Spendings.Api.Services;
 
@@ -36,44 +35,17 @@ public class SpendingCategoriesController : ControllerBase
         _userInspector = userInspector;
     }
 
-    private bool CategoryBelongsToUser(Domain.Entities.SpendingCategory category)
-    {
-        return category.UserId == _userInspector.GetAuthenticatedUser();
-    }
-
-    private SpendingCategory? ConvertSpendingCategory(Domain.Entities.SpendingCategory? domainCategory)
-    {
-        SpendingCategory? modelCategory = null;
-
-        if (domainCategory != null)
-        {
-            //Do not return a category that does not belong to the user
-            //Do not let an impostor know if an id exists or not
-            if (CategoryBelongsToUser(domainCategory))
-                modelCategory = new SpendingCategory(domainCategory);
-            else
-                throw new WrongUserException();
-        }
-            
-        return modelCategory;
-    }
-
     private IEnumerable<SpendingCategoryEvent> GetHistoryFrom(Domain.Entities.SpendingCategory? domainCategory)
     {
         var events = new List<SpendingCategoryEvent>();
 
         if (domainCategory != null)
         {
-            //Do not return a category that does not belong to the user
-            //Do not let an impostor know if an id exists or not
-            if (CategoryBelongsToUser(domainCategory))
-                events = domainCategory.Changes.Select(c => new SpendingCategoryEvent() {
+            events = domainCategory.Changes.Select(c => new SpendingCategoryEvent() {
                     EventId = c.EventId,
                     EventDate = c.EventDate,
                     EventType = c.GetType().ToString().Split('.').Last()
                 }).ToList();
-            else
-                throw new WrongUserException();
         }
 
         return events;
@@ -101,12 +73,13 @@ public class SpendingCategoriesController : ControllerBase
 
             var creation = await _mediator.Send(command);
 
-            var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(creation.Id);
+            var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(creation.Id, _userInspector.GetAuthenticatedUser());
+            var category = await _mediator.Send(getCategoryByIdCommand);
 
             response = CreatedAtRoute(
-                "GetSpendingCategoryFromId", 
+                "GetSpendingCategoryById", 
                 new { id = creation.Id }, 
-                ConvertSpendingCategory(await _mediator.Send(getCategoryByIdCommand))
+                new SpendingCategory(category!)
             );
         }
         catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException || ex is InvalidOperationException)
@@ -137,7 +110,7 @@ public class SpendingCategoriesController : ControllerBase
         return response;
     }
 
-    [HttpGet("{id:guid}", Name = "GetSpendingCategoryFromId")]
+    [HttpGet("{id:guid}", Name = "GetSpendingCategoryById")]
     [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(SpendingCategory), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
@@ -148,11 +121,11 @@ public class SpendingCategoriesController : ControllerBase
 
         try
         {
-            var command = new GetSpendingCategoryByIdCommand(id);
-            var category = ConvertSpendingCategory(await _mediator.Send(command));
+            var command = new GetSpendingCategoryByIdCommand(id, _userInspector.GetAuthenticatedUser());
+            var domainCategory = await _mediator.Send(command);
 
-            if (category != null)
-                response = new OkObjectResult(category);
+            if (domainCategory != null)
+                response = new OkObjectResult(new SpendingCategory(domainCategory));
             else
                 response = NotFound();
         }
@@ -165,7 +138,7 @@ public class SpendingCategoriesController : ControllerBase
                 ex.ToString()
             );
         }
-        catch (WrongUserException)
+        catch (CategoryBelongsToAnotherUserException)
         {
             response = NotFound();
 
@@ -207,10 +180,10 @@ public class SpendingCategoriesController : ControllerBase
                     name
                 );
 
-                var category = ConvertSpendingCategory(await _mediator.Send(command));
+                var domainCategory = await _mediator.Send(command);
                 
-                if (category != null)
-                    categories.Add(category);
+                if (domainCategory != null)
+                    categories.Add(new SpendingCategory(domainCategory));
             }
             else
             {
@@ -219,9 +192,9 @@ public class SpendingCategoriesController : ControllerBase
                 );
 
                 categories.AddRange(
-                    (await _mediator.Send(command)).Select(
-                        c => ConvertSpendingCategory(c)
-                    ).Where(c => c != null)!
+                    (await _mediator.Send(command)).Where(c => c != null).Select(
+                        c => new SpendingCategory(c)
+                    )
                 );
             }
 
@@ -262,7 +235,7 @@ public class SpendingCategoriesController : ControllerBase
 
         try
         {
-            var command = new GetSpendingCategoryByIdCommand(id);
+            var command = new GetSpendingCategoryByIdCommand(id, _userInspector.GetAuthenticatedUser());
             var history = GetHistoryFrom(await _mediator.Send(command));
 
             if (history != null && history.Any())
@@ -279,7 +252,7 @@ public class SpendingCategoriesController : ControllerBase
                 ex.ToString()
             );
         }
-        catch (WrongUserException)
+        catch (CategoryBelongsToAnotherUserException)
         {
             response = NotFound();
 

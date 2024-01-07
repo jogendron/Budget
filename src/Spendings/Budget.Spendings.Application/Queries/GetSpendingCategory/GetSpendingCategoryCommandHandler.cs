@@ -1,3 +1,4 @@
+using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Domain.Entities;
 using Budget.Spendings.Domain.Repositories;
 
@@ -22,7 +23,12 @@ public class GetSpendingCategoryCommandHandler :
         CancellationToken cancellationToken
     )
     {
-        return await _unitOfWork.SpendingCategories.GetAsync(request.Id);
+        var category = await _unitOfWork.SpendingCategories.GetAsync(request.Id);
+
+        if (category != null && category.UserId != request.UserId)
+            throw new CategoryBelongsToAnotherUserException();
+
+        return category;
     }
 
     public async Task<SpendingCategory?> Handle(

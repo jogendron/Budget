@@ -1,5 +1,3 @@
-using Budget.Spendings.Api.Exceptions;
-
 namespace Budget.Spendings.Api.Services;
 
 public class HttpContextUserInspector : IUserInspector
@@ -19,7 +17,7 @@ public class HttpContextUserInspector : IUserInspector
         var value = _context.User.Identity?.Name ?? string.Empty;
 
         if (string.IsNullOrEmpty(value))
-            throw new WrongUserException();
+            throw new ArgumentException("No user id available");
 
         return value;
     }

@@ -6,6 +6,7 @@ using AutoFixture;
 using FluentAssertions;
 using NSubstitute;
 using Budget.Spendings.Domain.Factories;
+using Budget.Spendings.Application.Exceptions;
 
 namespace Budget.Spendings.Application.Tests.Queries.GetSpendingCategory;
 
@@ -43,8 +44,11 @@ public class GetSpendingCategoryCommandHandlerTests
     public async Task Handle_GetById_ReturnsCategoryFromRepository()
     {
         //Arrange
-        var command = _fixture.Create<GetSpendingCategoryByIdCommand>();
         var expectedCategory = CreateSpendingCategory();
+        var command = new GetSpendingCategoryByIdCommand(
+            expectedCategory.Id,
+            expectedCategory.UserId
+        );
 
         _repository.GetAsync(Arg.Is(command.Id)).Returns(expectedCategory);
 
@@ -56,6 +60,24 @@ public class GetSpendingCategoryCommandHandlerTests
         //Assert
         category.Should().NotBeNull();
         category.Should().BeEquivalentTo(expectedCategory);
+    }
+
+    [Fact]
+    public async Task Handle_GetById_ThrowsCategoryBelongsToAnotherUserException_WhenCategoryBelongsToAnotherUser()
+    {
+        //Arrange
+        var command = _fixture.Create<GetSpendingCategoryByIdCommand>();
+        var expectedCategory = CreateSpendingCategory();
+
+        _repository.GetAsync(Arg.Is(command.Id)).Returns(expectedCategory);
+
+        var tokenSource = new CancellationTokenSource();
+
+        //Act
+        var action = (() => _handler.Handle(command, tokenSource.Token));
+
+        //Assert
+        await action.Should().ThrowAsync<CategoryBelongsToAnotherUserException>();
     }
 
     [Fact]

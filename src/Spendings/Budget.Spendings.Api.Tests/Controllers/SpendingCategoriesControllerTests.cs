@@ -95,7 +95,7 @@ public class SpendingCategoriesControllerTests
         var result = response as CreatedAtRouteResult;
         if (result != null)
         {
-            result.RouteName.Should().Be("GetSpendingCategoryFromId");
+            result.RouteName.Should().Be("GetSpendingCategoryById");
             result.RouteValues.Should().NotBeNull();
             result.RouteValues!.Count.Should().Be(1);
 
@@ -301,18 +301,12 @@ public class SpendingCategoriesControllerTests
     {
         //Arrange
         var id = Guid.NewGuid();
-        var domainCategory = new SpendingCategoryFactory().Load(
-            id, 
-            new List<Event>() {
-                _fixture.Build<SpendingCategoryCreated>().With(
-                    c => c.AggregateId, id
-                ).With(
-                    c => c.Period, new Domain.Events.Period(DateTime.MinValue)
-                ).Create()
-            }
-        );
 
-        _mediator.Send(Arg.Is<GetSpendingCategoryByIdCommand>(c => c.Id == id)).Returns(domainCategory);
+        _mediator.When(m => m.Send(
+            Arg.Is<GetSpendingCategoryByIdCommand>(
+                c => c.Id == id
+            )
+        )).Do(c => throw new CategoryBelongsToAnotherUserException());
 
         //Act
         var result = await _controller.GetSpendingCategoryFromId(id);
@@ -648,20 +642,12 @@ public class SpendingCategoriesControllerTests
     {
         //Arrange
         var id = Guid.NewGuid();
-        var domainCategory = new SpendingCategoryFactory().Load(
-            id, 
-            new List<Event>() {
-                _fixture.Build<SpendingCategoryCreated>().With(
-                    c => c.AggregateId, id
-                ).With(
-                    c => c.UserId, _fixture.Create<string>()
-                ).With(
-                    c => c.Period, new Domain.Events.Period(DateTime.MinValue)
-                ).Create()
-            }
-        );
 
-        _mediator.Send(Arg.Is<GetSpendingCategoryByIdCommand>(c => c.Id == id)).Returns(domainCategory);
+        _mediator.When(m => m.Send(
+            Arg.Is<GetSpendingCategoryByIdCommand>(
+                c => c.Id == id
+            )
+        )).Do(c => throw new CategoryBelongsToAnotherUserException());
 
         //Act
         var result = await _controller.GetSpendingCategoryHistoryFromId(id);
