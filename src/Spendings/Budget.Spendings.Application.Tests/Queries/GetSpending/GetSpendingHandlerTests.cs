@@ -225,8 +225,8 @@ public class GetSpendingHandlerTests
 
         var command = new GetSpendingsByUserCommand(
             _fixture.Create<string>(),
-            _fixture.Create<DateTime>(),
-            _fixture.Create<DateTime>()
+            DateTime.MinValue,
+            DateTime.MaxValue
         );
 
         _spendingRepository.GetAsync(

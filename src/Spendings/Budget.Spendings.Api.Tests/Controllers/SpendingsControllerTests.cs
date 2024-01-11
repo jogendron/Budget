@@ -46,6 +46,8 @@ public class SpendingsControllerTests
     public async Task CreateSpending_Returns_CreatedAtRouteResult()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         var expectedResponse = new CreateSpendingResponse(Guid.NewGuid());
         _mediator.Send(Arg.Any<CreateSpendingCommand>()).Returns(expectedResponse);
 
@@ -169,6 +171,7 @@ public class SpendingsControllerTests
     public async Task GetSpendingById_ReturnsNotFound_WhenSpendingIsNotFound()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         //Act
         var result = await _controller.GetSpending(Guid.NewGuid());
@@ -182,6 +185,8 @@ public class SpendingsControllerTests
     public async Task GetSpendingById_ReturnsNotFound_WhenSpendingBelongsToAnotherUser()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(
             m => m.Send(Arg.Any<GetSpendingByIdCommand>())
         ).Do(c => throw new SpendingBelongsToAnotherUserException());
@@ -300,8 +305,8 @@ public class SpendingsControllerTests
     public async Task GetSpendingsByUser_ReturnsOkObjectResult()
     {
         //Arrange
-        var beginDate = _fixture.Create<DateTime>();
-        var endDate = _fixture.Create<DateTime>();
+        var beginDate = DateTime.MinValue;
+        var endDate = DateTime.MaxValue;
 
         var userId = _fixture.Create<string>();
         _userInspector.GetAuthenticatedUser().Returns(userId);
@@ -364,8 +369,9 @@ public class SpendingsControllerTests
     public async Task GetSpendingsByUser_ReturnsNotFound_WhenNoSpendingIsFound()
     {
         //Arrange
-        var beginDate = _fixture.Create<DateTime>();
-        var endDate = _fixture.Create<DateTime>();
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+        var beginDate = DateTime.MinValue;
+        var endDate = DateTime.MaxValue;
 
         //Act
         var result = await _controller.GetSpendings(null, beginDate, endDate);
@@ -376,11 +382,12 @@ public class SpendingsControllerTests
     }
 
     [Fact]
-    public async Task GetSpendings_ReturnsNotFound_WhenAskedForAnotherUserSpendings()
+    public async Task GetSpendingsByUser_ReturnsNotFound_WhenAskedForAnotherUserSpendings()
     {
         //Arrange
-        var beginDate = _fixture.Create<DateTime>();
-        var endDate = _fixture.Create<DateTime>();
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+        var beginDate = DateTime.MinValue;
+        var endDate = DateTime.MaxValue;
 
         _mediator.When(
             m => m.Send(Arg.Any<GetSpendingsByUserCommand>())
@@ -397,9 +404,10 @@ public class SpendingsControllerTests
     }
 
     [Fact]
-    public async Task GetSpendings_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
+    public async Task GetSpendingsByUser_ReturnsInternalError_WhenUnexpectedExceptionOccurs()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
         var beginDate = _fixture.Create<DateTime>();
         var endDate = _fixture.Create<DateTime>();
 

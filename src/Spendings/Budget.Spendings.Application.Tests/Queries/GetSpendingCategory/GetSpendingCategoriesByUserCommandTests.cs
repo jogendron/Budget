@@ -2,6 +2,7 @@ using Budget.Spendings.Application.Queries.GetSpendingCategory;
 
 using AutoFixture;
 using FluentAssertions;
+using NSubstitute.Core;
 
 namespace Budget.Spendings.Application.Tests.Queries.GetSpendingCategory;
 
@@ -25,5 +26,19 @@ public class GetSpendingCategoriesByUserCommandTests
 
         //Assert
         command.UserId.Should().Be(userId);
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenUserIdIsNullOrEmpty()
+    {
+        //Arrange
+
+        //Act
+        var actionNull = (() => new GetSpendingCategoriesByUserCommand(null!));
+        var actionEmpty = (() => new GetSpendingCategoriesByUserCommand(string.Empty));
+
+        //Assert
+        actionNull.Should().Throw<ArgumentException>();
+        actionEmpty.Should().Throw<ArgumentException>();
     }
 }

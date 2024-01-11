@@ -13,6 +13,15 @@ public class GetSpendingsByCategoryCommand : IRequest<IEnumerable<Spending>>
         DateTime? endDate
     )
     {
+        if (string.IsNullOrEmpty(userId))
+            throw new ArgumentException("User id cannot be empty");
+
+        if (categoryId == Guid.Empty)
+            throw new ArgumentException("Category id cannot be empty");
+
+        if (beginDate != null && endDate != null && beginDate > endDate)
+            throw new ArgumentException("End date must be after begin date");
+
         UserId = userId;
         CategoryId = categoryId;
         BeginDate = beginDate;

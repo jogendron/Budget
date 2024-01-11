@@ -7,13 +7,11 @@ namespace Budget.Spendings.Application.Queries.GetSpendingCategory;
 
 public class GetSpendingCategoriesByUserCommand : IRequest<IEnumerable<SpendingCategory>>
 {
-    public GetSpendingCategoriesByUserCommand()
-    {
-        UserId = string.Empty;
-    }
-
     public GetSpendingCategoriesByUserCommand(string userId)
     {
+        if (string.IsNullOrEmpty(userId))
+            throw new ArgumentException("User id cannot be empty");
+
         UserId = userId;
     }
 
