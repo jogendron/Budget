@@ -3,6 +3,7 @@ using Budget.Spendings.Domain.Entities;
 
 using FluentAssertions;
 using AutoFixture;
+using NSubstitute.Core;
 
 namespace Budget.Spendings.Application.Tests.Commands.CreateSpendingCategory;
 
@@ -10,46 +11,67 @@ public class CreateSpendingCategoryCommandTests
 {
     private Fixture _fixture;
 
-    private string _userId;
-    private string _name;
-    private Frequency _frequency;
-    private double _amount;
-    private string _description;
-
-    private CreateSpendingCategoryCommand _command;
-
     public CreateSpendingCategoryCommandTests()
     {
         _fixture = new Fixture();
-
-        _userId = _fixture.Create<string>();
-        _name = _fixture.Create<string>();
-        _frequency = _fixture.Create<Frequency>();
-        _amount = _fixture.Create<double>();
-        _description = _fixture.Create<string>();
-
-        _command = new CreateSpendingCategoryCommand(
-            _userId,
-            _name,
-            _frequency,
-            _amount,
-            _description
-        );
     }
 
     [Fact]
     public void Constructor_Assigns_Properties()
     {
         //Arrange
-
+        var userId = _fixture.Create<string>();
+        var name = _fixture.Create<string>();
+        var frequency = _fixture.Create<Frequency>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+        
         //Act
+        var command = new CreateSpendingCategoryCommand(
+            userId,
+            name,
+            frequency,
+            amount,
+            description
+        );
 
         //Assert
-        _userId.Should().Be(_userId);
-        _name.Should().Be(_name);
-        _frequency.Should().Be(_frequency);
-        _amount.Should().Be(_amount);
-        _description.Should().Be(_description);
+        command.UserId.Should().Be(userId);
+        command.Name.Should().Be(name);
+        command.Frequency.Should().Be(frequency);
+        command.Amount.Should().Be(amount);
+        command.Description.Should().Be(description);
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenUserIdIsNullOrEmpty()
+    {
+        //Arrange
+        var name = _fixture.Create<string>();
+        var frequency = _fixture.Create<Frequency>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+        
+        //Act
+        var commandNull = (() => new CreateSpendingCategoryCommand(
+            null!,
+            name,
+            frequency,
+            amount,
+            description
+        ));
+
+        var commandEmpty = (() => new CreateSpendingCategoryCommand(
+            null!,
+            name,
+            frequency,
+            amount,
+            description
+        ));
+
+        //Assert
+        commandNull.Should().Throw<ArgumentException>();
+        commandEmpty.Should().Throw<ArgumentException>();
     }
 
 }

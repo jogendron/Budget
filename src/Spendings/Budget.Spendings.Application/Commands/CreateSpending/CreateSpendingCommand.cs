@@ -12,6 +12,12 @@ public class CreateSpendingCommand : IRequest<CreateSpendingResponse>
         string description
     )
     {
+        if (categoryId == Guid.Empty)
+            throw new ArgumentException("Category id cannot be empty");
+
+        if (string.IsNullOrEmpty(userId))
+            throw new ArgumentException("User id cannot be empty");
+
         CategoryId = categoryId;
         UserId = userId;
         Date = date;

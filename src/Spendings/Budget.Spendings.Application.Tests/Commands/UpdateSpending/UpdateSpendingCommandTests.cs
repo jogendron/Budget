@@ -43,4 +43,63 @@ public class UpdateSpendingCommandTests
         command.Amount.Should().Be(amount);
         command.Description.Should().Be(description);        
     }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenSpendingIdIsEmpty()
+    {
+        //Arrange
+        var userId = _fixture.Create<string>();
+        var spendingId = Guid.Empty;
+        var categoryId = Guid.NewGuid();
+        var date = _fixture.Create<DateTime>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+
+        //Act
+        var command = (() => new UpdateSpendingCommand(
+            spendingId,
+            userId,
+            categoryId,
+            date,
+            amount,
+            description
+        ));
+
+        //Assert
+        command.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenUserIdIsNullOrEmpty()
+    {
+        //Arrange
+        var spendingId = Guid.NewGuid();
+        var categoryId = Guid.NewGuid();
+        var date = _fixture.Create<DateTime>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+
+        //Act
+        var commandNull = (() => new UpdateSpendingCommand(
+            spendingId,
+            null!,
+            categoryId,
+            date,
+            amount,
+            description
+        ));
+
+        var commandEmpty = (() => new UpdateSpendingCommand(
+            spendingId,
+            string.Empty,
+            categoryId,
+            date,
+            amount,
+            description
+        ));
+
+        //Assert
+        commandNull.Should().Throw<ArgumentException>();
+        commandEmpty.Should().Throw<ArgumentException>();
+    }
 }

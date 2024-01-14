@@ -16,6 +16,12 @@ public class UpdateSpendingCategoryCommand : IRequest
         string? description
     )
     {
+        if (spendingCategoryId == Guid.Empty)
+            throw new ArgumentException("Spending category id cannot be empty");
+
+        if (string.IsNullOrEmpty(userId))
+            throw new ArgumentException("User id cannot be empty");
+
         SpendingCategoryId = spendingCategoryId;
         UserId = userId;
         Name = name;

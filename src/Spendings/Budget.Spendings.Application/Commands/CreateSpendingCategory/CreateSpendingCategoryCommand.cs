@@ -16,6 +16,9 @@ public class CreateSpendingCategoryCommand
         string description
     )
     {
+        if (string.IsNullOrEmpty(userId))
+            throw new ArgumentException("User id cannot be empty");
+
         UserId = userId;
         Name = name;
         Frequency = frequency;

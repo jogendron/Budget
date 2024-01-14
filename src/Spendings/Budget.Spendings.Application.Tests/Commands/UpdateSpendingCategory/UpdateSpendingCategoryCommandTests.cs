@@ -47,4 +47,67 @@ public class UpdateSpendingCategoryCommandTests
         command.Amount.Should().Be(amount);
         command.Description.Should().Be(description);
     }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenSpendingCategoryIdIsEmpty()
+    {
+        //Arrange
+        var userId = _fixture.Create<string>();
+        var name = _fixture.Create<string>();
+        var frequency = _fixture.Create<Frequency>();
+        var isPeriodOpened = _fixture.Create<bool>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+
+        //Act
+        var command = (() => new UpdateSpendingCategoryCommand(
+            Guid.Empty,
+            userId,
+            name,
+            frequency,
+            isPeriodOpened,
+            amount,
+            description
+        ));
+
+        //Assert
+        command.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void Constructor_ThrowsArgumentException_WhenUserIdIsNullOrEmpty()
+    {
+        //Arrange
+        var categoryId = _fixture.Create<Guid>();
+        var name = _fixture.Create<string>();
+        var frequency = _fixture.Create<Frequency>();
+        var isPeriodOpened = _fixture.Create<bool>();
+        var amount = _fixture.Create<double>();
+        var description = _fixture.Create<string>();
+
+        //Act
+        var commandNull = (() => new UpdateSpendingCategoryCommand(
+            categoryId,
+            null!,
+            name,
+            frequency,
+            isPeriodOpened,
+            amount,
+            description
+        ));
+
+        var commandEmpty = (() => new UpdateSpendingCategoryCommand(
+            categoryId,
+            string.Empty,
+            name,
+            frequency,
+            isPeriodOpened,
+            amount,
+            description
+        ));
+
+        //Assert
+        commandNull.Should().Throw<ArgumentException>();
+        commandEmpty.Should().Throw<ArgumentException>();
+    }
 }
