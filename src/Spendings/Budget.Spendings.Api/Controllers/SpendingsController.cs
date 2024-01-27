@@ -72,7 +72,12 @@ public class SpendingsController : ControllerBase
                 ))
             );
         }
-        catch (Exception ex) when (ex is CategoryDoesNotExistException || ex is CategoryBelongsToAnotherUserException)
+        catch (Exception ex) when (
+            ex is ArgumentException
+            || ex is ArgumentNullException
+            || ex is CategoryDoesNotExistException 
+            || ex is CategoryBelongsToAnotherUserException
+        )
         {
             _logger.LogWarning(
                 "Failed to create spending with category \"{id}\" because of invalid parameters",
@@ -95,6 +100,7 @@ public class SpendingsController : ControllerBase
     [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(Spending), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> GetSpending([FromRoute] Guid id)
     {
@@ -111,7 +117,19 @@ public class SpendingsController : ControllerBase
             else
                 response = NotFound();
         }
-        catch (Exception ex) when (ex is SpendingBelongsToAnotherUserException)
+        catch (Exception ex) when (
+            ex is ArgumentException
+            || ex is ArgumentNullException 
+        )
+        {
+            _logger.LogWarning(
+                "Failed to get spending with id \"{id}\" because of invalid parameters",
+                id
+            );
+
+            response = BadRequest();
+        }
+        catch (SpendingBelongsToAnotherUserException)
         {
             _logger.LogWarning(
                 "Failed to get spending with id \"{id}\" because it belongs to another user",
@@ -181,7 +199,11 @@ public class SpendingsController : ControllerBase
             else
                 response = NotFound();
         }
-        catch (Exception ex) when (ex is CategoryBelongsToAnotherUserException) 
+        catch (Exception ex) when (
+            ex is ArgumentException
+            || ex is ArgumentNullException
+            || ex is CategoryBelongsToAnotherUserException
+        ) 
         {
             _logger.LogWarning(
                 "Failed to get queryResult with category id \"{id}\" because it belongs to another user",
@@ -224,6 +246,7 @@ public class SpendingsController : ControllerBase
             await _mediator.Send(command);
         }
         catch (Exception ex) when (
+            ex is ArgumentException |
             ex is ArgumentNullException 
             | ex is CategoryDoesNotExistException
             | ex is CategoryBelongsToAnotherUserException
@@ -274,7 +297,10 @@ public class SpendingsController : ControllerBase
 
             await _mediator.Send(command);
         }
-        catch (ArgumentNullException)
+        catch (Exception ex) when (
+            ex is ArgumentException
+            || ex is ArgumentNullException
+        )
         {
             _logger.LogWarning(
                 "Failed to delete a spending because of invalid parameters"

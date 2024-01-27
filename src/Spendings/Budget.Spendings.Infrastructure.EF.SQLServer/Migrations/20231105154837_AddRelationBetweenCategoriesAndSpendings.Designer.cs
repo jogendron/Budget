@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Budget.Spendings.Infrastructure.EF.Migrations
+namespace Budget.Spendings.Infrastructure.EF.Migrations.SQLServer
 {
     [DbContext(typeof(SpendingsContext))]
-    [Migration("20230818013807_Initial")]
-    partial class Initial
+    [Migration("20231105154837_AddRelationBetweenCategoriesAndSpendings")]
+    partial class AddRelationBetweenCategoriesAndSpendings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,6 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
             modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Event", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -39,21 +38,52 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
                     b.Property<Guid?>("SpendingCategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("SpendingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SpendingCategoryId");
 
+                    b.HasIndex("SpendingId");
+
                     b.ToTable("Event", "Spendings");
+                });
+
+            modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Spending", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("SpendingCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SpendingCategoryId");
+
+                    b.ToTable("Spendings", "Spendings");
                 });
 
             modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.SpendingCategory", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Amount")
@@ -64,7 +94,8 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -77,11 +108,13 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -93,11 +126,31 @@ namespace Budget.Spendings.Infrastructure.EF.Migrations
                     b.HasOne("Budget.Spendings.Infrastructure.EF.SpendingCategory", null)
                         .WithMany("Events")
                         .HasForeignKey("SpendingCategoryId");
+
+                    b.HasOne("Budget.Spendings.Infrastructure.EF.Spending", null)
+                        .WithMany("Events")
+                        .HasForeignKey("SpendingId");
+                });
+
+            modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Spending", b =>
+                {
+                    b.HasOne("Budget.Spendings.Infrastructure.EF.SpendingCategory", null)
+                        .WithMany("Spendings")
+                        .HasForeignKey("SpendingCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.Spending", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("Budget.Spendings.Infrastructure.EF.SpendingCategory", b =>
                 {
                     b.Navigation("Events");
+
+                    b.Navigation("Spendings");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,11 @@ using Budget.Spendings.Domain.Factories;
 namespace Budget.Spendings.Infrastructure.EF;
 
 public class SpendingCategory
-{
+{ 
+    private DateTime _beginDate = DateTime.MinValue;
+    private DateTime _modifiedOn;
+    private DateTime? _endDate;
+
     public SpendingCategory()
     {
         Id = Guid.Empty;
@@ -43,11 +47,31 @@ public class SpendingCategory
     [MaxLength(100)]
     public string Name { get; set; }
 
-    public DateTime BeginDate { get; set; }
+    public DateTime BeginDate 
+    { 
+        get => _beginDate;
+        set {
+            _beginDate = DateTime.SpecifyKind(value.ToUniversalTime(), DateTimeKind.Utc);
+        }
+    }
 
-    public DateTime ModifiedOn { get; set; }
+    public DateTime ModifiedOn 
+    { 
+        get => _modifiedOn;
+        set {
+            _modifiedOn = DateTime.SpecifyKind(value.ToUniversalTime(), DateTimeKind.Utc);
+        }
+    }
 
-    public DateTime? EndDate { get; set; }
+    public DateTime? EndDate 
+    { 
+        get => _endDate; 
+        set {
+            _endDate = value.HasValue 
+                ? DateTime.SpecifyKind(value.Value.ToUniversalTime(), DateTimeKind.Utc)
+                : null;
+        }
+    }
 
     public Frequency Frequency { get; set; }
 
@@ -64,7 +88,7 @@ public class SpendingCategory
     {
         var factory = new SpendingCategoryFactory();
         
-        return factory.Load(Id, Events.Select(e => e.ToDomainEvent()).OrderBy(e => e.EventDate));
+        return factory.Load(Id, Events.Select(e => e.ToDomain()).OrderBy(e => e.EventDate));
     }
 
 }

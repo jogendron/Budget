@@ -148,9 +148,32 @@ if (databaseConfig.UseInMemory)
         o => o.UseInMemoryDatabase("Spendings")
     );
 else
-    builder.Services.AddDbContext<SpendingsContext>(
-        o => o.UseSqlServer(databaseConfig.ConnectionString)
-    );
+{
+    switch (databaseConfig.Provider)
+    {
+        case "SQLServer":
+            builder.Services.AddDbContext<SpendingsContext>(
+                o => o.UseSqlServer(
+                    databaseConfig.ConnectionString,
+                    x => x.MigrationsAssembly("Budget.Spendings.Infrastructure.EF.SQLServer")
+                )
+            );
+
+            break;
+
+        case "Postgres":
+
+            builder.Services.AddDbContext<SpendingsContext>(
+                o => o.UseNpgsql(
+                    databaseConfig.ConnectionString,
+                    x => x.MigrationsAssembly("Budget.Spendings.Infrastructure.EF.Postgres")
+                )
+            );
+
+            break;
+    }
+    
+}
 
 /*
 *   Build application
@@ -166,6 +189,18 @@ if (certificate != null)
     });
 
 var app = builder.Build();
+
+// Migrate postgres
+if (databaseConfig.MigrateOnStartup)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        var context = services.GetRequiredService<SpendingsContext>();    
+        context.Database.Migrate();
+    }
+}
 
 /*
 *   Configure application

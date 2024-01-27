@@ -5,6 +5,8 @@ namespace Budget.Spendings.Infrastructure.EF;
 
 public class Spending
 {
+    private DateTime _date;
+
     public Spending()
     {
         Id = Guid.Empty;
@@ -29,7 +31,13 @@ public class Spending
 
     public Guid SpendingCategoryId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateTime Date 
+    { 
+        get => _date; 
+        set {
+            _date = DateTime.SpecifyKind(value.ToUniversalTime(), DateTimeKind.Utc);
+        }
+    }
 
     public double Amount { get; set; }
 
@@ -42,6 +50,6 @@ public class Spending
     {
         var factory = new SpendingFactory();
         
-        return factory.Load(Id, Events.Select(e => e.ToDomainEvent()).OrderBy(e => e.EventDate));
+        return factory.Load(Id, Events.Select(e => e.ToDomain()).OrderBy(e => e.EventDate));
     }
 }

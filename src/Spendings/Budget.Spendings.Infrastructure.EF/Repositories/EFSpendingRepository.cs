@@ -34,8 +34,8 @@ public class EFSpendingRepository : ISpendingRepository
 
         var dbSpendings = await _context.Spendings.Include(s => s.Events).Where(
             s => s.SpendingCategoryId == categoryId
-                && s.Date >= begin 
-                && s.Date <= end
+                && s.Date >= DateTime.SpecifyKind(begin.ToUniversalTime(), DateTimeKind.Utc)
+                && s.Date <= DateTime.SpecifyKind(end.ToUniversalTime(), DateTimeKind.Utc)
         ).ToListAsync();
 
         spendings.AddRange(dbSpendings.Select(d => d.ToDomain()));
@@ -55,8 +55,8 @@ public class EFSpendingRepository : ISpendingRepository
 
         var dbSpendings = await _context.Spendings.Include(s => s.Events).Where(
             s => categoryIds.Contains(s.SpendingCategoryId)
-                && s.Date >= begin 
-                && s.Date <= end
+                && s.Date >= DateTime.SpecifyKind(begin.ToUniversalTime(), DateTimeKind.Utc) 
+                && s.Date <= DateTime.SpecifyKind(end.ToUniversalTime(), DateTimeKind.Utc)
         ).ToListAsync();
 
         spendings.AddRange(dbSpendings.Select(d => d.ToDomain()));

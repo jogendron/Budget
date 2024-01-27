@@ -244,7 +244,7 @@ public class EFSpendingRepositoryTests
         {
             dbSpending.Id.Should().Be(spending.Id);
             dbSpending.SpendingCategoryId.Should().Be(spending.CategoryId);
-            dbSpending.Date.Should().Be(spending.Date);
+            dbSpending.Date.Should().Be(DateTime.SpecifyKind(spending.Date.ToUniversalTime(), DateTimeKind.Utc));
             dbSpending.Amount.Should().Be(spending.Amount);
             dbSpending.Description.Should().Be(spending.Description);
         }
@@ -285,7 +285,7 @@ public class EFSpendingRepositoryTests
         {
             dbSpending.Id.Should().Be(spending.Id);
             dbSpending.SpendingCategoryId.Should().Be(spending.CategoryId);
-            dbSpending.Date.Should().Be(spending.Date);
+            dbSpending.Date.Should().Be(DateTime.SpecifyKind(spending.Date.ToUniversalTime(), DateTimeKind.Utc));
             dbSpending.Amount.Should().Be(spending.Amount);
             dbSpending.Description.Should().Be(spending.Description);
         }

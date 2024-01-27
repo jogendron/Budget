@@ -38,7 +38,7 @@ public class EFSpendingCategoryRepositoryTests
         ).With(
             e => e.UserId, userId
         ).With(
-            e => e.Period, new Domain.Events.Period(DateTime.MinValue, DateTime.MaxValue)
+            e => e.Period, new Domain.Events.Period(DateTime.MinValue, DateTime.Now)
         ).Create();
 
         return _fixture.Build<SpendingCategory>().With(
@@ -69,8 +69,14 @@ public class EFSpendingCategoryRepositoryTests
         category.Id.Should().Be(dbCategory.Id);
         category.UserId.Should().Be(dbCategory.UserId);
         category.Name.Should().Be(dbCategory.Name);
-        category.Period.BeginDate.Should().Be(dbCategory.BeginDate);
-        category.Period.EndDate.Should().Be(dbCategory.EndDate);
+        category.Period.BeginDate.Should().Be(
+            DateTime.SpecifyKind(dbCategory.BeginDate.ToLocalTime(), DateTimeKind.Utc)
+        );
+        category.Period.EndDate.Should().Be(
+            dbCategory.EndDate == null 
+            ? null
+            : DateTime.SpecifyKind(dbCategory.EndDate.Value.ToLocalTime(), DateTimeKind.Utc)
+        );
         category.Frequency.Should().Be(dbCategory.Frequency.ToDomainFrequency());
         category.Amount.Should().Be(dbCategory.Amount);
         category.Description.Should().Be(dbCategory.Description);
@@ -255,9 +261,13 @@ public class EFSpendingCategoryRepositoryTests
 
         dbCategory.UserId.Should().Be(category.UserId);
         dbCategory.Name.Should().Be(category.Name);
-        dbCategory.BeginDate.Should().Be(category.Period.BeginDate);
-        dbCategory.ModifiedOn.Should().Be(category.Changes.Max(c => c.EventDate));
-        dbCategory.EndDate.Should().Be(category.Period.EndDate);
+        dbCategory.BeginDate.Should().Be(DateTime.SpecifyKind(category.Period.BeginDate.ToUniversalTime(), DateTimeKind.Utc));
+        dbCategory.ModifiedOn.Should().Be(DateTime.SpecifyKind(category.Changes.Max(c => c.EventDate).ToUniversalTime(), DateTimeKind.Utc));
+        dbCategory.EndDate.Should().Be(
+            dbCategory.EndDate == null
+            ? null
+            : DateTime.SpecifyKind(category.Period!.EndDate!.Value.ToUniversalTime(), DateTimeKind.Utc)
+        );
         dbCategory.Frequency.Should().Be(Frequency.SemiWeekly);
         dbCategory.Amount.Should().Be(category.Amount);
         dbCategory.Description.Should().Be(category.Description);

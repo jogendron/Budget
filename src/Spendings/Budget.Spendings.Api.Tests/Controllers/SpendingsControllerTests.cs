@@ -68,6 +68,8 @@ public class SpendingsControllerTests
     public async Task CreateSpending_ReturnsBadRequest_WhenCategoryDoesNotExist()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(
             m => m.Send(Arg.Any<CreateSpendingCommand>())
         ).Do(c => throw new CategoryDoesNotExistException());
@@ -85,6 +87,8 @@ public class SpendingsControllerTests
     public async Task CreateSpending_ReturnsBadRequest_WhenCategoryBelongsToAnotherUser()
     {
         //Arrange
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(
             m => m.Send(Arg.Any<CreateSpendingCommand>())
         ).Do(c => throw new CategoryBelongsToAnotherUserException());
@@ -105,6 +109,8 @@ public class SpendingsControllerTests
         _mediator.When(
             m => m.Send(Arg.Any<CreateSpendingCommand>())
         ).Do(c => throw new DivideByZeroException());
+
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         var spending = _fixture.Create<NewSpending>();
 
@@ -207,6 +213,8 @@ public class SpendingsControllerTests
             m => m.Send(Arg.Any<GetSpendingByIdCommand>())
         ).Do(c => throw new DivideByZeroException());
 
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         //Act
         var result = await _controller.GetSpending(Guid.NewGuid());
 
@@ -224,8 +232,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         var categoryId = Guid.NewGuid();
-        var beginDate = _fixture.Create<DateTime>();
-        var endDate = _fixture.Create<DateTime>();
+        var beginDate = DateTime.MinValue;;
+        var endDate = DateTime.MaxValue;
 
         var userId = _fixture.Create<string>();
         _userInspector.GetAuthenticatedUser().Returns(userId);
@@ -292,6 +300,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         var categoryId = Guid.NewGuid();
+
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         //Act
         var result = await _controller.GetSpendings(categoryId, null, null);
@@ -408,8 +418,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
-        var beginDate = _fixture.Create<DateTime>();
-        var endDate = _fixture.Create<DateTime>();
+        var beginDate = DateTime.MinValue;
+        var endDate = DateTime.MaxValue;
 
         _mediator.When(
             m => m.Send(Arg.Any<GetSpendingsByUserCommand>())
@@ -462,6 +472,8 @@ public class SpendingsControllerTests
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
 
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())
         ).Do(c => throw new ArgumentNullException());
@@ -478,6 +490,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
+
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())
@@ -496,6 +510,8 @@ public class SpendingsControllerTests
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
 
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())
         ).Do(c => throw new CategoryDoesNotExistException());
@@ -512,6 +528,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
+
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())
@@ -530,6 +548,8 @@ public class SpendingsControllerTests
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
 
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
+
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())
         ).Do(c => throw new SpendingDoesNotExistException());
@@ -546,6 +566,8 @@ public class SpendingsControllerTests
     {
         //Arrange
         var spending = _fixture.Create<SpendingUpdate>();
+
+        _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
 
         _mediator.When(m => 
             m.Send(Arg.Any<UpdateSpendingCommand>())

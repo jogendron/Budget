@@ -32,7 +32,7 @@ public class Event
 
     public string Content { get; set; }
 
-    public EventSourcing.Events.Event ToDomainEvent()
+    public EventSourcing.Events.Event ToDomain()
     {
         EventSourcing.Events.Event @event;
 

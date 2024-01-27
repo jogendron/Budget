@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Budget.Spendings.Infrastructure.EF.Migrations
+namespace Budget.Spendings.Infrastructure.EF.Migrations.SQLServer
 {
     [DbContext(typeof(SpendingsContext))]
     [Migration("20231031011250_AddSpendingDbSet")]

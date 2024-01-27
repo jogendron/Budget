@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Budget.Spendings.Infrastructure.EF.Migrations
+namespace Budget.Spendings.Infrastructure.EF.Migrations.SQLServer
 {
     /// <inheritdoc />
     public partial class AddSpendingDbSet : Migration

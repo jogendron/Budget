@@ -22,6 +22,7 @@
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="8.0.0" />
     <PackageReference Include="microsoft.extensions.configuration.azurekeyvault" Version="3.1.24" />
     <PackageReference Include="microsoft.identity.web" Version="2.15.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="system.text.json" Version="8.0.0" />
   </ItemGroup>
@@ -30,6 +31,8 @@
     <ProjectReference Include="..\Budget.Spendings.Domain\Budget.Spendings.Domain.csproj" />
     <ProjectReference Include="..\Budget.Spendings.Application\Budget.Spendings.Application.csproj" />
     <ProjectReference Include="..\Budget.Spendings.Infrastructure.EF\Budget.Spendings.Infrastructure.EF.csproj" />
+    <ProjectReference Include="..\Budget.Spendings.Infrastructure.EF.SQLServer\Budget.Spendings.Infrastructure.EF.SQLServer.csproj" />
+    <ProjectReference Include="..\Budget.Spendings.Infrastructure.EF.Postgres\Budget.Spendings.Infrastructure.EF.Postgres.csproj" />
   </ItemGroup>
 
 </Project>
