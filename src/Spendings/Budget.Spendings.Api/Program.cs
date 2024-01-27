@@ -39,11 +39,34 @@ if (! string.IsNullOrEmpty(keyvaultUri))
 
 builder.Configuration.GetSection("Database").Bind(databaseConfig);
 
-var certificateValue = builder.Configuration.GetValue<string>("Api:Certificate");
-if (! string.IsNullOrEmpty(certificateValue))
+var certificateFormat = builder.Configuration.GetValue<string>("Api:CertificateFormat");
+switch (certificateFormat)
 {
-    var certificateBytes = Convert.FromBase64String(certificateValue);
-    certificate = new X509Certificate2(certificateBytes);
+    case "Pkcs12":
+
+        var certificateValue = builder.Configuration.GetValue<string>("Api:Pkcs12Certificate");
+        
+        if (! string.IsNullOrEmpty(certificateValue))
+        {
+            var certificateBytes = Convert.FromBase64String(certificateValue);
+            certificate = new X509Certificate2(certificateBytes);
+        }
+
+        break;
+
+    case "Separate":
+
+        var certBytes = Convert.FromBase64String(builder.Configuration.GetValue<string>("Api:Certificate") ?? string.Empty);
+        var keyBytes = Convert.FromBase64String(builder.Configuration.GetValue<string>("Api:PrivateKey") ?? string.Empty);
+
+        var temporaryCert = new X509Certificate2(certBytes);
+
+        var rsa = System.Security.Cryptography.RSA.Create();
+        rsa.ImportPkcs8PrivateKey(keyBytes, out _);
+
+        certificate = temporaryCert.CopyWithPrivateKey(rsa);
+
+        break;
 }
 
 /*
