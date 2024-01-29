@@ -4,6 +4,7 @@ using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Budget.Spendings.Application.Queries.GetSpending;
 
@@ -30,6 +31,11 @@ public class GetSpendingHandler
 
         try
         {
+            _logger.LogInformation("Getting a spending by id");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"GetSpendingByIdCommand: {JsonSerializer.Serialize(request)}");
+
             var spending = await _unitOfWork.Spendings.GetAsync(request.Id);
 
             if (spending != null)
@@ -57,6 +63,11 @@ public class GetSpendingHandler
 
         try
         {
+            _logger.LogInformation("Getting spendings by category");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"GetSpendingsByCategoryCommand: {JsonSerializer.Serialize(request)}");
+
             var category = await _unitOfWork.SpendingCategories.GetAsync(request.CategoryId);
 
             if (category?.UserId != request.UserId)
@@ -83,6 +94,11 @@ public class GetSpendingHandler
 
         try
         {
+            _logger.LogInformation("Getting spendings by user");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"GetSpendingsByUserCommand: {JsonSerializer.Serialize(request)}");
+
             response = await _unitOfWork.Spendings.GetAsync(
                 request.UserId,
                 request.BeginDate,

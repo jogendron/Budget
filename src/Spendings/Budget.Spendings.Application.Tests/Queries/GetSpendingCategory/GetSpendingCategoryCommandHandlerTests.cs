@@ -7,6 +7,7 @@ using FluentAssertions;
 using NSubstitute;
 using Budget.Spendings.Domain.Factories;
 using Budget.Spendings.Application.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Budget.Spendings.Application.Tests.Queries.GetSpendingCategory;
 
@@ -15,7 +16,8 @@ public class GetSpendingCategoryCommandHandlerTests
     private readonly Fixture _fixture;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISpendingCategoryRepository _repository;
-    private readonly GetSpendingCategoryCommandHandler _handler;
+    private readonly ILogger<GetSpendingCategoryHandler> _logger;
+    private readonly GetSpendingCategoryHandler _handler;
     private readonly SpendingCategoryFactory _factory;
 
     public GetSpendingCategoryCommandHandlerTests()
@@ -24,7 +26,8 @@ public class GetSpendingCategoryCommandHandlerTests
         _repository = Substitute.For<ISpendingCategoryRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _unitOfWork.SpendingCategories.Returns(_repository);
-        _handler = new GetSpendingCategoryCommandHandler(_unitOfWork);
+        _logger = Substitute.For<ILogger<GetSpendingCategoryHandler>>();
+        _handler = new GetSpendingCategoryHandler(_unitOfWork, _logger);
 
         _factory = new SpendingCategoryFactory();
     }

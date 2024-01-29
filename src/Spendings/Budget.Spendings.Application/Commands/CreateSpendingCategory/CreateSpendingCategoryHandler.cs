@@ -4,6 +4,7 @@ using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Budget.Spendings.Application.Commands.CreateSpendingCategory;
 
@@ -33,6 +34,11 @@ public class CreateSpendingCategoryHandler
 
         try
         {
+            _logger.LogInformation("Creating a spending category");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"CreateSpendingCategoryCommand: {JsonSerializer.Serialize(request)}");
+
             _unitOfWork.BeginTransaction();
 
             var existingCategory = await _unitOfWork.SpendingCategories.GetAsync(

@@ -1,7 +1,9 @@
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Domain.Repositories;
+
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Budget.Spendings.Application.Commands.UpdateSpending;
 
@@ -23,6 +25,11 @@ public class UpdateSpendingHandler : IRequestHandler<UpdateSpendingCommand>
     {
         try
         {
+            _logger.LogInformation("Updating a spending");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"UpdateSpendingCommand: {JsonSerializer.Serialize(request)}");
+            
             _unitOfWork.BeginTransaction();
 
             if (request == null)

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Budget.Spendings.Application.Exceptions;
 using Budget.Spendings.Domain.Factories;
 using Budget.Spendings.Domain.Repositories;
@@ -29,6 +30,11 @@ public class CreateSpendingHandler : IRequestHandler<CreateSpendingCommand, Crea
         try
         {
             _unitOfWork.BeginTransaction();
+
+            _logger.LogInformation("Creating a spending");
+
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"CreateSpendingCommand: {JsonSerializer.Serialize(request)}");
 
             var category = await _unitOfWork.SpendingCategories.GetAsync(request.CategoryId);
 

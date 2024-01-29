@@ -4,6 +4,7 @@ using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Budget.Spendings.Application.Commands.UpdateSpendingCategory;
 
@@ -25,9 +26,14 @@ public class UpdateSpendingCategoryHandler : IRequestHandler<UpdateSpendingCateg
     {
         try
         {
+            _logger.LogInformation("Updating a spending category");
+
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
             
+            if (_logger.IsEnabled(LogLevel.Debug))
+                _logger.LogDebug($"UpdateSpendingCategoryCommand: {JsonSerializer.Serialize(request)}");
+
             var category = await _unitOfWork.SpendingCategories.GetAsync(request.SpendingCategoryId);
 
             if (category == null)
