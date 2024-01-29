@@ -392,7 +392,7 @@ public class SpendingsControllerTests
     }
 
     [Fact]
-    public async Task GetSpendingsByUser_ReturnsNotFound_WhenAskedForAnotherUserSpendings()
+    public async Task GetSpendingsByUser_ReturnsBadRequest_WhenAskedForAnotherUserSpendings()
     {
         //Arrange
         _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
@@ -410,7 +410,7 @@ public class SpendingsControllerTests
 
         //Assert
         result.Should().NotBeNull();
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [Fact]

@@ -359,7 +359,7 @@ public class SpendingCategoriesController : ControllerBase
 
             await _mediator.Send(command);
         }
-        catch (ArgumentNullException)
+        catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
         {
             _logger.LogWarning(
                 "Failed to delete spending category \"{id}\" because of invalid parameters",

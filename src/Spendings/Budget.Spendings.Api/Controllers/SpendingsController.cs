@@ -152,6 +152,7 @@ public class SpendingsController : ControllerBase
     [RequiredScope(ApiScopes.Read)]
     [ProducesResponseType(typeof(IEnumerable<Spending>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult> GetSpendings(
         [FromQuery] Guid? categoryId, 
@@ -210,7 +211,7 @@ public class SpendingsController : ControllerBase
                 categoryId
             );
 
-            response = NotFound();
+            response = BadRequest();
         }
         catch (Exception ex)
         {
