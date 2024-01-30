@@ -305,7 +305,7 @@ public class EFSpendingRepositoryTests
         await _spendingRepository.SaveAsync(spending);
 
         //Act
-        await _spendingRepository.DeleteAsync(spending.Id);
+        await _spendingRepository.DeleteAsync(spending);
 
         //Assert
         var search = await _spendingRepository.GetAsync(spending.Id);

@@ -116,7 +116,7 @@ public class DeleteSpendingCategoryHandlerTests
 
         //Assert
         _unitOfWork.Received(1).BeginTransaction();
-        await _repository.Received(1).DeleteAsync(Arg.Is(category.Id));
+        await _repository.Received(1).DeleteAsync(Arg.Is(category));
         _unitOfWork.Received(1).Commit();
     }
 }

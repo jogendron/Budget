@@ -322,7 +322,7 @@ public class EFSpendingCategoryRepositoryTests
         await _repository.SaveAsync(category);
 
         //Act
-        await _repository.DeleteAsync(category.Id);
+        await _repository.DeleteAsync(category);
 
         //Assert
         var search = await _repository.GetAsync(category.Id);

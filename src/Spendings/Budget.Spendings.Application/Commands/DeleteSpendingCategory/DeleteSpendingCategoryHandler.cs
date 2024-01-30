@@ -43,7 +43,7 @@ public class DeleteSpendingCategoryHandler : IRequestHandler<DeleteSpendingCateg
             if (category.UserId != request.UserId)
                 throw new CategoryBelongsToAnotherUserException();
 
-            await _unitOfWork.SpendingCategories.DeleteAsync(request.Id);
+            await _unitOfWork.SpendingCategories.DeleteAsync(category);
 
             _unitOfWork.Commit();
         }

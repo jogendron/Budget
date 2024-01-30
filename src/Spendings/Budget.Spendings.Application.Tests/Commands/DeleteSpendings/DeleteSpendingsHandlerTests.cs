@@ -153,7 +153,7 @@ public class DeleteSpendingsHandlerTests
         //Assert
         _unitOfWork.Received(1).BeginTransaction();
 
-        await _spendingRepository.Received(1).DeleteAsync(Arg.Is(spending.Id));
+        await _spendingRepository.Received(1).DeleteAsync(Arg.Is(spending));
 
         _unitOfWork.Received(1).Commit();
     }

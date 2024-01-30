@@ -12,5 +12,5 @@ public interface ISpendingCategoryRepository
 
     Task SaveAsync(SpendingCategory category);
 
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(SpendingCategory category);
 }

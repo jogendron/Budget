@@ -1,4 +1,5 @@
 using Budget.Spendings.Application.Exceptions;
+using Budget.Spendings.Domain.Entities;
 using Budget.Spendings.Domain.Repositories;
 
 using MediatR;
@@ -35,9 +36,9 @@ public class DeleteSpendingHandler : IRequestHandler<DeleteSpendingCommand>
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            await VerifySpendingsExistAndBelongToUser(request);
+            var spending = await GetValidatedSpending(request);
 
-            await _unitOfWork.Spendings.DeleteAsync(request.Id);
+            await _unitOfWork.Spendings.DeleteAsync(spending);
 
             _unitOfWork.Commit();
         }
@@ -49,7 +50,7 @@ public class DeleteSpendingHandler : IRequestHandler<DeleteSpendingCommand>
         }
     }
 
-    private async Task VerifySpendingsExistAndBelongToUser(DeleteSpendingCommand request)
+    private async Task<Spending> GetValidatedSpending(DeleteSpendingCommand request)
     {
         var spending = await _unitOfWork.Spendings.GetAsync(request.Id);
 
@@ -60,5 +61,7 @@ public class DeleteSpendingHandler : IRequestHandler<DeleteSpendingCommand>
 
         if (category!.UserId != request.UserId)
             throw new SpendingBelongsToAnotherUserException();
+
+        return spending;
     }
 }

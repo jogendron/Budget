@@ -12,5 +12,5 @@ public interface ISpendingRepository
 
     Task SaveAsync(Spending spending);
 
-    Task DeleteAsync(Guid id);
+    Task DeleteAsync(Spending spending);
 }

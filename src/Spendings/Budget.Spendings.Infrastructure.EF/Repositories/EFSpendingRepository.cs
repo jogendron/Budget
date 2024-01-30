@@ -93,9 +93,13 @@ public class EFSpendingRepository : ISpendingRepository
         _context.SaveChanges();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Domain.Entities.Spending spending)
     {
-        var dbSpending = await _context.Spendings.Include(s => s.Events).FirstOrDefaultAsync(s => s.Id == id);
+        var dbSpending = await _context.Spendings.Include(
+            s => s.Events
+        ).FirstOrDefaultAsync(
+            s => s.Id == spending.Id
+        );
 
         if (dbSpending != null)
         {

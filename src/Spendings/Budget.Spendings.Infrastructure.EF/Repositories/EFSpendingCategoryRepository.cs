@@ -83,19 +83,19 @@ public class EFSpendingCategoryRepository : ISpendingCategoryRepository
         _context.SaveChanges();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Domain.Entities.SpendingCategory category)
     {
-        var category = await _context.SpendingCategories.Include(
+        var dbCategory = await _context.SpendingCategories.Include(
             c => c.Spendings
         ).ThenInclude(
             s => s.Events
         ).Include(
             c => c.Events
-        ).FirstOrDefaultAsync(s => s.Id == id);
+        ).FirstOrDefaultAsync(s => s.Id == category.Id);
 
-        if (category != null)
+        if (dbCategory != null)
         {
-            _context.SpendingCategories.Remove(category);
+            _context.SpendingCategories.Remove(dbCategory);
             await _context.SaveChangesAsync();
         }
     }
