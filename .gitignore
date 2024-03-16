@@ -5,6 +5,7 @@
 
 # Mac files
 *.DS_Store
+*.mono
 
 # User-specific files
 *.rsuser
