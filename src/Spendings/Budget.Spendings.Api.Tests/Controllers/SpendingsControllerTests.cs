@@ -376,7 +376,7 @@ public class SpendingsControllerTests
     }
 
     [Fact]
-    public async Task GetSpendingsByUser_ReturnsNotFound_WhenNoSpendingIsFound()
+    public async Task GetSpendingsByUser_ReturnsEmptyOkObjectResult_WhenNoSpendingIsFound()
     {
         //Arrange
         _userInspector.GetAuthenticatedUser().Returns(_fixture.Create<string>());
@@ -388,7 +388,17 @@ public class SpendingsControllerTests
 
         //Assert
         result.Should().NotBeNull();
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<OkObjectResult>();
+
+        var okResult = result as OkObjectResult;
+        if (okResult != null) 
+        {
+            okResult.Value.Should().BeOfType<List<Spending>>();
+            var value = okResult.Value as List<Spending>;
+
+            if (value != null)
+                value.Count.Should().Be(0);
+        }
     }
 
     [Fact]

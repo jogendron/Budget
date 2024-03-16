@@ -195,7 +195,7 @@ public class SpendingsController : ControllerBase
                 ).Where(s => s != null)!
             );
             
-            if (spendings.Any())
+            if (spendings.Any() || ! categoryId.HasValue)
                 response = new OkObjectResult(spendings.AsEnumerable());
             else
                 response = NotFound();
