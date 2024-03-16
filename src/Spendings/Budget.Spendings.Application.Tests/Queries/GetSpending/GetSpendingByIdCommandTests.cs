@@ -22,7 +22,7 @@ public class GetSpendingByIdCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var command = new GetSpendingByIdCommand(id, userId);
+        var command = new GetSpendingByIdCommand(userId, id);
 
         //Assert
         command.Id.Should().Be(id);
@@ -37,7 +37,7 @@ public class GetSpendingByIdCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var action = (() => new GetSpendingByIdCommand(id, userId));
+        var action = (() => new GetSpendingByIdCommand(userId, id));
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -51,7 +51,7 @@ public class GetSpendingByIdCommandTests
         var userId = string.Empty;
 
         //Act
-        var action = (() => new GetSpendingByIdCommand(id, userId));
+        var action = (() => new GetSpendingByIdCommand(userId, id));
 
         //Assert
         action.Should().Throw<ArgumentException>();

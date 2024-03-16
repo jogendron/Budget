@@ -26,8 +26,8 @@ public class CreateSpendingCommandTests
 
         //Act
         var command = new CreateSpendingCommand(
-            categoryId,
             userId,
+            categoryId,
             date,
             amount,
             description
@@ -53,8 +53,8 @@ public class CreateSpendingCommandTests
 
         //Act
         var command = (() => new CreateSpendingCommand(
-            categoryId,
             userId,
+            categoryId,
             date,
             amount,
             description
@@ -75,16 +75,16 @@ public class CreateSpendingCommandTests
 
         //Act
         var commandNull = (() => new CreateSpendingCommand(
-            categoryId,
             null!,
+            categoryId,
             date,
             amount,
             description
         ));
 
         var commandEmpty = (() => new CreateSpendingCommand(
-            categoryId,
             null!,
+            categoryId,
             date,
             amount,
             description

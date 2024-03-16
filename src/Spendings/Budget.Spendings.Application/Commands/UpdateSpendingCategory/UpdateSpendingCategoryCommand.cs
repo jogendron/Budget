@@ -7,8 +7,8 @@ namespace Budget.Spendings.Application.Commands.UpdateSpendingCategory;
 public class UpdateSpendingCategoryCommand : IRequest
 {
     public UpdateSpendingCategoryCommand(
-        Guid spendingCategoryId,
         string userId,
+        Guid spendingCategoryId,
         string? name,
         Frequency? frequency,
         bool? isPeriodOpened,
@@ -16,14 +16,14 @@ public class UpdateSpendingCategoryCommand : IRequest
         string? description
     )
     {
-        if (spendingCategoryId == Guid.Empty)
-            throw new ArgumentException("Spending category id cannot be empty");
-
         if (string.IsNullOrEmpty(userId))
             throw new ArgumentException("User id cannot be empty");
 
-        SpendingCategoryId = spendingCategoryId;
+        if (spendingCategoryId == Guid.Empty)
+            throw new ArgumentException("Spending category id cannot be empty");
+
         UserId = userId;
+        SpendingCategoryId = spendingCategoryId;
         Name = name;
         Frequency = frequency;
         IsPeriodOpened = isPeriodOpened;
@@ -31,9 +31,9 @@ public class UpdateSpendingCategoryCommand : IRequest
         Description = description;
     }
 
-    public Guid SpendingCategoryId { get; }
-
     public string UserId { get; }
+
+    public Guid SpendingCategoryId { get; }
 
     public string? Name { get; }
 

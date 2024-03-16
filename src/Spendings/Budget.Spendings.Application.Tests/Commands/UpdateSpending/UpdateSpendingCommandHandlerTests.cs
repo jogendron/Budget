@@ -63,8 +63,8 @@ public class UpdateSpendingCommandHandlerTests
         var tokenSource = new CancellationTokenSource();
 
         var command = new UpdateSpendingCommand(
-            Guid.NewGuid(),
             _fixture.Create<string>(),
+            Guid.NewGuid(),
             Guid.NewGuid(),
             DateTime.Now,
             new Random().NextDouble() * 10000,
@@ -101,8 +101,8 @@ public class UpdateSpendingCommandHandlerTests
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
         var command = new UpdateSpendingCommand(
-            spending.Id,
             _fixture.Create<string>(),
+            spending.Id,
             Guid.NewGuid(),
             DateTime.Now,
             new Random().NextDouble() * 10000,
@@ -141,8 +141,8 @@ public class UpdateSpendingCommandHandlerTests
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
         var command = new UpdateSpendingCommand(
-            spending.Id,
             category.UserId,
+            spending.Id,
             Guid.NewGuid(),
             DateTime.Now,
             new Random().NextDouble() * 10000,
@@ -192,8 +192,8 @@ public class UpdateSpendingCommandHandlerTests
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
         var command = new UpdateSpendingCommand(
-            spending.Id,
             category.UserId,
+            spending.Id,
             newCategory.Id,
             DateTime.Now,
             new Random().NextDouble() * 10000,
@@ -243,8 +243,8 @@ public class UpdateSpendingCommandHandlerTests
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
         var command = new UpdateSpendingCommand(
-            spending.Id,
             category.UserId,
+            spending.Id,
             newCategory.Id,
             DateTime.Now,
             new Random().NextDouble() * 10000,

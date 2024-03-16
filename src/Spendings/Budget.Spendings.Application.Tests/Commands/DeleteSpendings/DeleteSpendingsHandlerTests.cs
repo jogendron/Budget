@@ -63,8 +63,8 @@ public class DeleteSpendingsHandlerTests
         var userId = _fixture.Create<string>();
 
         var command = new DeleteSpendingCommand(
-            Guid.NewGuid(), 
-            userId
+            userId,
+            Guid.NewGuid()
         );
         var tokenSource = new CancellationTokenSource();
 
@@ -104,7 +104,7 @@ public class DeleteSpendingsHandlerTests
         _spendingRepository.GetAsync(spending.Id).Returns(spending);
         spendings.Add(spending);
         
-        var command = new DeleteSpendingCommand(spending.Id, userId);
+        var command = new DeleteSpendingCommand(userId, spending.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -144,7 +144,7 @@ public class DeleteSpendingsHandlerTests
         spendings.Add(spending);
     
 
-        var command = new DeleteSpendingCommand(spending.Id, userId);
+        var command = new DeleteSpendingCommand(userId, spending.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act

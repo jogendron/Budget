@@ -22,7 +22,7 @@ public class DeleteSpendingsCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var command = new DeleteSpendingCommand(id, userId);
+        var command = new DeleteSpendingCommand(userId, id);
 
         //Assert
         command.Id.Should().Be(id);
@@ -36,7 +36,7 @@ public class DeleteSpendingsCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var action = (() => new DeleteSpendingCommand(Guid.Empty, userId));
+        var action = (() => new DeleteSpendingCommand(userId, Guid.Empty));
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -49,8 +49,8 @@ public class DeleteSpendingsCommandTests
         var id = Guid.NewGuid();
 
         //Act
-        var actionNull = (() => new DeleteSpendingCommand(id, null!));
-        var actionEmpty = (() => new DeleteSpendingCommand(id, string.Empty));
+        var actionNull = (() => new DeleteSpendingCommand(null!, id));
+        var actionEmpty = (() => new DeleteSpendingCommand(string.Empty, id));
 
         //Assert
         actionNull.Should().Throw<ArgumentException>();

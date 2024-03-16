@@ -56,7 +56,7 @@ public class DeleteSpendingCategoryHandlerTests
     public async Task Handle_ThrowsCategoryDoesNotExistException_WhenCategoryIsNotFound()
     {
         //Arrange
-        var command = new DeleteSpendingCategoryCommand(Guid.NewGuid(), _fixture.Create<string>());
+        var command = new DeleteSpendingCategoryCommand(_fixture.Create<string>(), Guid.NewGuid());
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -82,7 +82,7 @@ public class DeleteSpendingCategoryHandlerTests
 
         _repository.GetAsync(Arg.Is(category.Id)).Returns(category);
 
-        var command = new DeleteSpendingCategoryCommand(category.Id, _fixture.Create<string>());
+        var command = new DeleteSpendingCategoryCommand(_fixture.Create<string>(), category.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -108,7 +108,7 @@ public class DeleteSpendingCategoryHandlerTests
 
         _repository.GetAsync(Arg.Is(category.Id)).Returns(category);
 
-        var command = new DeleteSpendingCategoryCommand(category.Id, category.UserId);
+        var command = new DeleteSpendingCategoryCommand(category.UserId, category.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act

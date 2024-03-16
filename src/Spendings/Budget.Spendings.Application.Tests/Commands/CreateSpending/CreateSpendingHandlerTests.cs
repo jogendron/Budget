@@ -45,8 +45,8 @@ public class CreateSpendingHandlerTests
     {
         //Arrange
         var request = new CreateSpendingCommand(
-            _fixture.Create<Guid>(),
             _fixture.Create<string>(),
+            _fixture.Create<Guid>(),
             _fixture.Create<DateTime>(),
             new Random().NextDouble() * 1000000,
             _fixture.Create<string>()
@@ -68,8 +68,8 @@ public class CreateSpendingHandlerTests
     {
         //Arrange
         var request = new CreateSpendingCommand(
-            _fixture.Create<Guid>(),
             _fixture.Create<string>(),
+            _fixture.Create<Guid>(),
             _fixture.Create<DateTime>(),
             new Random().NextDouble() * 1000000,
             _fixture.Create<string>()
@@ -116,8 +116,8 @@ public class CreateSpendingHandlerTests
         );
 
         var request = new CreateSpendingCommand(
-            category.Id,
             userId,
+            category.Id,
             _fixture.Create<DateTime>(),
             new Random().NextDouble() * 1000000,
             _fixture.Create<string>()

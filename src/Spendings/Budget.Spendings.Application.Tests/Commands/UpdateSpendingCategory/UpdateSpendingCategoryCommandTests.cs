@@ -29,8 +29,8 @@ public class UpdateSpendingCategoryCommandTests
 
         //Act
         var command = new UpdateSpendingCategoryCommand(
-            categoryId,
             userId,
+            categoryId,
             name,
             frequency,
             isPeriodOpened,
@@ -61,8 +61,8 @@ public class UpdateSpendingCategoryCommandTests
 
         //Act
         var command = (() => new UpdateSpendingCategoryCommand(
-            Guid.Empty,
             userId,
+            Guid.Empty,
             name,
             frequency,
             isPeriodOpened,
@@ -87,8 +87,8 @@ public class UpdateSpendingCategoryCommandTests
 
         //Act
         var commandNull = (() => new UpdateSpendingCategoryCommand(
-            categoryId,
             null!,
+            categoryId,
             name,
             frequency,
             isPeriodOpened,
@@ -97,8 +97,8 @@ public class UpdateSpendingCategoryCommandTests
         ));
 
         var commandEmpty = (() => new UpdateSpendingCategoryCommand(
-            categoryId,
             string.Empty,
+            categoryId,
             name,
             frequency,
             isPeriodOpened,

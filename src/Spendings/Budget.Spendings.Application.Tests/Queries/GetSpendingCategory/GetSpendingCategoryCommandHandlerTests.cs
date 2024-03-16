@@ -49,8 +49,8 @@ public class GetSpendingCategoryCommandHandlerTests
         //Arrange
         var expectedCategory = CreateSpendingCategory();
         var command = new GetSpendingCategoryByIdCommand(
-            expectedCategory.Id,
-            expectedCategory.UserId
+            expectedCategory.UserId,
+            expectedCategory.Id
         );
 
         _repository.GetAsync(Arg.Is(command.Id)).Returns(expectedCategory);

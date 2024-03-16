@@ -73,7 +73,7 @@ public class SpendingCategoriesController : ControllerBase
 
             var creation = await _mediator.Send(command);
 
-            var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(creation.Id, _userInspector.GetAuthenticatedUser());
+            var getCategoryByIdCommand = new GetSpendingCategoryByIdCommand(_userInspector.GetAuthenticatedUser(), creation.Id);
             var category = await _mediator.Send(getCategoryByIdCommand);
 
             response = CreatedAtRoute(
@@ -121,7 +121,7 @@ public class SpendingCategoriesController : ControllerBase
 
         try
         {
-            var command = new GetSpendingCategoryByIdCommand(id, _userInspector.GetAuthenticatedUser());
+            var command = new GetSpendingCategoryByIdCommand(_userInspector.GetAuthenticatedUser(), id);
             var domainCategory = await _mediator.Send(command);
 
             if (domainCategory != null)
@@ -235,7 +235,7 @@ public class SpendingCategoriesController : ControllerBase
 
         try
         {
-            var command = new GetSpendingCategoryByIdCommand(id, _userInspector.GetAuthenticatedUser());
+            var command = new GetSpendingCategoryByIdCommand(_userInspector.GetAuthenticatedUser(), id);
             var history = GetHistoryFrom(await _mediator.Send(command));
 
             if (history != null && history.Any())
@@ -289,8 +289,8 @@ public class SpendingCategoriesController : ControllerBase
         try
         {
             var command = new UpdateSpendingCategoryCommand(
-                update.Id,
                 _userInspector.GetAuthenticatedUser(),
+                update.Id,
                 update.Name,
                 update.Frequency,
                 update.IsPeriodOpened,
@@ -353,8 +353,8 @@ public class SpendingCategoriesController : ControllerBase
         try
         {
             var command = new DeleteSpendingCategoryCommand(
-                id, 
-                _userInspector.GetAuthenticatedUser()
+                _userInspector.GetAuthenticatedUser(),
+                id
             );
 
             await _mediator.Send(command);

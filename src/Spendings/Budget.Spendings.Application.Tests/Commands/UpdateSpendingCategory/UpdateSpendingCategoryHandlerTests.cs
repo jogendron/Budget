@@ -51,8 +51,8 @@ public class UpdateSpendingCategoryHandlerTests
         var tokenSource = new CancellationTokenSource();
 
         var request = new UpdateSpendingCategoryCommand(
-            _fixture.Create<Guid>(),
             _fixture.Create<string>(),
+            _fixture.Create<Guid>(),
             _fixture.Create<string>(),
             _fixture.Create<Domain.Entities.Frequency>(),
             null,
@@ -83,8 +83,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId + "1",
+            category.Id,
             _fixture.Create<string>(),
             _fixture.Create<Domain.Entities.Frequency>(),
             null,
@@ -127,8 +127,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             category1.Name,
             _fixture.Create<Domain.Entities.Frequency>(),
             null,
@@ -168,8 +168,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             _fixture.Create<string>(),
             null,
             null,
@@ -211,8 +211,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -254,8 +254,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             Domain.Entities.Frequency.Monthly,
             null,
@@ -297,8 +297,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -340,8 +340,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -383,8 +383,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -426,8 +426,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -469,8 +469,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             null,
@@ -513,8 +513,8 @@ public class UpdateSpendingCategoryHandlerTests
         category.ClosePeriod();
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             true,
@@ -556,8 +556,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             false,
@@ -599,8 +599,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             false,
@@ -636,8 +636,8 @@ public class UpdateSpendingCategoryHandlerTests
         );
 
         var request = new UpdateSpendingCategoryCommand(
-            category.Id,
             category.UserId,
+            category.Id,
             null,
             null,
             false,

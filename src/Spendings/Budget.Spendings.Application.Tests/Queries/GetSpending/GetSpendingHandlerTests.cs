@@ -66,7 +66,7 @@ public class GetSpendingHandlerTests
         _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
-        var request = new GetSpendingByIdCommand(spending.Id, userId);
+        var request = new GetSpendingByIdCommand(userId, spending.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act
@@ -101,7 +101,7 @@ public class GetSpendingHandlerTests
         _categoryRepository.GetAsync(Arg.Is(category.Id)).Returns(category);
         _spendingRepository.GetAsync(Arg.Is(spending.Id)).Returns(spending);
 
-        var request = new GetSpendingByIdCommand(spending.Id, userId);
+        var request = new GetSpendingByIdCommand(userId, spending.Id);
         var tokenSource = new CancellationTokenSource();
 
         //Act

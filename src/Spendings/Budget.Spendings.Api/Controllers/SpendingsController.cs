@@ -54,8 +54,8 @@ public class SpendingsController : ControllerBase
         try
         {
             var creation = await _mediator.Send(new CreateSpendingCommand(
-                spending.CategoryId,
                 _userInspector.GetAuthenticatedUser(),
+                spending.CategoryId,
                 spending.Date,
                 spending.Amount,
                 spending.Description
@@ -66,8 +66,8 @@ public class SpendingsController : ControllerBase
                 new { id = creation.Id }, 
                 ConvertSpending(await _mediator.Send(
                     new GetSpendingByIdCommand(
-                        creation.Id, 
-                        _userInspector.GetAuthenticatedUser()
+                        _userInspector.GetAuthenticatedUser(),
+                        creation.Id
                     )
                 ))
             );
@@ -109,7 +109,7 @@ public class SpendingsController : ControllerBase
         try
         {
             var spending = await _mediator.Send(
-                new GetSpendingByIdCommand(id, _userInspector.GetAuthenticatedUser())
+                new GetSpendingByIdCommand(_userInspector.GetAuthenticatedUser(), id)
             );
 
             if (spending != null)
@@ -236,8 +236,8 @@ public class SpendingsController : ControllerBase
         try
         {
             var command = new UpdateSpendingCommand(
-                update.Id,
                 _userInspector.GetAuthenticatedUser(),
+                update.Id,
                 update.CategoryId,
                 update.Date,
                 update.Amount,
@@ -292,8 +292,8 @@ public class SpendingsController : ControllerBase
         try
         {
             var command = new DeleteSpendingCommand(
-                id, 
-                _userInspector.GetAuthenticatedUser()
+                _userInspector.GetAuthenticatedUser(),
+                id
             );
 
             await _mediator.Send(command);

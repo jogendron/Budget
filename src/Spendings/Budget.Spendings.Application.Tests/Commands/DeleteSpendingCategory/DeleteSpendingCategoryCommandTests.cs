@@ -22,7 +22,7 @@ public class DeleteSpendingCategoryCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var command = new DeleteSpendingCategoryCommand(id, userId);
+        var command = new DeleteSpendingCategoryCommand(userId, id);
 
         //Assert
         command.Id.Should().Be(id);
@@ -36,7 +36,7 @@ public class DeleteSpendingCategoryCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var action = (() => new DeleteSpendingCategoryCommand(Guid.Empty, userId));
+        var action = (() => new DeleteSpendingCategoryCommand(userId, Guid.Empty));
 
         //Assert
         action.Should().Throw<ArgumentException>();
@@ -49,10 +49,10 @@ public class DeleteSpendingCategoryCommandTests
         var id = Guid.NewGuid();
 
         //Act
-        var actionNull = (() => new DeleteSpendingCategoryCommand(id, null!));
-        var actionEmpty = (() => new DeleteSpendingCategoryCommand(id, string.Empty));
+        var actionNull = (() => new DeleteSpendingCategoryCommand(null!, id));
+        var actionEmpty = (() => new DeleteSpendingCategoryCommand(string.Empty, id));
 
-        //Assert
+        //Assert¸
         actionNull.Should().Throw<ArgumentException>();
         actionEmpty.Should().Throw<ArgumentException>();
     }

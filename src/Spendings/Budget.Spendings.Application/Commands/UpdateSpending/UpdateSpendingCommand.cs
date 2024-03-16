@@ -5,31 +5,31 @@ namespace Budget.Spendings.Application.Commands.UpdateSpending;
 public class UpdateSpendingCommand : IRequest
 {
     public UpdateSpendingCommand(
-        Guid spendingId,
         string userId,
+        Guid spendingId,
         Guid? categoryId,
         DateTime? date,
         double? amount,
         string? description
     )
     {
-        if (spendingId == Guid.Empty)
-            throw new ArgumentException("Spending id cannot be empty");
-
         if (string.IsNullOrEmpty(userId))
             throw new ArgumentException("User id cannot be empty");
 
-        SpendingId = spendingId;
+        if (spendingId == Guid.Empty)
+            throw new ArgumentException("Spending id cannot be empty");
+
         UserId = userId;
+        SpendingId = spendingId;
         CategoryId = categoryId;
         Date = date;
         Amount = amount;
         Description = description;
     }
 
-    public Guid SpendingId { get; }
-
     public string UserId { get; }
+
+    public Guid SpendingId { get; }
 
     public Guid? CategoryId { get; }
 

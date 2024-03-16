@@ -5,8 +5,8 @@ namespace Budget.Spendings.Application.Commands.CreateSpending;
 public class CreateSpendingCommand : IRequest<CreateSpendingResponse>
 {
     public CreateSpendingCommand(
-        Guid categoryId,
         string userId,
+        Guid categoryId,
         DateTime date,
         double amount,
         string description
@@ -18,16 +18,16 @@ public class CreateSpendingCommand : IRequest<CreateSpendingResponse>
         if (string.IsNullOrEmpty(userId))
             throw new ArgumentException("User id cannot be empty");
 
-        CategoryId = categoryId;
         UserId = userId;
+        CategoryId = categoryId;
         Date = date;
         Amount = amount;
         Description = description;        
     }
 
-    public Guid CategoryId { get; }
-
     public string UserId { get; }
+
+    public Guid CategoryId { get; }
 
     public DateTime Date { get; }
 

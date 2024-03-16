@@ -22,7 +22,7 @@ public class GetSpendingCategoryByIdCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var command = new GetSpendingCategoryByIdCommand(id, userId);
+        var command = new GetSpendingCategoryByIdCommand(userId, id);
 
         //Assert
         command.Id.Should().Be(id);
@@ -36,8 +36,8 @@ public class GetSpendingCategoryByIdCommandTests
         var id = Guid.NewGuid();
 
         //Act
-        var actionNull = (() =>new GetSpendingCategoryByIdCommand(id, null!));
-        var actionEmpty = (() =>new GetSpendingCategoryByIdCommand(id, string.Empty));
+        var actionNull = (() =>new GetSpendingCategoryByIdCommand(null!, id));
+        var actionEmpty = (() =>new GetSpendingCategoryByIdCommand(string.Empty, id));
 
         //Assert
         actionNull.Should().Throw<ArgumentException>();
@@ -52,7 +52,7 @@ public class GetSpendingCategoryByIdCommandTests
         var userId = _fixture.Create<string>();
 
         //Act
-        var action = (() =>new GetSpendingCategoryByIdCommand(id, userId));
+        var action = (() =>new GetSpendingCategoryByIdCommand(userId, id));
 
         //Assert
         action.Should().Throw<ArgumentException>();

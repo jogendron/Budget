@@ -27,8 +27,8 @@ public class UpdateSpendingCommandTests
 
         //Act
         var command = new UpdateSpendingCommand(
-            spendingId,
             userId,
+            spendingId,
             categoryId,
             date,
             amount,
@@ -57,8 +57,8 @@ public class UpdateSpendingCommandTests
 
         //Act
         var command = (() => new UpdateSpendingCommand(
-            spendingId,
             userId,
+            spendingId,
             categoryId,
             date,
             amount,
@@ -81,8 +81,8 @@ public class UpdateSpendingCommandTests
 
         //Act
         var commandNull = (() => new UpdateSpendingCommand(
-            spendingId,
             null!,
+            spendingId,
             categoryId,
             date,
             amount,
@@ -90,8 +90,8 @@ public class UpdateSpendingCommandTests
         ));
 
         var commandEmpty = (() => new UpdateSpendingCommand(
-            spendingId,
             string.Empty,
+            spendingId,
             categoryId,
             date,
             amount,
