@@ -8,29 +8,25 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" 
-            [class.disabled]="! authentification.isAuthenticated" 
-            href="#">
-            Catégories de dépenses
-          </a>
+          <a class="nav-link" [class.disabled]="! authentication.isAuthenticated" href="#" i18n>Spending categories</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-            [class.disabled]="! authentification.isAuthenticated" 
-            href="#">
-            Dépenses
-          </a>
+          <a class="nav-link" [class.disabled]="! authentication.isAuthenticated" href="#" i18n>Spendings</a>
         </li>
       </ul>
       <div class="d-flex authentification">
-        <span *ngIf="! authentification.isAuthenticated" role="button" (click)="login()">Se connecter</span>
-        
-        <span *ngIf="authentification.isAuthenticated" class="nav-item dropdown">
+        <span *ngIf="! authentication.isAuthenticated" role="button" (click)="login()" i18n>Login</span>
+
+        <span *ngIf="authentication.isAuthenticated" class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-fill"></i> {{authentification.userData.name}} 
+            <i class="bi bi-person-fill"></i> {{authentication.userData.name}}
           </a>
           <ul class="dropdown-menu">
-            <li><span class="dropdown-item" role="button" (click)="logout()"><i class="bi bi-door-open-fill"></i> Déconnexion</span></li>
+            <li>
+              <span class="dropdown-item" role="button" (click)="logout()">
+                <i class="bi bi-door-open-fill"></i> <span i18n>Logout</span>
+              </span>
+            </li>
           </ul>
         </span>
       </div>

@@ -12,10 +12,10 @@ import { OidcSecurityService, LoginResponse } from 'angular-auth-oidc-client';
 })
 export class AppComponent implements OnInit {
   
-  authentification: LoginResponse;
+  authentication: LoginResponse;
 
   constructor(private authService: OidcSecurityService) {
-    this.authentification = {
+    this.authentication = {
       isAuthenticated: false,
       userData: null,
       accessToken: '',
@@ -24,12 +24,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    var composant = this;
+    var component = this;
 
     this.authService
       .checkAuth()
       .subscribe((loginResponse: LoginResponse) => {
-        composant.authentification = loginResponse;
+        component.authentication = loginResponse;
       });
   }
 
