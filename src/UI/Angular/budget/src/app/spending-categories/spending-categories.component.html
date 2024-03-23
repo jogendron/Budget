@@ -1,0 +1,24 @@
+<form class="d-flex justify-content-center">
+
+    <div class="input-group mb-3 w-75">
+        <input type="text" class="form-control" name="IdOrName" placeholder="Id or name"
+            aria-label="Recipient's username" aria-describedby="button-addon2" [(ngModel)]="searchInput">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="search()">Search</button>
+    </div>
+
+</form>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="list-group" *ngIf="spendingCategories.length > 0">
+            <span class="list-group-item list-group-item-action" aria-current="true" role="button"
+                (click)="selectCategory(category.id)" [class.active]="selectedCategory == category.id"
+                *ngFor="let category of spendingCategories">
+                {{category.name}}
+            </span>
+        </div>
+    </div>
+    <div class="col-md-7">
+
+    </div>
+</div>

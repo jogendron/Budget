@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet , RouterLink, RouterLinkActive} from '@angular/router';
 import { OidcSecurityService, LoginResponse } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgIf],
+  imports: [NgIf, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   
   authentication: LoginResponse;
 
-  constructor(private authService: OidcSecurityService) {
+  constructor(private securityService: OidcSecurityService) {
     this.authentication = {
       isAuthenticated: false,
       userData: null,
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     var component = this;
 
-    this.authService
+    this.securityService
       .checkAuth()
       .subscribe((loginResponse: LoginResponse) => {
         component.authentication = loginResponse;
@@ -34,11 +34,11 @@ export class AppComponent implements OnInit {
   }
 
   login() {
-    this.authService.authorize();
+    this.securityService.authorize();
   }
 
   logout() {
-    this.authService
+    this.securityService
       .logoff()
       .subscribe((result) => console.log(result));
   }
