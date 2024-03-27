@@ -1,7 +1,8 @@
-
-using Budget.Spendings.Infrastructure.EF;
-using Microsoft.EntityFrameworkCore;
 using Budget.Spendings.Api;
+using Budget.Spendings.Api.Configuration;
+using Budget.Spendings.Infrastructure.EF;
+
+using Microsoft.EntityFrameworkCore;
 
 ApiBuilderFactory factory = new ApiBuilderFactory();
 ApiBuilder apiBuilder = factory.Create(args);
@@ -28,9 +29,10 @@ if (app.Environment.IsDevelopment())
 }
 
 if (app.Configuration.GetValue<bool>("Api:UseHttpsRedirection"))
-{
     app.UseHttpsRedirection();
-}
+
+if (app.Configuration.GetValue<bool>("Api:Cors:UseCors"))
+    app.UseCors(CorsConfiguration.PolicyName);
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,11 +1,12 @@
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
+
 using Budget.Spendings.Api.Configuration;
 using Budget.Spendings.Api.Services;
 using Budget.Spendings.Infrastructure.EF;
 using Budget.Spendings.Infrastructure.EF.Repositories;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Budget.Spendings.Api;
@@ -166,17 +167,20 @@ public abstract class ApiBuilder
 
     protected void AddCors()
     {
-        var origins = Builder.Configuration.GetSection("Api:AllowedOrigins").Get<string[]>();
-
-        if (origins != null && origins.Length > 0)
+        if (Builder.Configuration.GetValue<bool>("Api:Cors:UseCors"))
         {
-            Builder.Services.AddCors(options =>
+            var origins = Builder.Configuration.GetSection("Api:Cors:AllowedOrigins").Get<string[]>();
+
+            if (origins != null && origins.Length > 0)
             {
-                options.AddPolicy(
-                    "AllowOrigins",
-                    policy => policy.WithOrigins(origins)
-                );
-            });
+                Builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy(
+                        CorsConfiguration.PolicyName,
+                        policy => policy.WithOrigins(origins)
+                    );
+                });
+            }
         }
     }
 
