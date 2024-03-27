@@ -169,15 +169,15 @@ public abstract class ApiBuilder
     {
         if (Builder.Configuration.GetValue<bool>("Api:Cors:UseCors"))
         {
-            var origins = Builder.Configuration.GetSection("Api:Cors:AllowedOrigins").Get<string[]>();
+            var origins = Builder.Configuration.GetValue<string>("Api:Cors:AllowedOrigins");
 
-            if (origins != null && origins.Length > 0)
+            if (!string.IsNullOrEmpty(origins))
             {
                 Builder.Services.AddCors(options =>
                 {
                     options.AddPolicy(
                         CorsConfiguration.PolicyName,
-                        policy => policy.WithOrigins(origins)
+                        policy => policy.WithOrigins(origins.Split(","))
                     );
                 });
             }
