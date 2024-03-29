@@ -177,7 +177,9 @@ public abstract class ApiBuilder
                 {
                     options.AddPolicy(
                         CorsConfiguration.PolicyName,
-                        policy => policy.WithOrigins(origins.Split(","))
+                        policy => policy.WithOrigins(
+                            origins.Split(",")
+                        ).AllowAnyHeader().AllowAnyMethod()
                     );
                 });
             }
