@@ -5,12 +5,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.entityframeworkcore" Version="8.0.3" />
-    <PackageReference Include="microsoft.entityframeworkcore.design" Version="8.0.3">
+    <PackageReference Include="microsoft.entityframeworkcore" Version="8.0.4" />
+    <PackageReference Include="microsoft.entityframeworkcore.design" Version="8.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="microsoft.entityframeworkcore.relational" Version="8.0.3" />
+    <PackageReference Include="microsoft.entityframeworkcore.relational" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
