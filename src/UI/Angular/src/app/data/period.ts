@@ -1,4 +1,4 @@
 export interface Period {
     beginDate: Date,
-    endDate: Date?
+    endDate: Date | undefined
 }

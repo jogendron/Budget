@@ -1,0 +1,37 @@
+<div class="row">
+    <div class="col-md-4">
+        <div class="d-flex mb-1">
+            <h5 class="pt-2" i18n>Spending categories</h5>
+            <div class="mx-auto"></div>
+            <button type="button" class="btn btn-primary" (click)="createRequested()" i18n>
+                Create
+            </button>
+        </div>
+        <div class="list-group list-group-flush">
+            <span class="list-group-item list-group-item-action" aria-current="true" role="button"
+                (click)="selectCategory(category.id)"
+                [class.active]="selectedCategory != undefined && selectedCategory.id == category.id"
+                *ngFor="let category of spendingCategories">
+                {{category.name}}
+            </span>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <app-read-spending-category 
+            [category]="selectedCategory" 
+            (editRequested)="editRequested()"
+            (deleteRequested)="deleteRequested($event)"
+            *ngIf="state == SpendingCategoriesComponentState.reading">
+        </app-read-spending-category>
+
+        <app-edit-spending-category [category]="selectedCategory"
+            *ngIf="state == SpendingCategoriesComponentState.updating" (cancelled)="editCancelled()"
+            (saved)="editCompleted($event)">
+        </app-edit-spending-category>
+
+        <app-create-spending-category *ngIf="state == SpendingCategoriesComponentState.creating"
+            (cancelled)="createCancelled()" (saved)="createCompleted($event)">
+
+        </app-create-spending-category>
+    </div>
+</div>

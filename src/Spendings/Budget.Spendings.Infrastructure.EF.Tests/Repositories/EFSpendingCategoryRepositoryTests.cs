@@ -243,7 +243,7 @@ public class EFSpendingCategoryRepositoryTests
         var category = _categoryFactory.Create(
             _fixture.Create<string>(),
             _fixture.Create<string>(),
-            Budget.Spendings.Domain.Entities.Frequency.SemiWeekly,
+            Budget.Spendings.Domain.Entities.Frequency.BiWeekly,
             _fixture.Create<double>(),
             _fixture.Create<string>()
         );
@@ -268,7 +268,7 @@ public class EFSpendingCategoryRepositoryTests
             ? null
             : DateTime.SpecifyKind(category.Period!.EndDate!.Value.ToUniversalTime(), DateTimeKind.Utc)
         );
-        dbCategory.Frequency.Should().Be(Frequency.SemiWeekly);
+        dbCategory.Frequency.Should().Be(Frequency.BiWeekly);
         dbCategory.Amount.Should().Be(category.Amount);
         dbCategory.Description.Should().Be(category.Description);
         dbCategory.Events.Count().Should().Be(category.Changes.Count());

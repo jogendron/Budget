@@ -6,7 +6,7 @@ public enum Frequency
 
     Weekly,
 
-    SemiWeekly,
+    BiWeekly,
 
     Monthly,
 
@@ -21,7 +21,7 @@ public static class FrequencyExtensions
         {
             Domain.Entities.Frequency.Daily => Frequency.Daily,
             Domain.Entities.Frequency.Weekly => Frequency.Weekly,
-            Domain.Entities.Frequency.SemiWeekly => Frequency.SemiWeekly,
+            Domain.Entities.Frequency.BiWeekly => Frequency.BiWeekly,
             Domain.Entities.Frequency.Monthly => Frequency.Monthly,
             Domain.Entities.Frequency.Yearly => Frequency.Yearly,
             _ => throw new ArgumentException($"Cannot parse unknown frequency {frequency}")
@@ -34,7 +34,7 @@ public static class FrequencyExtensions
         {
             Frequency.Daily => Domain.Entities.Frequency.Daily,
             Frequency.Weekly => Domain.Entities.Frequency.Weekly,
-            Frequency.SemiWeekly => Domain.Entities.Frequency.SemiWeekly,
+            Frequency.BiWeekly => Domain.Entities.Frequency.BiWeekly,
             Frequency.Monthly => Domain.Entities.Frequency.Monthly,
             Frequency.Yearly => Domain.Entities.Frequency.Yearly,
             _ => throw new ArgumentException($"Cannot parse unknown frequency {frequency}")

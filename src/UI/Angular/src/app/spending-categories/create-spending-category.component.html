@@ -1,0 +1,40 @@
+<div class="card" *ngIf="_newCategory">
+    <h5 class="card-header" i18n>New spending category</h5>
+
+    <div class="card-body">
+        <form>
+
+            <div class="form-group m-2">
+                <label for="name" i18n>Name</label>
+                <input type="text" class="form-control" name="name" [(ngModel)]="_newCategory.name " />
+            </div>
+
+            <div class="form-group m-2">
+                <label for="description" i18n>Description</label>
+                <input type="text" class="form-control" name="description" [(ngModel)]="_newCategory.description " />
+            </div>
+
+            <div class="form-group m-2">
+                <label for="amount" i18n>Amount</label>
+                <input type="number" class="form-control" name="amount" [(ngModel)]="_newCategory.amount" />
+            </div>
+
+            <div class="form-group m-2">
+                <label for="frequency" i18n>Frequency</label>
+                <select class="form-select" i18n-aria-label="Select frequency" name="frequency" [(ngModel)]="_newCategory.frequency">
+                    <option value="Daily" i18n>Daily</option>
+                    <option value="Weekly" i18n>Weekly</option>
+                    <option value="SemiWeekly" i18n>SemiWeekly</option>
+                    <option value="Monthly" i18n>Monthly</option>
+                    <option value="Yearly" i18n>Yearly</option>
+                </select>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="text-end">
+        <button type="button" class="btn btn-warning m-2" (click)="cancel()" i18n>Cancel</button>
+        <button type="button" class="btn btn-primary m-2" (click)="save()" i18n>Save</button>
+    </div>
+</div>

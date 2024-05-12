@@ -10,8 +10,8 @@ public enum Frequency
     [EnumMember(Value = "Weekly")]
     Weekly,
 
-    [EnumMember(Value = "SemiWeekly")]
-    SemiWeekly,
+    [EnumMember(Value = "BiWeekly")]
+    BiWeekly,
 
     [EnumMember(Value = "Monthly")]
     Monthly,
@@ -31,7 +31,7 @@ internal static class FrequencyExtensions
         {
             "daily" => Frequency.Daily,
             "weekly" => Frequency.Weekly,
-            "semiweekly" => Frequency.SemiWeekly,
+            "biweekly" => Frequency.BiWeekly,
             "monthly" => Frequency.Monthly,
             "yearly" => Frequency.Yearly,
             _ => throw new ArgumentException($"Cannot parse unknown frequency {value}")
