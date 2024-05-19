@@ -18,6 +18,17 @@
             "stopAtEntry": false
         },
         {
+            "name": "Launch UI server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build Budget.Spendings.sln",
+            "program": "${workspaceFolder}/src/UI/Server/bin/Debug/net8.0/Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/UI/Server",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"

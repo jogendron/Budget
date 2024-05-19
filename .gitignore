@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# UI static files
+src/UI/Server/wwwroot/en
+src/UI/Server/wwwroot/fr
+
 # Mac files
 *.DS_Store
 *.mono
