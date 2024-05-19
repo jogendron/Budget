@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { SpendingCategory } from '../data/spending-category';
 import { SpendingCategoryUpdate } from '../data/spending-category-update';
 import { NewSpendingCategory } from '../data/new-spending-category';
 
+import config from '../../assets/configuration.json'
+
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingCategoriesService {
 
-  private apiUrl: string = 'https://denethor:7154/api/v1/SpendingCategories';
+  private apiUrl: string = config.apiConfiguration.spendingCategoriesUrl;
   private header: {} = {};
 
   constructor(private http: HttpClient, private securityService: OidcSecurityService) {

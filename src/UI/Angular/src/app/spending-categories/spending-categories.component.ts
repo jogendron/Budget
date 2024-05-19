@@ -105,20 +105,11 @@ export class SpendingCategoriesComponent implements OnInit {
     });
   }
 
-  editCompleted(category: SpendingCategory) {
-    let update: SpendingCategoryUpdate = {
-      id: category.id,
-      name: category.name,
-      frequency: category.frequency,
-      isPeriodOpened: true,
-      amount: category.amount,
-      description: category.description
-    }
-
+  editCompleted(update: SpendingCategoryUpdate) {
     firstValueFrom(
       this.spendingCategoryService.updateSpendingCategory(update)
     ).then(response => {
-      this.loadCategories(category.id);
+      this.loadCategories(update.id);
       this.state = SpendingCategoriesComponentState.reading;
     });
   }

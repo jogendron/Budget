@@ -1,4 +1,4 @@
-<div class="card" *ngIf="_newCategory">
+<form class="card" [formGroup]="categoryForm" (ngSubmit)="save()">
     <h5 class="card-header" i18n>New spending category</h5>
 
     <div class="card-body">
@@ -6,28 +6,48 @@
 
             <div class="form-group m-2">
                 <label for="name" i18n>Name</label>
-                <input type="text" class="form-control" name="name" [(ngModel)]="_newCategory.name " />
+                <input type="text" class="form-control" name="name" formControlName="name"
+                    [class.is-invalid]="name?.touched && ! name?.valid" />
+                <span *ngIf="name?.touched && ! name?.valid" class="text-danger">
+                    <ng-container *ngIf="name?.errors?.['required']" i18n>Name is required</ng-container>
+                    <ng-container *ngIf="name?.errors?.['maxlength']" i18n>Max length is 100 characters</ng-container>
+                </span>
             </div>
 
             <div class="form-group m-2">
                 <label for="description" i18n>Description</label>
-                <input type="text" class="form-control" name="description" [(ngModel)]="_newCategory.description " />
+                <textarea class="form-control" name="description" formControlName="description"
+                    [class.is-invalid]="description?.touched && ! description?.valid" >
+                </textarea>
+                <span *ngIf="description?.touched && ! description?.valid" class="text-danger">
+                    <ng-container *ngIf="description?.errors?.['required']" i18n>Description is required</ng-container>
+                    <ng-container *ngIf="description?.errors?.['maxlength']" i18n>Max length is 500 characters</ng-container>
+                </span>
             </div>
 
             <div class="form-group m-2">
                 <label for="amount" i18n>Amount</label>
-                <input type="number" class="form-control" name="amount" [(ngModel)]="_newCategory.amount" />
+                <input type="number" class="form-control" name="amount" formControlName="amount" 
+                    [class.is-invalid]="amount?.touched && ! amount?.valid" />
+                <span *ngIf="amount?.touched && ! amount?.valid" class="text-danger">
+                    <ng-container *ngIf="amount?.errors?.['required']" i18n>Amount is required</ng-container>
+                    <ng-container *ngIf="amount?.errors?.['min']" i18n>Amount must be greater or equal than 0</ng-container>
+                </span>
             </div>
 
             <div class="form-group m-2">
                 <label for="frequency" i18n>Frequency</label>
-                <select class="form-select" i18n-aria-label="Select frequency" name="frequency" [(ngModel)]="_newCategory.frequency">
+                <select class="form-select" i18n-aria-label="Select frequency" name="frequency" formControlName="frequency"
+                    [class.is-invalid]="frequency?.touched && ! frequency?.valid" >
                     <option value="Daily" i18n>Daily</option>
                     <option value="Weekly" i18n>Weekly</option>
-                    <option value="SemiWeekly" i18n>SemiWeekly</option>
+                    <option value="BiWeekly" i18n>SemiWeekly</option>
                     <option value="Monthly" i18n>Monthly</option>
                     <option value="Yearly" i18n>Yearly</option>
                 </select>
+                <span *ngIf="frequency?.touched && ! frequency?.valid" class="text-danger">
+                    <ng-container *ngIf="frequency?.errors?.['required']" i18n>Frequency is required</ng-container>
+                </span>
             </div>
 
         </form>
@@ -35,6 +55,6 @@
 
     <div class="text-end">
         <button type="button" class="btn btn-warning m-2" (click)="cancel()" i18n>Cancel</button>
-        <button type="button" class="btn btn-primary m-2" (click)="save()" i18n>Save</button>
+        <button type="submit" class="btn btn-primary m-2" (click)="save()" i18n>Save</button>
     </div>
-</div>
+</form>

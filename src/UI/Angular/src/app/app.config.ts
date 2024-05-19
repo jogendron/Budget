@@ -3,25 +3,24 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
 import { provideAuth } from 'angular-auth-oidc-client';
-import { authConfig } from './auth/auth.config';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 
-export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient);
-}
+import config from '../assets/configuration.json'
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
     provideHttpClient(), 
-    provideAuth(authConfig),
+    provideAuth({
+      config: config.openIdConfiguration
+    }),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
+          useFactory: (httpClient: HttpClient) => new TranslateHttpLoader(httpClient),
           deps: [HttpClient],
         },
       })
