@@ -21,4 +21,4 @@ WORKDIR /app
 COPY --from=build /app ./
 ENTRYPOINT ["dotnet", "Budget.Spendings.Api.dll"]
 
-EXPOSE 7000
+EXPOSE 7154
