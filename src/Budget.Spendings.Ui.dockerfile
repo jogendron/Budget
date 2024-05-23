@@ -18,6 +18,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS serverBuild
 WORKDIR /source
 
 COPY UI/Server/. /source
+RUN dotnet restore
 RUN dotnet publish -c release -o /app --no-restore
 
 RUN mkdir /app/wwwroot/fr
