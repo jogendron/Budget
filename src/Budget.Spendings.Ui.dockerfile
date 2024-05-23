@@ -8,6 +8,7 @@ RUN mkdir -p /app
 COPY UI/Angular/. /app
 WORKDIR /app/Angular
 
+RUN npm i
 RUN ng build --localize
 
 # ===========================
