@@ -23,6 +23,7 @@ RUN dotnet publish -c release -o /app --no-restore
 
 RUN mkdir /app/wwwroot/fr
 COPY --from=uiBuild /app/dist/budget/browser/fr/. /app/wwwroot/fr/.
+RUN sed -i -e 's/https:\/\/denethor.jogendron.xyz\/en/https:\/\/denethor.jogendron.xyz\/fr/g' /app/wwwroot/fr/assets/configuration.json
 RUN mkdir /app/wwwroot/en
 COPY --from=uiBuild /app/dist/budget/browser/en/. /app/wwwroot/en/.
 
@@ -33,4 +34,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=serverBuild /app ./
 ENTRYPOINT ["dotnet", "Server.dll"]
-EXPOSE 5000
+EXPOSE 8080
