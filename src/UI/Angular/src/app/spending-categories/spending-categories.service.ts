@@ -1,78 +1,103 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { ConfigurationService } from '../configuration/configuration.service';
+import { ApiConfiguration } from '../configuration/api-configuration';
+import { Observable, firstValueFrom, map } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { SpendingCategory } from '../data/spending-category';
 import { SpendingCategoryUpdate } from '../data/spending-category-update';
 import { NewSpendingCategory } from '../data/new-spending-category';
-
-import config from '../../assets/configuration.json'
+import { Configuration } from '../configuration/configuration';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingCategoriesService {
 
-  private apiUrl: string = config.apiConfiguration.spendingCategoriesUrl;
+  private apiUrl: string = '';
   private header: {} = {};
 
-  constructor(private http: HttpClient, private securityService: OidcSecurityService) {
-    this.securityService.getAccessToken().subscribe({
-      next: value => {
-        this.header = {
-          "Authorization": `Bearer ${value}`
+  constructor(
+    private http: HttpClient, 
+    private configService: ConfigurationService,
+    private securityService: OidcSecurityService
+  ) {
+      this.securityService.getAccessToken().subscribe({
+        next: value => {
+          this.header = {
+            "Authorization": `Bearer ${value}`
+          }
+        },
+        error: message => {
+          console.error(message);
         }
-      },
-      error: message => {
-        console.error(message);
-      }
-    });
+      });
   }
 
-  getSpendingCategory(id: string): Observable<SpendingCategory> {
-    return this.http.get<SpendingCategory>(`${this.apiUrl}/${id}`, {
-      headers: this.header
-    });
-  }
+  async getSpendingCategory(id: string): Promise<SpendingCategory> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
 
-  getSpendingCategories(): Observable<SpendingCategory[]> {
-    return this.http.get<SpendingCategory[]>(this.apiUrl, {
-      headers: this.header
-    });
-  }
-
-  searchSpendingCategories(name: string): Observable<SpendingCategory[]> {
-    return this.http.get<SpendingCategory[]>(`${this.apiUrl}?name=${name}`, {
-      headers: this.header
-    });
-  }
-
-  createSpendingCategory(newCategory: NewSpendingCategory): Observable<void> {
-    return this.http.post<void>(
-      `${this.apiUrl}`,
-      newCategory,
-      {
-        headers: this.header
-      }
+    return firstValueFrom(
+      this.http.get<SpendingCategory>(
+        `${apiConfig.spendingCategoriesUrl}/${id}`, 
+        { headers: this.header }
+      )
     );
   }
 
-  updateSpendingCategory(update: SpendingCategoryUpdate): Observable<void> {
-    return this.http.patch<void>(
-      `${this.apiUrl}`,
-      update,
-      {
-        headers: this.header
-      }
+  async getSpendingCategories(): Promise<SpendingCategory[]> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
+
+    return firstValueFrom(
+      this.http.get<SpendingCategory[]>(
+        apiConfig.spendingCategoriesUrl, 
+        { headers: this.header }
+      )
     );
   }
 
-  deleteSpendingCategory(category: SpendingCategory): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${category.id}`,
-      {
-        headers: this.header
-      }
+  async searchSpendingCategories(name: string): Promise<SpendingCategory[]> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
+
+    return firstValueFrom(
+      this.http.get<SpendingCategory[]>(
+        `${apiConfig.spendingCategoriesUrl}?name=${name}`, 
+        { headers: this.header }
+      )
+    );
+  }
+
+  async createSpendingCategory(newCategory: NewSpendingCategory): Promise<void> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
+
+    return firstValueFrom(
+      this.http.post<void>(
+        `${apiConfig.spendingCategoriesUrl}`,
+        newCategory,
+        { headers: this.header }
+    ));
+  }
+
+  async updateSpendingCategory(update: SpendingCategoryUpdate): Promise<void> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
+
+    return firstValueFrom(
+      this.http.patch<void>(
+        `${apiConfig.spendingCategoriesUrl}`,
+        update,
+        { headers: this.header }
+      )
+    );
+  }
+
+  async deleteSpendingCategory(category: SpendingCategory): Promise<void> {
+    let apiConfig = await firstValueFrom(this.configService.getApiConfiguration());
+
+    return firstValueFrom(
+      this.http.delete<void>(
+        `${apiConfig.spendingCategoriesUrl}/${category.id}`,
+        { headers: this.header }
+      )
     );
   }
 

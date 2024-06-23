@@ -1,6 +1,6 @@
 {
     "openIdConfiguration": {
-        "authority": "https://denethor:8443/realms/Denethor",
+        "authority": "https://denethor.jogendron.xyz:8443/realms/Denethor",
         "redirectUrl": "http://localhost:4200/spending-categories",
         "postLogoutRedirectUri": "http://localhost:4200",
         "clientId": "budget-angular-ui",
@@ -11,6 +11,6 @@
         "renewTimeBeforeTokenExpiresInSeconds": 30
     },
     "apiConfiguration": {
-        "spendingCategoriesUrl": "https://denethor:7154/api/v1/SpendingCategories"
+        "spendingCategoriesUrl": "https://denethor.jogendron.xyz/api/v1/SpendingCategories"
     }
 }

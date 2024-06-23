@@ -1,21 +1,33 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { map } from 'rxjs';
 import { routes } from './app.routes';
-import { provideAuth } from 'angular-auth-oidc-client';
+import { AuthModule, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 
-import config from '../assets/configuration.json'
+import { ConfigurationService } from './configuration/configuration.service';
+
+export const authFactory = (configService: ConfigurationService) => {
+  return new StsConfigHttpLoader(configService.getOpenIdConfiguration());
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), 
-    provideHttpClient(), 
-    provideAuth({
-      config: config.openIdConfiguration
-    }),
+    provideHttpClient(),
+    { provide: ConfigurationService, deps: [ HttpClient ] },
+    importProvidersFrom(
+      AuthModule.forRoot({
+        loader: {
+          provide: StsConfigLoader,
+          useFactory: authFactory,
+          deps: [ ConfigurationService ],
+        },
+      }),
+    ),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {

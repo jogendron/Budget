@@ -8,7 +8,6 @@ import { ReadSpendingCategoryComponent } from './read-spending-category.componen
 import { EditSpendingCategoryComponent } from './edit-spending-category.component';
 import { CreateSpendingCategoryComponent } from './create-spending-category.component';
 import { SpendingCategoryUpdate } from '../data/spending-category-update';
-import { firstValueFrom } from 'rxjs';
 import { NewSpendingCategory } from '../data/new-spending-category';
 
 @Component({
@@ -45,22 +44,17 @@ export class SpendingCategoriesComponent implements OnInit {
   private loadCategories(idToSelect?: string) {
     let component = this;
 
-    this.spendingCategoryService.getSpendingCategories().subscribe({
-      next: value => {
-        component.spendingCategories = value.sort(
-          (a,b) => a.name.localeCompare(b.name)
-        );
+    this.spendingCategoryService.getSpendingCategories().then(value => {
+      component.spendingCategories = value.sort(
+        (a,b) => a.name.localeCompare(b.name)
+      );
 
-        if (component.spendingCategories) {
-          if (idToSelect) {
-            component.selectCategory(idToSelect);
-          } else {
-            component.selectedCategory = component.spendingCategories[0];
-          }
+      if (component.spendingCategories) {
+        if (idToSelect) {
+          component.selectCategory(idToSelect);
+        } else {
+          component.selectedCategory = component.spendingCategories[0];
         }
-      },
-      error: message => {
-        console.error(message);
       }
     });
   }
@@ -82,9 +76,7 @@ export class SpendingCategoriesComponent implements OnInit {
   createCompleted(newCategory: NewSpendingCategory) {
     this.state = SpendingCategoriesComponentState.reading;
 
-    firstValueFrom(
-      this.spendingCategoryService.createSpendingCategory(newCategory)
-    ).then(response => {
+    this.spendingCategoryService.createSpendingCategory(newCategory).then(() => {
       this.loadCategories();
     });
   }
@@ -98,17 +90,13 @@ export class SpendingCategoriesComponent implements OnInit {
   }
 
   deleteRequested(category: SpendingCategory) {
-    this.spendingCategoryService.deleteSpendingCategory(category).subscribe({
-      next: () => {
-        this.loadCategories();
-      }
+    this.spendingCategoryService.deleteSpendingCategory(category).then(() => {
+      this.loadCategories();
     });
   }
 
   editCompleted(update: SpendingCategoryUpdate) {
-    firstValueFrom(
-      this.spendingCategoryService.updateSpendingCategory(update)
-    ).then(response => {
+    this.spendingCategoryService.updateSpendingCategory(update).then(() => {
       this.loadCategories(update.id);
       this.state = SpendingCategoriesComponentState.reading;
     });
