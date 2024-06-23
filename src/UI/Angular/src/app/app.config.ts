@@ -1,7 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
 import { routes } from './app.routes';
 import { AuthModule, StsConfigHttpLoader, StsConfigLoader } from 'angular-auth-oidc-client';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';

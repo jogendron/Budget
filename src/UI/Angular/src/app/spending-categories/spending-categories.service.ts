@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConfigurationService } from '../configuration/configuration.service';
-import { ApiConfiguration } from '../configuration/api-configuration';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { SpendingCategory } from '../data/spending-category';
 import { SpendingCategoryUpdate } from '../data/spending-category-update';
 import { NewSpendingCategory } from '../data/new-spending-category';
-import { Configuration } from '../configuration/configuration';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpendingCategoriesService {
 
-  private apiUrl: string = '';
   private header: {} = {};
 
   constructor(

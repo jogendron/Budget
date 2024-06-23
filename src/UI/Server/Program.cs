@@ -9,6 +9,10 @@ app.Use(async (context, next) => {
         context.Request.Path = "/en/index.html";
     else if (path == "/fr" || (path.StartsWith("/fr") && ! File.Exists(physicalPath)))
         context.Request.Path = "/fr/index.html";
+    else if (path.StartsWith("/en/assets"))
+        context.Request.Path = $"/en/assets/{path}";
+    else if (path.StartsWith("/fr/assets"))
+        context.Request.Path = $"/fr/assets/{path}";
     else if (path.StartsWith("/assets"))
         context.Request.Path = $"/en{path}";
 
