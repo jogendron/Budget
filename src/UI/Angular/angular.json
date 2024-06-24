@@ -5,9 +5,12 @@
   "projects": {
     "budget": {
       "i18n": {
-        "sourceLocale": "en",
+        "sourceLocale": "en-US",
         "locales": {
-          "fr": "src/locale/fr.json"
+          "fr-CA": {
+            "translation": "src/locale/fr-CA.json",
+            "baseHref": "/fr-CA"
+          }
         }
       },
       "projectType": "application",
@@ -56,7 +59,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "localize": ["fr"],
+              "localize": ["fr-CA"],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

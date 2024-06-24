@@ -10,14 +10,25 @@ import { ApiConfiguration } from './api-configuration';
 })
 export class ConfigurationService {
 
-  private configUrl: string = '/assets/configuration.json';
+  private configUrl: string = 'assets/configuration.json';
 
   constructor(
     private http: HttpClient, 
-    @Inject(LOCALE_ID) locale:string
+    @Inject(LOCALE_ID) private locale:string
   ) {
     if (! isDevMode()) {
-      this.configUrl = `/${locale}${this.configUrl}`;
+      if (! locale) { //Locale is not yet initialized here
+        let knownLocales = ['en-US', 'fr-CA'];
+        let path = window.location.pathname;
+        let firstSegment = path.split('/')[1];
+
+        if (knownLocales.indexOf(firstSegment) > -1)
+          locale = firstSegment;
+        else 
+          locale = 'en-US';
+      }
+
+      this.configUrl = `/${locale}/${this.configUrl}`;
     }
   }
 

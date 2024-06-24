@@ -32,7 +32,9 @@ export class SpendingCategoriesComponent implements OnInit {
   spendingCategories: SpendingCategory[];
   selectedCategory: SpendingCategory | undefined;
 
-  constructor(private spendingCategoryService: SpendingCategoriesService) {
+  constructor(
+    private spendingCategoryService: SpendingCategoriesService
+  ) {
     this.state = SpendingCategoriesComponentState.reading;
     this.spendingCategories = [];
   }

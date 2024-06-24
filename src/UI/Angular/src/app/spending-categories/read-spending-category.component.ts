@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Inject, LOCALE_ID } from '@angular/core';
 import { NgIf, CurrencyPipe, DatePipe } from '@angular/common';
 import { SpendingCategory } from '../data/spending-category';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
@@ -12,17 +12,18 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 })
 export class ReadSpendingCategoryComponent {
 
-  translateService: TranslateService;
-
   @Input() category: SpendingCategory | undefined;
 
   @Output() editRequested: EventEmitter<void>;
   @Output() deleteRequested: EventEmitter<SpendingCategory>;
 
-  constructor(translateService: TranslateService) {
+  constructor(
+    public translateService: TranslateService,
+    @Inject(LOCALE_ID) private locale: string
+  ) {
     this.translateService = translateService;
-    this.translateService.setDefaultLang('en');
-    this.translateService.use('fr');
+    this.translateService.setDefaultLang('en-US');
+    this.translateService.use(locale);
 
     this.editRequested = new EventEmitter<void>();
     this.deleteRequested = new EventEmitter<SpendingCategory>();

@@ -21,11 +21,11 @@ COPY UI/Server/. /source
 RUN dotnet restore
 RUN dotnet publish -c release -o /app --no-restore
 
-RUN mkdir /app/wwwroot/fr
-COPY --from=uiBuild /app/dist/budget/browser/fr/. /app/wwwroot/fr/.
+RUN mkdir /app/wwwroot/fr-CA
+COPY --from=uiBuild /app/dist/budget/browser/fr-CA/. /app/wwwroot/fr-CA/.
 RUN sed -i -e 's/https:\/\/denethor.jogendron.xyz\/en/https:\/\/denethor.jogendron.xyz\/fr/g' /app/wwwroot/fr/assets/configuration.json
-RUN mkdir /app/wwwroot/en
-COPY --from=uiBuild /app/dist/budget/browser/en/. /app/wwwroot/en/.
+RUN mkdir /app/wwwroot/en-US
+COPY --from=uiBuild /app/dist/budget/browser/en-US/. /app/wwwroot/en-US/.
 
 # ======================================
 # Final image with Runtime and Users API
