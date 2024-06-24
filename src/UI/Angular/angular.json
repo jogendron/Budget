@@ -7,10 +7,7 @@
       "i18n": {
         "sourceLocale": "en-US",
         "locales": {
-          "fr-CA": {
-            "translation": "src/locale/fr-CA.json",
-            "baseHref": "/fr-CA"
-          }
+          "fr-CA": "src/locale/fr-CA.json"
         }
       },
       "projectType": "application",
