@@ -23,7 +23,7 @@ RUN dotnet publish -c release -o /app --no-restore
 
 RUN mkdir /app/wwwroot/fr-CA
 COPY --from=uiBuild /app/dist/budget/browser/fr-CA/. /app/wwwroot/fr-CA/.
-RUN sed -i -e 's/https:\/\/denethor.jogendron.xyz\/en/https:\/\/denethor.jogendron.xyz\/fr/g' /app/wwwroot/fr-CA/assets/configuration.json
+RUN sed -i -e 's/https:\/\/denethor.jogendron.xyz\/en-US/https:\/\/denethor.jogendron.xyz\/fr-CA/g' /app/wwwroot/fr-CA/assets/configuration.json
 RUN mkdir /app/wwwroot/en-US
 COPY --from=uiBuild /app/dist/budget/browser/en-US/. /app/wwwroot/en-US/.
 
